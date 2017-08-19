@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.draft
+  module:
+    - facets
+    - system
+  theme:
+    - corpus_theme
+id: corpus_theme_draft
+theme: corpus_theme
+region: sidebar_first
+weight: -2
+provider: null
+plugin: 'facet_block:draft'
+settings:
+  id: 'facet_block:draft'
+  label: Draft
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /search
+    negate: false
+    context_mapping: {  }

@@ -1,0 +1,69 @@
+.region-sidebar-first h2 {
+  margin:0.25em;
+  font-size:20px;
+}
+.region-sidebar-first section {
+  background-color: #efefef;
+  margin-bottom:0.5em;
+  padding:0.5em;
+  border-radius:3px;
+}
+.region-sidebar-first ul {
+  list-style-type:none;
+  padding-left:0px;
+}
+.region-sidebar-first li > input {
+  margin: 0px 10px 0px 0px;
+}
+.region-sidebar-first li label {
+  font-weight: normal;
+}
+.bef-exposed-form .form--inline > .form-item.form-item-search-api-fulltext {
+  float:none;
+  width:100%;
+}
+div#edit-secondary {
+  float:none;
+  margin-top:1em;
+}
+#edit-secondary > div.panel-heading {
+  background-image: url("../assets/chevron_down.png");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 40px 40px;
+}
+div#edit-secondary div.form-group {
+  float:left;
+  height:60px;
+  margin:0.5em 0em 0.5em 0em;
+}
+.form-item-field-toefl-total-max,
+.form-item-field-toefl-reading-max,
+.form-item-field-toefl-writing-max,
+.form-item-field-toefl-listening-max,
+.form-item-field-toefl-speaking-max {
+  width:60%;
+}
+.bef-slider {
+  margin-top:0.5em;
+}
+div#edit-secondary input[type="text"] {
+  width:60px;
+}
+.view-content .views-row {
+  padding:0.5em;
+  border-radius:3px;
+}
+.view-content .views-row:nth-child(even) {
+  background-color: #efefef;
+}
+span.toefl {
+  background-color: #DCDCDC;
+  margin:0em 0.25em 0em 0.25em;
+  padding:0.15em;
+  border-radius:1px;
+}
+
+.view-id-corpus_text_search .excerpt strong {
+  background-color:yellow;
+}

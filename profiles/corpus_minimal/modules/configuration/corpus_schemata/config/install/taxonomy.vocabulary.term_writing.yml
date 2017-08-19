@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Term Writing'
+vid: term_writing
+description: 'The term the text was submitted'
+hierarchy: 0
+weight: 0

@@ -1,0 +1,9 @@
+
+corpus_importer.corpus_import_form:
+  path: 'admin/config/corpus/import'
+  defaults:
+    _form: '\Drupal\corpus_importer\Form\ImportForm'
+    _title: 'ImportForm'
+  requirements:
+    _access: 'TRUE'
+  

@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.college
+  module:
+    - facets
+    - system
+  theme:
+    - corpus_theme
+id: corpus_theme_college
+theme: corpus_theme
+region: sidebar_first
+weight: -6
+provider: null
+plugin: 'facet_block:college'
+settings:
+  id: 'facet_block:college'
+  label: College
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /search
+    negate: false
+    context_mapping: {  }

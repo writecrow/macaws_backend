@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Contains corpus_core.module.
+ */
+
+use \Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function corpus_search_configuration_preprocess_page(&$variables) {
+  // Add CSS to the search page.
+  $variables['page']['#cache']['contexts'][] = 'route';
+  if (\Drupal::routeMatch()->getRouteName() === 'view.corpus_text_search.page_1') {
+    $variables['#attached']['library'][] = 'corpus_search_configuration/corpus-search';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function corpus_search_configuration_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  // SITUATION: Search forms with facet filters and keywords search.
+  // PROBLEM: When searching for a keyword after using a facet filter, the
+  // facet filter is ignored by Views.
+  // SOLUTION: Add facet filters as hidden form fields to Views exposed forms.
+  $views = [
+    'corpus_text_search' => 'f',
+  ];
+  $id = $form_state->get('view')->id();
+  // Only apply for search views.
+  if (!in_array($id, array_keys($views))) {
+    return;
+  }
+  $parameter = $views[$id];
+  // Only apply if any facet query parameters are provided.
+  $facet_query = \Drupal::request()->query->filter($parameter);
+  if (empty($facet_query)) {
+    return;
+  }
+
+  // Iterate through facet query parameters.
+  foreach ($facet_query as $key => $value) {
+    // Add hidden form field for facet parameter.
+    $form[$parameter . '[' . $key . ']'] = array(
+      '#type' => 'hidden',
+      '#value' => $value,
+      '#weight' => -1,
+    );
+  }
+}

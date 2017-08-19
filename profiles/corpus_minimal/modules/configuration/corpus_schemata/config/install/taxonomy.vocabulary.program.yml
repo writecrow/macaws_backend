@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: Program
+vid: program
+description: 'Degree programs from institutions'
+hierarchy: 0
+weight: 0

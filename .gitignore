@@ -12,10 +12,10 @@ core/
 drush/
 example.gitignore
 index.php
-modules/
+/modules/
 robots.txt
 sites/
-themes/
+/themes/
 update.php
 vendor/
 web.config

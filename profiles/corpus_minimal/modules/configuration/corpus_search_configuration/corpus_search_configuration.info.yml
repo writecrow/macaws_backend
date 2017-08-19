@@ -1,0 +1,20 @@
+name: 'Corpus Search Configuration'
+type: module
+core: 8.x
+dependencies:
+  - better_exposed_filters
+  - block
+  - corpus_schemata
+  - facets
+  - node
+  - rest
+  - rest_facets
+  - search_api
+  - search_api_db
+  - serialization
+  - system
+  - taxonomy
+  - text
+  - user
+  - views
+version: 8.x-1.0
