@@ -1,0 +1,43 @@
+name: corpus_minimal
+# core: 8.x
+type: profile
+description: 'A minimal configuration for a corpus web application.'
+distribution:
+  name: Corpus (Minimal)
+
+# Required modules
+dependencies:
+  # core
+  - block_content
+  - breakpoint
+  - config
+  - contextual
+  - menu_link_content
+  - datetime
+  - editor
+  - entity_reference
+  - image
+  - menu_ui
+  - node
+  - options
+  - path
+  - page_cache
+  - taxonomy
+  - text
+  - dblog
+  - shortcut
+  - toolbar
+  - file
+  - rdf
+  - views
+  # Contributed modules
+  # Custom modules
+
+themes:
+  - bootstrap
+  - corpus_theme
+  - adminimal_theme
+
+version: '8.x-1.0'
+core: '8.x'
+project: 'corpus_minimal'

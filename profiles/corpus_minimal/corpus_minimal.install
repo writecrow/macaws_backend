@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall functions for the Corpus Minimal installation profile.
+ */
+
+use Drupal\user\Entity\User;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_preprocess_install_page().
+ */
+function corpus_minimal_preprocess_install_page(&$variables) {
+  // Custom styling for the install page.
+  $variables['#attached']['library'][] = 'corpus_minimal/corpus-minimal-install';
+}
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to set up the site for Corpus Minimal Profile.
+ *
+ * @see system_install()
+ */
+function corpus_minimal_install() {
+  // Set front page to "node".
+  \Drupal::configFactory()
+    ->getEditable('system.site')
+    ->set('page.front', '/search')
+    ->save(TRUE);
+
+  // Set the Site Name.
+  \Drupal::configFactory()
+    ->getEditable('system.site')
+    ->set('name', 'Corpus Repository of Writing')
+    ->save(TRUE);
+
+  // Restrict user registration to admin role creation.
+  \Drupal::configFactory()
+    ->getEditable('user.settings')
+    ->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)
+    ->save(TRUE);
+
+  // Assign user 1 the "administrator" role.
+  $user = User::load(1);
+  $user->roles[] = 'administrator';
+  $user->save();
+
+  // Allow authenticated users to use shortcuts.
+  user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access shortcuts']);
+
+  // Set the default and admin theme.
+  \Drupal::configFactory()
+    ->getEditable('system.theme')
+    ->set('default', 'corpus_theme')
+    ->set('admin', 'adminimal_theme')
+    ->save(TRUE);
+
+  // Enable the admin theme.
+  \Drupal::configFactory()
+    ->getEditable('node.settings')
+    ->set('use_admin_theme', TRUE)
+    ->save(TRUE);
+
+  // Set the path to the logo, favicon and README file based on install
+  // directory.
+  $profile_path = drupal_get_path('profile', 'corpus_minimal');
+  \Drupal::configFactory()
+    ->getEditable('system.theme.global')
+    ->set('logo', [
+      'path' => $profile_path . '/logo.png',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $profile_path . '/favicon.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+}

@@ -1,0 +1,5 @@
+corpus-minimal-install:
+  version: 8.0
+  css:
+    theme:
+      css/corpus-minimal.css: {}
