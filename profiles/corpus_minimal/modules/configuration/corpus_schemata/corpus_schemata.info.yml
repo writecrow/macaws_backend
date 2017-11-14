@@ -2,12 +2,18 @@ name: 'Corpus Schema'
 type: module
 core: 8.x
 dependencies:
+  - corpus_search_configuration
   - field
   - field_layout
   - layout_discovery
   - menu_ui
   - node
+  - rest
+  - rest_facets
+  - search_api
+  - serialization
   - taxonomy
   - text
   - user
+  - views
 version: 8.x-1.0
