@@ -2,7 +2,6 @@ name: 'Corpus Schema'
 type: module
 core: 8.x
 dependencies:
-  - corpus_search_configuration
   - facets
   - field
   - field_layout

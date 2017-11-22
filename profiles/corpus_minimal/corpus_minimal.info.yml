@@ -32,6 +32,7 @@ dependencies:
   - views
   # Contributed modules
   # Custom modules
+  - corpus_schemata
 
 themes:
   - bootstrap
