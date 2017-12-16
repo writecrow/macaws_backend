@@ -9,13 +9,9 @@ dependencies:
     - field.storage.node.field_toefl_total
     - field.storage.node.field_toefl_writing
     - search_api.index.corpus_text_index
-    - taxonomy.vocabulary.gender
   module:
     - better_exposed_filters
-    - rest
-    - rest_facets
     - search_api
-    - serialization
     - taxonomy
     - text
     - user

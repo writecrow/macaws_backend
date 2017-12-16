@@ -1517,12 +1517,12 @@ display:
           group: 1
           exposed: true
           expose:
-            operator_id: search_api_fulltext_op
+            operator_id: op
             label: 'Fulltext search'
             description: ''
-            use_operator: false
+            use_operator: true
             operator: search_api_fulltext_op
-            identifier: search_api_fulltext
+            identifier: keywords
             required: false
             remember: false
             multiple: false

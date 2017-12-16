@@ -183,66 +183,13 @@ processor_settings:
       preprocess_index: -20
       preprocess_query: -20
   rendered_item: {  }
-  stemmer:
-    all_fields: false
-    fields:
-      - field_text
-    exceptions:
-      texan: texa
-      mexican: mexic
-    weights:
-      preprocess_index: 0
-      preprocess_query: 0
-  stopwords:
-    all_fields: false
-    fields:
-      - field_text
-    stopwords:
-      - a
-      - an
-      - and
-      - are
-      - as
-      - at
-      - be
-      - but
-      - by
-      - for
-      - if
-      - in
-      - into
-      - is
-      - it
-      - 'no'
-      - not
-      - of
-      - 'on'
-      - or
-      - s
-      - such
-      - t
-      - that
-      - the
-      - their
-      - then
-      - there
-      - these
-      - they
-      - this
-      - to
-      - was
-      - will
-      - with
-    weights:
-      preprocess_index: -5
-      preprocess_query: -2
   tokenizer:
     all_fields: false
     fields:
       - field_text
     spaces: ''
     overlap_cjk: 1
-    minimum_word_size: '3'
+    minimum_word_size: '2'
     weights:
       preprocess_index: -6
       preprocess_query: -6
@@ -256,6 +203,6 @@ processor_settings:
 tracker_settings:
   default: {  }
 options:
-  index_directly: true
+  index_directly: false
   cron_limit: 50
 server: corpus_db_server
