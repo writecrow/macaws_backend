@@ -1,0 +1,60 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "b642c197fb6f72b2bdda49d6b3110b88",
+    "packages": [
+        {
+            "name": "skyeng/php-lemmatizer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/skyeng/php-lemmatizer.git",
+                "reference": "9f5154a0de3c64e08c1a96be793b4eec236962cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/skyeng/php-lemmatizer/zipball/9f5154a0de3c64e08c1a96be793b4eec236962cb",
+                "reference": "9f5154a0de3c64e08c1a96be793b4eec236962cb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Skyeng\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP Lemmatizer is a lemmatization library to retrieve a base form from an English inflected word.",
+            "keywords": [
+                "english",
+                "lemmatization",
+                "lemmatizer",
+                "php",
+                "word"
+            ],
+            "time": "2017-06-27T06:51:55+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "skyeng/php-lemmatizer": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
