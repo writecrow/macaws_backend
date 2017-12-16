@@ -19,7 +19,7 @@ function corpus_importer_drush_command() {
       'path' => 'Path to the folder that includes the files',
     ),
     'examples' => array(
-      'drush corpus-import /Users/foo/Syncplicity\ Folders/PSLW/',
+      'drush corpus-import /Users/jmf3658/Syncplicity\ Folders/PSLW/',
     ),
     'aliases' => array('corpus-i'),
   );
