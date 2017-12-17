@@ -12,7 +12,7 @@ url_alias: term_writing
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: field_term_writing
+field_identifier: term_writing
 facet_source_id: 'search_api:views_page__corpus_text_search__page_1'
 widget:
   type: checkbox
