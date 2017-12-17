@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_text
     - field.storage.node.field_toefl_listening
     - field.storage.node.field_toefl_reading
     - field.storage.node.field_toefl_speaking
@@ -13,7 +12,6 @@ dependencies:
     - better_exposed_filters
     - search_api
     - taxonomy
-    - text
     - user
 id: corpus_text_search
 label: 'Corpus Text Search'
@@ -1018,7 +1016,6 @@ display:
         - url.query_args
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_toefl_listening'
         - 'config:field.storage.node.field_toefl_reading'
         - 'config:field.storage.node.field_toefl_speaking'
@@ -1045,7 +1042,6 @@ display:
         - url.query_args
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_toefl_listening'
         - 'config:field.storage.node.field_toefl_reading'
         - 'config:field.storage.node.field_toefl_speaking'

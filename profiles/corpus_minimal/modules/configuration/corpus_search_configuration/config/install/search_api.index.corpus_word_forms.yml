@@ -3,17 +3,31 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_text
+    - field.storage.node.field_assignment
+    - field.storage.node.field_college
+    - field.storage.node.field_country
+    - field.storage.node.field_draft
+    - field.storage.node.field_gender
+    - field.storage.node.field_program
+    - field.storage.node.field_semester_in_school
+    - field.storage.node.field_term_writing
+    - field.storage.node.field_toefl_listening
+    - field.storage.node.field_toefl_reading
+    - field.storage.node.field_toefl_speaking
+    - field.storage.node.field_toefl_total
+    - field.storage.node.field_toefl_writing
+    - field.storage.node.field_filename
     - search_api.server.corpus_db_server
   module:
     - search_api
     - search_api_lemma
     - node
 id: corpus_word_forms
-name: 'Word Forms'
+name: 'Corpus : Word forms (lemma)'
 description: ''
 read_only: false
 field_settings:
-  field_text:
+  text:
     label: Text
     datasource_id: 'entity:node'
     property_path: field_text
@@ -21,6 +35,118 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_text
+  assignment:
+    label: Assignment
+    datasource_id: 'entity:node'
+    property_path: field_assignment
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_assignment
+  college:
+    label: College
+    datasource_id: 'entity:node'
+    property_path: field_college
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_college
+  country:
+    label: Country
+    datasource_id: 'entity:node'
+    property_path: field_country
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_country
+  draft:
+    label: Draft
+    datasource_id: 'entity:node'
+    property_path: field_draft
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_draft
+  gender:
+    label: Gender
+    datasource_id: 'entity:node'
+    property_path: field_gender
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_gender
+  program:
+    label: Program
+    datasource_id: 'entity:node'
+    property_path: field_program
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_program
+  semester_in_school:
+    label: 'Semester in School'
+    datasource_id: 'entity:node'
+    property_path: field_semester_in_school
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_semester_in_school
+  term_writing:
+    label: 'Term Writing'
+    datasource_id: 'entity:node'
+    property_path: field_term_writing
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_term_writing
+  toefl_listening:
+    label: 'TOEFL Listening'
+    datasource_id: 'entity:node'
+    property_path: field_toefl_listening
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_toefl_listening
+  toefl_reading:
+    label: 'TOEFL Reading'
+    datasource_id: 'entity:node'
+    property_path: field_toefl_reading
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_toefl_reading
+  toefl_speaking:
+    label: 'TOEFL Speaking'
+    datasource_id: 'entity:node'
+    property_path: field_toefl_speaking
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_toefl_speaking
+  toefl_total:
+    label: 'TOEFL Total'
+    datasource_id: 'entity:node'
+    property_path: field_toefl_total
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_toefl_total
+  toefl_writing:
+    label: 'TOEFL Writing'
+    datasource_id: 'entity:node'
+    property_path: field_toefl_writing
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_toefl_writing
+  filename:
+    label: filename
+    datasource_id: 'entity:node'
+    property_path: field_filename
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_filename
 datasource_settings:
   'entity:node':
     bundles:
@@ -37,7 +163,7 @@ processor_settings:
   html_filter:
     all_fields: false
     fields:
-      - field_text
+      - text
     title: true
     alt: true
     tags:
@@ -52,14 +178,14 @@ processor_settings:
   ignorecase:
     all_fields: false
     fields:
-      - field_text
+      - text
     weights:
       preprocess_index: -20
       preprocess_query: -20
   ignore_character:
     all_fields: false
     fields:
-      - field_text
+      - text
     ignorable: '[''¿¡!?,.:;]'
     strip:
       character_sets:
@@ -90,7 +216,7 @@ processor_settings:
   tokenizer:
     all_fields: false
     fields:
-      - field_text
+      - text
     spaces: ''
     overlap_cjk: 1
     minimum_word_size: '3'
@@ -110,7 +236,7 @@ processor_settings:
   lemmatizer:
     all_fields: 0
     fields:
-      - field_text
+      - text
     weights:
       preprocess_index: 0
       preprocess_query: 0

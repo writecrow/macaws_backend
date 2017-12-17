@@ -1,13 +1,18 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - search_api.index.corpus_text_index
+    - views.view.corpus_search_api
+  module:
+    - search_api
 id: api_college
 name: College
 url_alias: college
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: field_college
+field_identifier: college
 facet_source_id: 'search_api:views_rest__corpus_search_api__rest_export_1'
 widget:
   type: array

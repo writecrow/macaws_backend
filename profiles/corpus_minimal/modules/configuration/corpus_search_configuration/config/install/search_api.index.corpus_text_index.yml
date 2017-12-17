@@ -16,16 +16,17 @@ dependencies:
     - field.storage.node.field_toefl_speaking
     - field.storage.node.field_toefl_total
     - field.storage.node.field_toefl_writing
+    - field.storage.node.field_filename
     - search_api.server.corpus_db_server
   module:
     - search_api
     - node
 id: corpus_text_index
-name: 'Corpus Text Index'
+name: 'Corpus : Keyword Index'
 description: ''
 read_only: false
 field_settings:
-  field_text:
+  text:
     label: Text
     datasource_id: 'entity:node'
     property_path: field_text
@@ -33,7 +34,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_text
-  field_assignment:
+  assignment:
     label: Assignment
     datasource_id: 'entity:node'
     property_path: field_assignment
@@ -41,7 +42,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_assignment
-  field_college:
+  college:
     label: College
     datasource_id: 'entity:node'
     property_path: field_college
@@ -49,7 +50,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_college
-  field_country:
+  country:
     label: Country
     datasource_id: 'entity:node'
     property_path: field_country
@@ -57,7 +58,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_country
-  field_draft:
+  draft:
     label: Draft
     datasource_id: 'entity:node'
     property_path: field_draft
@@ -65,7 +66,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_draft
-  field_gender:
+  gender:
     label: Gender
     datasource_id: 'entity:node'
     property_path: field_gender
@@ -73,7 +74,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_gender
-  field_program:
+  program:
     label: Program
     datasource_id: 'entity:node'
     property_path: field_program
@@ -81,7 +82,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_program
-  field_semester_in_school:
+  semester_in_school:
     label: 'Semester in School'
     datasource_id: 'entity:node'
     property_path: field_semester_in_school
@@ -89,7 +90,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_semester_in_school
-  field_term_writing:
+  term_writing:
     label: 'Term Writing'
     datasource_id: 'entity:node'
     property_path: field_term_writing
@@ -97,7 +98,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_term_writing
-  field_toefl_listening:
+  toefl_listening:
     label: 'TOEFL Listening'
     datasource_id: 'entity:node'
     property_path: field_toefl_listening
@@ -105,7 +106,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_toefl_listening
-  field_toefl_reading:
+  toefl_reading:
     label: 'TOEFL Reading'
     datasource_id: 'entity:node'
     property_path: field_toefl_reading
@@ -113,7 +114,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_toefl_reading
-  field_toefl_speaking:
+  toefl_speaking:
     label: 'TOEFL Speaking'
     datasource_id: 'entity:node'
     property_path: field_toefl_speaking
@@ -121,7 +122,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_toefl_speaking
-  field_toefl_total:
+  toefl_total:
     label: 'TOEFL Total'
     datasource_id: 'entity:node'
     property_path: field_toefl_total
@@ -129,7 +130,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_toefl_total
-  field_toefl_writing:
+  toefl_writing:
     label: 'TOEFL Writing'
     datasource_id: 'entity:node'
     property_path: field_toefl_writing
@@ -137,6 +138,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_toefl_writing
+  filename:
+    label: filename
+    datasource_id: 'entity:node'
+    property_path: field_filename
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_filename
 datasource_settings:
   'entity:node':
     bundles:
@@ -153,9 +162,9 @@ processor_settings:
   entity_status: {  }
   highlight:
     highlight: always
-    highlight_partial: true
+    highlight_partial: false
     excerpt: true
-    excerpt_length: 200
+    excerpt_length: 256
     exclude_fields: {  }
     prefix: '<strong>'
     suffix: '</strong>'
@@ -178,7 +187,7 @@ processor_settings:
   ignorecase:
     all_fields: false
     fields:
-      - field_text
+      - text
     weights:
       preprocess_index: -20
       preprocess_query: -20
@@ -186,7 +195,7 @@ processor_settings:
   tokenizer:
     all_fields: false
     fields:
-      - field_text
+      - text
     spaces: ''
     overlap_cjk: 1
     minimum_word_size: '2'
@@ -196,7 +205,7 @@ processor_settings:
   transliteration:
     all_fields: false
     fields:
-      - field_text
+      - text
     weights:
       preprocess_index: -20
       preprocess_query: -20
