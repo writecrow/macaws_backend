@@ -1339,7 +1339,7 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 256
+            max_length: 200
             word_boundary: true
             ellipsis: true
             more_link: false
@@ -1356,7 +1356,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -1424,10 +1424,10 @@ display:
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
-          empty: '{{ field_text }}'
+          empty: '{{ text }}'
           hide_empty: false
           empty_zero: false
-          hide_alter_empty: true
+          hide_alter_empty: false
           link_to_item: false
           multi_type: separator
           multi_separator: ', '
