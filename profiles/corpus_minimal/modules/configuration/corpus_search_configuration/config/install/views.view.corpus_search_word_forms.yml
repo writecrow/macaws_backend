@@ -1393,7 +1393,7 @@ display:
             external: false
             replace_spaces: false
             path_case: none
-            trim_whitespace: false
+            trim_whitespace: true
             alt: ''
             rel: ''
             link_class: ''
@@ -1401,14 +1401,14 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 0
+            max_length: 200
             word_boundary: true
             ellipsis: true
             more_link: false
             more_link_text: ''
             more_link_path: ''
-            strip_tags: false
-            trim: false
+            strip_tags: true
+            trim: true
             preserve_tags: ''
             html: false
           element_type: ''
@@ -1437,7 +1437,7 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          field_rendering: true
+          field_rendering: false
           fallback_handler: search_api
           fallback_options:
             link_to_item: false
