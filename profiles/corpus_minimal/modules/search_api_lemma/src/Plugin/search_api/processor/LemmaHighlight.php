@@ -12,7 +12,6 @@ use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\Utility\DataTypeHelperInterface;
-use Drupal\search_api_lemma\Plugin\search_api\processor\Resources\RootMap;
 
 /**
  * Adds a highlighted excerpt to results and highlights returned fields.
@@ -32,6 +31,13 @@ use Drupal\search_api_lemma\Plugin\search_api\processor\Resources\RootMap;
 class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface {
 
   use PluginFormTrait;
+
+  /**
+   * Path to this module.
+   *
+   * @var string
+   */
+  protected $module_path = '';
 
   /**
    * PCRE regular expression for a word boundary.
@@ -368,6 +374,8 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
    *   An array of all unique positive keywords used in the query.
    */
   protected function getKeywords(QueryInterface $query) {
+    $module_handler = \Drupal::service('module_handler');
+    $this->module_path = $module_handler->getModule('search_api_lemma')->getPath();
     $keys = $query->getKeys();
     if (!$keys) {
       return [];
@@ -381,19 +389,24 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
     // array_unique() by a factor of 3 to 4.)
     // Remove quotes from keywords.
     $keywords = [];
-    $roots = RootMap::getMap();
+    //$roots = RootMap::getMap();
     foreach (array_filter($keywords_in) as $keyword) {
       if ($keyword = trim($keyword, "'\"")) {
         $keywords[$keyword] = $keyword;
       }
-      if (isset($roots[$keyword])) {
-        $lemmas = explode(',', $roots[$keyword]);
+      $alpha = $keyword[0];
+      $path = DRUPAL_ROOT . '/' . $this->module_path . '/data/roots_' . $alpha . '.php';
+      if (file_exists($path)) {
+        require $path;
+      }
+      if (isset($root_map[$keyword])) {
+        $lemmas = explode(',', $root_map[$keyword]);
         foreach ($lemmas as $lemma) {
           $keywords[$lemma] = $lemma;
         }
       }
     }
-    
+
     return $keywords;
   }
 

@@ -4,10 +4,9 @@ namespace Drupal\search_api_lemma\Plugin\search_api\processor;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Processor\FieldsProcessorPluginBase;
-use Drupal\search_api_lemma\Plugin\search_api\processor\Resources\LemmaMap;
 
 /**
- * Stems search terms.
+ * Lemmatizes search terms.
  *
  * @SearchApiProcessor(
  *   id = "lemmatizer",
@@ -23,11 +22,11 @@ use Drupal\search_api_lemma\Plugin\search_api\processor\Resources\LemmaMap;
 class Lemmatizer extends FieldsProcessorPluginBase {
 
   /**
-   * Static cache for already-generated lemmas.
+   * Path to this module.
    *
-   * @var string[]
+   * @var string
    */
-  protected $lemmas = [];
+  protected $module_path = '';
 
   /**
    * {@inheritdoc}
@@ -80,15 +79,20 @@ class Lemmatizer extends FieldsProcessorPluginBase {
    * {@inheritdoc}
    */
   protected function process(&$value) {
+    $module_handler = \Drupal::service('module_handler');
+    $this->module_path = $module_handler->getModule('search_api_lemma')->getPath();
     // In the absence of the tokenizer processor, this ensures split words.
     $words = preg_split('/[^\p{L}\p{N}]+/u', strip_tags($value), -1, PREG_SPLIT_NO_EMPTY);
     $stemmed = [];
-    $lemmas = LemmaMap::getMap();
+    $lemmas = [];
     foreach ($words as $i => $word) {
-      $lemma = $word;
-      // To optimize processing, store processed lemmas in a static array.
-      if (isset($lemmas[$word])) {
-        $lemmatized[] = $lemmas[$word];
+      $alpha = $word[0];
+      $path = DRUPAL_ROOT . '/' . $this->module_path . '/data/lemmas_' . $alpha . '.php';
+      if (file_exists($path)) {
+        require $path;
+      }
+      if (isset($lemma_map[$word])) {
+        $lemmatized[] = $lemma_map[$word];
       }
       else {
         $lemmatized[] = $word;
