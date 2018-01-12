@@ -389,7 +389,6 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
     // array_unique() by a factor of 3 to 4.)
     // Remove quotes from keywords.
     $keywords = [];
-    //$roots = RootMap::getMap();
     foreach (array_filter($keywords_in) as $keyword) {
       if ($keyword = trim($keyword, "'\"")) {
         $keywords[$keyword] = $keyword;
