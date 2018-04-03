@@ -158,23 +158,19 @@ datasource_settings:
       selected:
         - en
 processor_settings:
+  rendered_item: {  }
   add_url: {  }
   aggregated_field: {  }
-  html_filter:
+  tokenizer:
     all_fields: false
     fields:
       - text
-    title: true
-    alt: true
-    tags:
-      h1: 5
-      h2: 3
-      h3: 2
-      strong: 2
-      b: 2
+    spaces: ''
+    overlap_cjk: 1
+    minimum_word_size: '3'
     weights:
-      preprocess_index: -15
-      preprocess_query: -15
+      preprocess_index: -6
+      preprocess_query: -6
   ignorecase:
     all_fields: false
     fields:
@@ -212,17 +208,28 @@ processor_settings:
     weights:
       preprocess_index: -10
       preprocess_query: -10
-  rendered_item: {  }
-  tokenizer:
+  html_filter:
     all_fields: false
     fields:
       - text
-    spaces: ''
-    overlap_cjk: 1
-    minimum_word_size: '3'
+    title: true
+    alt: true
+    tags:
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
+      b: 2
     weights:
-      preprocess_index: -6
-      preprocess_query: -6
+      preprocess_index: -15
+      preprocess_query: -15
+  lemmatizer:
+    all_fields: 0
+    fields:
+      - text
+    weights:
+      preprocess_index: 0
+      preprocess_query: 0
   lemma_highlight:
     highlight: always
     highlight_partial: 0
@@ -233,15 +240,9 @@ processor_settings:
     suffix: '</strong>'
     weights:
       postprocess_query: 0
-  lemmatizer:
-    all_fields: 0
-    fields:
-      - text
-    weights:
-      preprocess_index: 0
-      preprocess_query: 0
 tracker_settings:
-  default: {  }
+  default:
+    indexing_order: fifo
 options:
   index_directly: false
   cron_limit: 50

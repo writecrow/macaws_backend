@@ -30,13 +30,10 @@ dependencies:
   - file
   - rdf
   - views
-  # Contributed modules
   # Custom modules
   - corpus_schemata
 
 themes:
-  - bootstrap
-  - corpus_theme
   - adminimal_theme
 
 version: '8.x-1.0'

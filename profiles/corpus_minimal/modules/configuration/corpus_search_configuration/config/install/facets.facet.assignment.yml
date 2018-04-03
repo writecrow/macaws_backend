@@ -1,11 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - search_api.index.corpus_text_index
-    - views.view.corpus_text_search
-  module:
-    - search_api
+dependencies: {  }
 id: assignment
 name: Assignment
 url_alias: assignment

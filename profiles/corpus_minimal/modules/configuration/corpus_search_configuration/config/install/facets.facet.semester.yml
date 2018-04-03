@@ -1,11 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - search_api.index.corpus_text_index
-    - views.view.corpus_search_api
-  module:
-    - search_api
+dependencies: {  }
 id: semester
 name: 'Semester in School'
 url_alias: semester
