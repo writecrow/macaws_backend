@@ -13,6 +13,7 @@ core/
 drush/
 example.gitignore
 index.php
+libraries/
 /modules/
 robots.txt
 sites/
