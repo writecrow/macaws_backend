@@ -12,12 +12,10 @@ dependencies:
   - breakpoint
   - config
   - contextual
-  - menu_link_content
   - datetime
-  - editor
+  - dynamic_page_cache
   - entity_reference
   - image
-  - menu_ui
   - node
   - options
   - path
@@ -25,10 +23,8 @@ dependencies:
   - taxonomy
   - text
   - dblog
-  - shortcut
   - toolbar
   - file
-  - rdf
   - views
 
 themes:
