@@ -19,14 +19,8 @@ dependencies:
     - field.field.node.text.field_toefl_writing
     - node.type.text
   module:
-    - field_layout
-    - layout_discovery
     - text
     - user
-third_party_settings:
-  field_layout:
-    id: layout_twocol
-    settings: {  }
 id: node.text.default
 targetEntityType: node
 bundle: text
@@ -39,7 +33,7 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: second
+    region: content
   field_college:
     weight: 3
     label: above
@@ -47,7 +41,7 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: second
+    region: content
   field_country:
     weight: 10
     label: above
@@ -55,7 +49,7 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: second
+    region: content
   field_draft:
     weight: 8
     label: above
@@ -63,7 +57,7 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: second
+    region: content
   field_filename:
     weight: 9
     label: above
@@ -71,7 +65,7 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     type: string
-    region: second
+    region: content
   field_gender:
     weight: 2
     label: above
@@ -79,7 +73,7 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: second
+    region: content
   field_program:
     weight: 4
     label: above
@@ -87,7 +81,7 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: second
+    region: content
   field_semester_in_school:
     weight: 5
     label: above
@@ -95,7 +89,7 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: second
+    region: content
   field_term_writing:
     weight: 7
     label: above
@@ -103,14 +97,14 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: second
+    region: content
   field_text:
     weight: 1
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
-    region: first
+    region: content
   field_toefl_listening:
     weight: 15
     label: above
@@ -119,7 +113,7 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
-    region: second
+    region: content
   field_toefl_reading:
     weight: 13
     label: above
@@ -128,7 +122,7 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
-    region: second
+    region: content
   field_toefl_speaking:
     weight: 14
     label: above
@@ -137,7 +131,7 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
-    region: second
+    region: content
   field_toefl_total:
     weight: 11
     label: above
@@ -146,7 +140,7 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
-    region: second
+    region: content
   field_toefl_writing:
     weight: 12
     label: above
@@ -155,10 +149,10 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
-    region: second
+    region: content
   links:
     weight: 0
-    region: first
+    region: content
     settings: {  }
     third_party_settings: {  }
 hidden: {  }

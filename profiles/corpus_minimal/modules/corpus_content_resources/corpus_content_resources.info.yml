@@ -4,8 +4,6 @@ type: module
 core: 8.x
 dependencies:
   - field
-  - field_layout
-  - layout_discovery
   - menu_ui
   - node
   - path

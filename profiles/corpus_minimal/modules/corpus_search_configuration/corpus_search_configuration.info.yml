@@ -5,9 +5,9 @@ dependencies:
   - block
   - corpus_content_texts
   - facets
+  - facets_rest
   - node
   - rest
-  - facets_rest
   - search_api
   - search_api_db
   - search_api_lemma
