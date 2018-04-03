@@ -36,13 +36,10 @@ function corpus_minimal_install() {
   $user->roles[] = 'administrator';
   $user->save();
 
-  // Allow authenticated users to use shortcuts.
-  user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access shortcuts']);
-
   // Set the default and admin theme.
   \Drupal::configFactory()
     ->getEditable('system.theme')
-    ->set('admin', 'adminimal_theme')
+    ->set('admin', 'seven')
     ->save(TRUE);
 
   // Enable the admin theme.
@@ -50,5 +47,4 @@ function corpus_minimal_install() {
     ->getEditable('node.settings')
     ->set('use_admin_theme', TRUE)
     ->save(TRUE);
-
 }

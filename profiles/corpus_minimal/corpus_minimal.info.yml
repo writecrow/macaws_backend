@@ -26,10 +26,12 @@ dependencies:
   - toolbar
   - file
   - views
-
+  # custom
+  - corpus_content_texts
+  - corpus_content_resources
+  - corpus_search_configuration
 themes:
-  - adminimal_theme
-
+  - seven
 version: '8.x-1.0'
 core: '8.x'
 project: 'corpus_minimal'

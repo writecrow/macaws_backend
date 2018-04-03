@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains corpus_core.module.
+ * Contains corpus_search_configuration.module.
  */
 
 use \Drupal\Core\Form\FormStateInterface;
