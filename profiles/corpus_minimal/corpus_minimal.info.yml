@@ -30,8 +30,6 @@ dependencies:
   - file
   - rdf
   - views
-  # Custom modules
-  - corpus_schemata
 
 themes:
   - adminimal_theme
