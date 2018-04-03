@@ -7,7 +7,7 @@ dependencies:
   - facets
   - node
   - rest
-  - rest_facets
+  - facets_rest
   - search_api
   - search_api_db
   - search_api_lemma

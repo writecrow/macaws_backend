@@ -20,7 +20,7 @@ dependencies:
     - search_api.index.corpus_text_index
   module:
     - rest
-    - rest_facets
+    - facets_rest
     - search_api
     - serialization
     - text
