@@ -32,8 +32,11 @@ dependencies:
   - corpus_content_resources
   - corpus_search_configuration
   - corpus_importer
+
 themes:
   - seven
+  - bartik
+
 version: '8.x-1.0'
 core: '8.x'
 project: 'corpus_minimal'
