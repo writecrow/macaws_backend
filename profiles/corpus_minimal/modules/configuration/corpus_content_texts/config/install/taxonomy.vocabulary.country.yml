@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: Country
+vid: country
+description: '3-digit country codes'
+hierarchy: 0
+weight: 0
