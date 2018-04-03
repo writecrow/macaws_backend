@@ -8,6 +8,7 @@ distribution:
 # Required modules
 dependencies:
   # core
+  - block
   - block_content
   - breakpoint
   - config
@@ -30,6 +31,7 @@ dependencies:
   - corpus_content_texts
   - corpus_content_resources
   - corpus_search_configuration
+  - corpus_importer
 themes:
   - seven
 version: '8.x-1.0'
