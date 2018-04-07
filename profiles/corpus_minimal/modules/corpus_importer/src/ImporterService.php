@@ -151,7 +151,7 @@ class ImporterService {
     }
 
     if (isset($options['lorem']) && $options['lorem']) {
-      //$text['text'] = LoremGutenberg::generate(array('sentences' => 10));
+      $text['text'] = LoremGutenberg::generate(array('sentences' => 10));
     }
     if (isset($options['merge']) && $options['merge']) {
       $nodes = \Drupal::entityTypeManager()

@@ -3,7 +3,6 @@ type: module
 core: 8.x
 dependencies:
   - block
-  - corpus_content_texts
   - facets
   - facets_rest
   - node

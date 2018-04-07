@@ -3,7 +3,6 @@ type: module
 core: 8.x
 dependencies:
   - block
-  - corpus_search_configuration
   - facets
   - facets_rest
   - field
