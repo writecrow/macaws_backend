@@ -11,7 +11,6 @@ dependencies:
     - field.storage.node.field_program
     - field.storage.node.field_semester_in_school
     - field.storage.node.field_term_writing
-    - field.storage.node.field_text
     - field.storage.node.field_toefl_listening
     - field.storage.node.field_toefl_reading
     - field.storage.node.field_toefl_speaking
@@ -23,11 +22,10 @@ dependencies:
     - rest
     - search_api
     - serialization
-    - text
-id: corpus_search_word_forms
-label: 'Corpus Search Word Forms'
+id: texts_lemma_search
+label: 'Texts Lemma Search'
 module: views
-description: ''
+description: 'Return all texts matching specified metadata and/or lemma in text'
 tag: ''
 base_table: search_api_index_corpus_word_forms
 base_field: search_api_id
@@ -61,96 +59,20 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       pager:
-        type: mini
+        type: some
         options:
           items_per_page: 100
           offset: 0
-          id: 0
-          total_pages: null
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          tags:
-            previous: ‹‹
-            next: ››
       style:
-        type: table
+        type: serializer
       row:
         type: fields
-      fields:
-        filename:
-          id: filename
-          table: search_api_index_corpus_word_forms
-          field: filename
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
+        options:
+          inline: {  }
+          separator: ''
           hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: false
-          fallback_handler: search_api
-          fallback_options:
-            link_to_item: false
-            multi_separator: ', '
-          plugin_id: search_api_field
+          default_field_elements: true
+      fields:
         assignment:
           id: assignment
           table: search_api_index_corpus_word_forms
@@ -202,7 +124,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: true
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -217,6 +139,8 @@ display:
           fallback_handler: search_api_entity
           fallback_options:
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             display_methods:
               assignment:
@@ -302,6 +226,8 @@ display:
           fallback_handler: search_api_entity
           fallback_options:
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             display_methods:
               assignment:
@@ -387,6 +313,8 @@ display:
           fallback_handler: search_api_entity
           fallback_options:
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             display_methods:
               assignment:
@@ -457,7 +385,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: true
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -472,6 +400,8 @@ display:
           fallback_handler: search_api_entity
           fallback_options:
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             display_methods:
               assignment:
@@ -490,6 +420,76 @@ display:
                 display_method: label
               term_writing:
                 display_method: label
+          plugin_id: search_api_field
+        filename:
+          id: filename
+          table: search_api_index_corpus_word_forms
+          field: filename
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          field_rendering: false
+          fallback_handler: search_api
+          fallback_options:
+            link_to_item: false
+            use_highlighting: false
+            multi_type: separator
+            multi_separator: ', '
           plugin_id: search_api_field
         gender:
           id: gender
@@ -542,7 +542,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: true
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -557,6 +557,8 @@ display:
           fallback_handler: search_api_entity
           fallback_options:
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             display_methods:
               assignment:
@@ -575,86 +577,6 @@ display:
                 display_method: label
               term_writing:
                 display_method: label
-          plugin_id: search_api_field
-        nid:
-          id: nid
-          table: search_api_datasource_corpus_word_forms_entity_node
-          field: nid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: number_integer
-          settings:
-            thousand_separator: ''
-            prefix_suffix: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: false
-          fallback_handler: search_api_numeric
-          fallback_options:
-            set_precision: false
-            precision: 0
-            decimal: .
-            format_plural: false
-            format_plural_string: !!binary MQNAY291bnQ=
-            prefix: ''
-            suffix: ''
-            link_to_item: false
-            multi_separator: ', '
-            format_plural_values:
-              - '1'
-              - '@count'
-          entity_type: node
           plugin_id: search_api_field
         program:
           id: program
@@ -707,7 +629,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: true
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -722,6 +644,8 @@ display:
           fallback_handler: search_api_entity
           fallback_options:
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             display_methods:
               assignment:
@@ -792,7 +716,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: true
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -807,6 +731,8 @@ display:
           fallback_handler: search_api_entity
           fallback_options:
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             display_methods:
               assignment:
@@ -877,7 +803,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: true
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -892,6 +818,8 @@ display:
           fallback_handler: search_api_entity
           fallback_options:
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             display_methods:
               assignment:
@@ -910,75 +838,6 @@ display:
                 display_method: label
               term_writing:
                 display_method: label
-          plugin_id: search_api_field
-        title:
-          id: title
-          table: search_api_datasource_corpus_word_forms_entity_node
-          field: title
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: false
-          fallback_handler: search_api
-          fallback_options:
-            link_to_item: false
-            multi_separator: ', '
-          entity_type: node
           plugin_id: search_api_field
         toefl_listening:
           id: toefl_listening
@@ -1032,7 +891,7 @@ display:
           type: number_integer
           settings:
             thousand_separator: ''
-            prefix_suffix: true
+            prefix_suffix: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1049,11 +908,14 @@ display:
             set_precision: false
             precision: 0
             decimal: .
+            separator: ','
             format_plural: false
             format_plural_string: !!binary MQNAY291bnQ=
             prefix: ''
             suffix: ''
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             format_plural_values:
               - '1'
@@ -1111,7 +973,7 @@ display:
           type: number_integer
           settings:
             thousand_separator: ''
-            prefix_suffix: true
+            prefix_suffix: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1128,11 +990,14 @@ display:
             set_precision: false
             precision: 0
             decimal: .
+            separator: ','
             format_plural: false
             format_plural_string: !!binary MQNAY291bnQ=
             prefix: ''
             suffix: ''
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             format_plural_values:
               - '1'
@@ -1190,7 +1055,7 @@ display:
           type: number_integer
           settings:
             thousand_separator: ''
-            prefix_suffix: true
+            prefix_suffix: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1207,11 +1072,14 @@ display:
             set_precision: false
             precision: 0
             decimal: .
+            separator: ','
             format_plural: false
             format_plural_string: !!binary MQNAY291bnQ=
             prefix: ''
             suffix: ''
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             format_plural_values:
               - '1'
@@ -1269,7 +1137,7 @@ display:
           type: number_integer
           settings:
             thousand_separator: ''
-            prefix_suffix: true
+            prefix_suffix: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1286,11 +1154,14 @@ display:
             set_precision: false
             precision: 0
             decimal: .
+            separator: ','
             format_plural: false
             format_plural_string: !!binary MQNAY291bnQ=
             prefix: ''
             suffix: ''
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             format_plural_values:
               - '1'
@@ -1348,7 +1219,7 @@ display:
           type: number_integer
           settings:
             thousand_separator: ''
-            prefix_suffix: true
+            prefix_suffix: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1365,84 +1236,18 @@ display:
             set_precision: false
             precision: 0
             decimal: .
+            separator: ','
             format_plural: false
             format_plural_string: !!binary MQNAY291bnQ=
             prefix: ''
             suffix: ''
             link_to_item: false
+            use_highlighting: false
+            multi_type: separator
             multi_separator: ', '
             format_plural_values:
               - '1'
               - '@count'
-          plugin_id: search_api_field
-        field_text:
-          id: field_text
-          table: search_api_datasource_corpus_word_forms_entity_node
-          field: field_text
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: Text
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: true
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 200
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: true
-            trim: true
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: text_trimmed
-          settings:
-            trim_length: 600
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: false
-          fallback_handler: search_api
-          fallback_options:
-            link_to_item: false
-            multi_separator: ', '
-          entity_type: node
           plugin_id: search_api_field
         search_api_excerpt:
           id: search_api_excerpt
@@ -1451,7 +1256,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Excerpt
+          label: ''
           exclude: false
           alter:
             alter_text: false
@@ -1484,15 +1289,16 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
-          empty: '{{ field_text }}'
+          empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
           link_to_item: false
+          use_highlighting: true
           multi_type: separator
           multi_separator: ', '
           plugin_id: search_api
@@ -1510,7 +1316,7 @@ display:
           exposed: true
           expose:
             operator_id: op
-            label: Search
+            label: 'Fulltext search'
             description: ''
             use_operator: true
             operator: search_api_fulltext_op
@@ -1521,6 +1327,7 @@ display:
             remember_roles:
               authenticated: authenticated
               anonymous: '0'
+              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -1550,156 +1357,12 @@ display:
           expose:
             label: ''
           plugin_id: search_api
-      title: 'Corpus Search Word Forms'
-      header:
-        result:
-          id: result
-          table: views
-          field: result
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: false
-          content: 'Displaying @start - @end of @total'
-          plugin_id: result
+      header: {  }
       footer: {  }
       empty: {  }
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-      tags:
-        - 'config:field.storage.node.field_assignment'
-        - 'config:field.storage.node.field_college'
-        - 'config:field.storage.node.field_country'
-        - 'config:field.storage.node.field_draft'
-        - 'config:field.storage.node.field_filename'
-        - 'config:field.storage.node.field_gender'
-        - 'config:field.storage.node.field_program'
-        - 'config:field.storage.node.field_semester_in_school'
-        - 'config:field.storage.node.field_term_writing'
-        - 'config:field.storage.node.field_text'
-        - 'config:field.storage.node.field_toefl_listening'
-        - 'config:field.storage.node.field_toefl_reading'
-        - 'config:field.storage.node.field_toefl_speaking'
-        - 'config:field.storage.node.field_toefl_total'
-        - 'config:field.storage.node.field_toefl_writing'
-  page_1:
-    display_plugin: page
-    id: page_1
-    display_title: Page
-    position: 1
-    display_options:
-      display_extenders: {  }
-      path: search/api/word-forms
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-      tags:
-        - 'config:field.storage.node.field_assignment'
-        - 'config:field.storage.node.field_college'
-        - 'config:field.storage.node.field_country'
-        - 'config:field.storage.node.field_draft'
-        - 'config:field.storage.node.field_filename'
-        - 'config:field.storage.node.field_gender'
-        - 'config:field.storage.node.field_program'
-        - 'config:field.storage.node.field_semester_in_school'
-        - 'config:field.storage.node.field_term_writing'
-        - 'config:field.storage.node.field_text'
-        - 'config:field.storage.node.field_toefl_listening'
-        - 'config:field.storage.node.field_toefl_reading'
-        - 'config:field.storage.node.field_toefl_speaking'
-        - 'config:field.storage.node.field_toefl_total'
-        - 'config:field.storage.node.field_toefl_writing'
-  rest_export_1:
-    display_plugin: rest_export
-    id: rest_export_1
-    display_title: 'REST export'
-    position: 2
-    display_options:
-      display_extenders: {  }
-      path: api/word-forms
-      style:
-        type: facets_serializer
-        options:
-          formats:
-            json: json
-      defaults:
-        style: false
-        row: false
-        cache: false
-      row:
-        type: data_field
-        options:
-          field_options:
-            filename:
-              alias: ''
-              raw_output: false
-            assignment:
-              alias: ''
-              raw_output: false
-            college:
-              alias: ''
-              raw_output: false
-            country:
-              alias: ''
-              raw_output: false
-            draft:
-              alias: ''
-              raw_output: false
-            gender:
-              alias: ''
-              raw_output: false
-            nid:
-              alias: ''
-              raw_output: false
-            program:
-              alias: ''
-              raw_output: false
-            semester_in_school:
-              alias: ''
-              raw_output: false
-            term_writing:
-              alias: ''
-              raw_output: false
-            title:
-              alias: ''
-              raw_output: false
-            toefl_listening:
-              alias: ''
-              raw_output: false
-            toefl_reading:
-              alias: ''
-              raw_output: false
-            toefl_speaking:
-              alias: ''
-              raw_output: false
-            toefl_total:
-              alias: ''
-              raw_output: false
-            toefl_writing:
-              alias: ''
-              raw_output: false
-            search_api_excerpt:
-              alias: ''
-              raw_output: false
-      pager:
-        type: some
-        options:
-          items_per_page: 100
-          offset: 0
-      cache:
-        type: none
     cache_metadata:
       max-age: -1
       contexts:
@@ -1717,7 +1380,234 @@ display:
         - 'config:field.storage.node.field_program'
         - 'config:field.storage.node.field_semester_in_school'
         - 'config:field.storage.node.field_term_writing'
-        - 'config:field.storage.node.field_text'
+        - 'config:field.storage.node.field_toefl_listening'
+        - 'config:field.storage.node.field_toefl_reading'
+        - 'config:field.storage.node.field_toefl_speaking'
+        - 'config:field.storage.node.field_toefl_total'
+        - 'config:field.storage.node.field_toefl_writing'
+  page_1:
+    display_plugin: page
+    id: page_1
+    display_title: Page
+    position: 2
+    display_options:
+      display_extenders: {  }
+      path: texts/lemma
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: false
+          override: false
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            assignment: assignment
+            college: college
+            country: country
+            draft: draft
+            filename: filename
+            gender: gender
+            program: program
+            semester_in_school: semester_in_school
+            term_writing: term_writing
+            toefl_listening: toefl_listening
+            toefl_reading: toefl_reading
+            toefl_speaking: toefl_speaking
+            toefl_total: toefl_total
+            toefl_writing: toefl_writing
+            search_api_excerpt: search_api_excerpt
+          info:
+            assignment:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            college:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            country:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            draft:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            filename:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            gender:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            program:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            semester_in_school:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            term_writing:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            toefl_listening:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            toefl_reading:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            toefl_speaking:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            toefl_total:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            toefl_writing:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            search_api_excerpt:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
+      defaults:
+        style: false
+        row: false
+        cache: false
+      row:
+        type: fields
+        options:
+          inline: {  }
+          separator: ''
+          hide_empty: false
+          default_field_elements: true
+      cache:
+        type: none
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+      tags:
+        - 'config:field.storage.node.field_assignment'
+        - 'config:field.storage.node.field_college'
+        - 'config:field.storage.node.field_country'
+        - 'config:field.storage.node.field_draft'
+        - 'config:field.storage.node.field_filename'
+        - 'config:field.storage.node.field_gender'
+        - 'config:field.storage.node.field_program'
+        - 'config:field.storage.node.field_semester_in_school'
+        - 'config:field.storage.node.field_term_writing'
+        - 'config:field.storage.node.field_toefl_listening'
+        - 'config:field.storage.node.field_toefl_reading'
+        - 'config:field.storage.node.field_toefl_speaking'
+        - 'config:field.storage.node.field_toefl_total'
+        - 'config:field.storage.node.field_toefl_writing'
+  rest_export_1:
+    display_plugin: rest_export
+    id: rest_export_1
+    display_title: REST
+    position: 1
+    display_options:
+      display_extenders: {  }
+      path: texts/lemma
+      pager:
+        type: some
+        options:
+          items_per_page: 100
+          offset: 0
+      style:
+        type: facets_serializer
+        options:
+          formats:
+            json: json
+            xml: xml
+      row:
+        type: data_field
+        options:
+          field_options:
+            text:
+              alias: ''
+              raw_output: false
+      display_description: ''
+      cache:
+        type: none
+      defaults:
+        cache: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - request_format
+        - url
+      tags:
+        - 'config:field.storage.node.field_assignment'
+        - 'config:field.storage.node.field_college'
+        - 'config:field.storage.node.field_country'
+        - 'config:field.storage.node.field_draft'
+        - 'config:field.storage.node.field_filename'
+        - 'config:field.storage.node.field_gender'
+        - 'config:field.storage.node.field_program'
+        - 'config:field.storage.node.field_semester_in_school'
+        - 'config:field.storage.node.field_term_writing'
         - 'config:field.storage.node.field_toefl_listening'
         - 'config:field.storage.node.field_toefl_reading'
         - 'config:field.storage.node.field_toefl_speaking'

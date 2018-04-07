@@ -1,19 +1,27 @@
 langcode: en
 status: true
-dependencies: {  }
-id: gender
-name: Gender
-url_alias: gender
+dependencies:
+  config:
+    - search_api.index.corpus_word_forms
+    - views.view.texts_lemma_search
+  module:
+    - search_api
+id: assignment_lemma_page
+name: Assignment
+url_alias: assignment
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: gender
-facet_source_id: 'search_api:views_page__corpus_text_search__page_1'
+field_identifier: assignment
+facet_source_id: 'search_api:views_page__texts_lemma_search__page_1'
 widget:
   type: checkbox
   config:
     show_numbers: true
     soft_limit: 0
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
@@ -35,11 +43,6 @@ processor_configs:
     settings: {  }
   list_item:
     processor_id: list_item
-    weights:
-      build: 5
-    settings: {  }
-  translate_entity:
-    processor_id: translate_entity
     weights:
       build: 5
     settings: {  }

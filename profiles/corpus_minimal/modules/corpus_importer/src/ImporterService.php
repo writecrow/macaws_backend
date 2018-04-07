@@ -151,7 +151,7 @@ class ImporterService {
     }
 
     if (isset($options['lorem']) && $options['lorem']) {
-      $text['text'] = LoremGutenberg::generate(array('sentences' => 10));
+      //$text['text'] = LoremGutenberg::generate(array('sentences' => 10));
     }
     if (isset($options['merge']) && $options['merge']) {
       $nodes = \Drupal::entityTypeManager()
@@ -167,7 +167,7 @@ class ImporterService {
       $node = Node::create(['type' => 'text']);
       $return = 'created';
     }
-    $node->set('title', $text['ID']);
+    $node->set('title', $text['filename']);
     $node->set('field_draft', array('target_id' => $fields['draft']));
     $node->set('field_college', array('target_id' => $fields['college']));
     $node->set('field_gender', array('target_id' => $fields['gender']));
@@ -175,6 +175,7 @@ class ImporterService {
     $node->set('field_assignment', array('target_id' => $fields['assignment']));
     $node->set('field_semester_in_school', array('target_id' => $fields['semester_in_school']));
     $node->set('field_term_writing', array('target_id' => $fields['term_writing']));
+    $node->set('field_id', array('value' => $text['ID']));
     $node->set('field_toefl_total', array('value' => $text['TOEFL-total']));
     $node->set('field_toefl_writing', array('value' => $text['TOEFL-writing']));
     $node->set('field_toefl_speaking', array('value' => $text['TOEFL-speaking']));

@@ -72,4 +72,72 @@ Alternative to the UI import, a directory of local text files can be imported vi
 `drush corpus-import /Users/me/myfiles/`
 
 ## Performing search requests via the API
-@todo
+All API requests require basic HTTP authorization. Contact the corpus maintainers for access.
+
+All endpoints are accessible via https and are located at `writecrow.corporaproject.org`, and can return data in either XML or JSON format. An example request for all texts matching a given ID, in JSON format, would look like this:
+
+```
+https://api.writecrow.org/texts/id?id=10533&_format=json
+```
+
+### All texts matching a given ID
+/texts/id?id=`ID` | 
+------------ |
+`/texts/id?id=10533&_format=json` | 
+```
+[
+  {"id":"10389","filename":"2_D_KOR_3_M_10389","draft":"D"},
+  {"id":"10389","filename":"2_E_KOR_3_M_10389","draft":"E"},
+  {"id":"10389","filename":"2_F_KOR_3_M_10389","draft":"F"},
+  {"id":"10389","filename":"1_B_KOR_3_M_10389","draft":"B"},
+  {"id":"10389","filename":"1_C_KOR_3_M_10389","draft":"C"}
+ ]
+```
+
+### Single text matching a given filename
+/texts/filename?filename=`FILENAME` | 
+------------ |
+`/texts/filename?filename=1_C_CHN_1_M_10285&_format=json` | 
+```
+[{
+  "filename":"1_C_CHN_1_M_10285",
+  "assignment":"1",
+  "college":"S",
+  "country":"China",
+  "draft":"C",
+  "gender":"M",
+  "id":"10285",
+  "program":"Computer Science-BS",
+  "semester":"1",
+  "term":"Spring 2015",
+  "toefl_listening":"26",
+  "toefl_reading":"23",
+  "toefl_speaking":"22",
+  "toefl_writing":"25",
+  "toefl_total":"96",
+  "text":Lorem ipsum dolor sit amet..."
+}]
+```
+
+### Text search using lemmatized keywords
+/texts/lemma?keywords=`SEARCH STRING` | 
+------------ |
+`/texts/lemma?op=and&keywords=professional+concepts&_format=json` | 
+```
+{"search_results":[{"assignment":"4",
+  "college":"A",
+  "country":"China",
+  "draft":"L",
+  "filename":"4_L_CHN_1_F_10206",
+  "gender":"F",
+  "program":"Agricultural Mech-BS",
+  "semester_in_school":"1",
+  "term_writing":"Spring 2015",
+  "toefl_listening":"28",
+  "toefl_reading":"22",
+  "toefl_speaking":"22",
+  "toefl_total":"97",
+  "toefl_writing":"25",
+  "search_api_excerpt":"\u2026 or colleagues have to be convincing , more specific and \u003Cstrong\u003Eprofessional\u003C\/strong\u003E. In most cases, Marketing plans are written for \u2026 by attracting their attention as well as explain some \u003Cstrong\u003Eprofessional\u003C\/strong\u003E concepts specifically. Last but not least, by \u2026 majors because they have to be focus on explaining \u003Cstrong\u003Eprofessional\u003C\/strong\u003E concepts and definition in their fields instead \u2026"
+}]}
+```

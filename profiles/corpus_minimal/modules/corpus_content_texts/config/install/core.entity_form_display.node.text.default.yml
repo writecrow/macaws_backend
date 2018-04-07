@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.text.field_draft
     - field.field.node.text.field_filename
     - field.field.node.text.field_gender
+    - field.field.node.text.field_id
     - field.field.node.text.field_program
     - field.field.node.text.field_semester_in_school
     - field.field.node.text.field_term_writing
@@ -77,6 +78,14 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: entity_reference_autocomplete
+    region: content
+  field_id:
+    weight: 121
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_program:
     weight: 3
