@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.term_keyword_page
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: termwriting_2
+theme: bartik
+region: sidebar_first
+weight: 7
+provider: null
+plugin: 'facet_block:term_keyword_page'
+settings:
+  id: 'facet_block:term_keyword_page'
+  label: 'Term Writing'
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /texts/keyword
+    negate: false
+    context_mapping: {  }

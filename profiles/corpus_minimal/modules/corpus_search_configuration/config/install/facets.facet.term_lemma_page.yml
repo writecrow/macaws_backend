@@ -6,13 +6,13 @@ dependencies:
     - views.view.texts_lemma_search
   module:
     - search_api
-id: assignment_lemma_page
-name: Assignment
-url_alias: assignment
+id: term_lemma_page
+name: 'Term Writing'
+url_alias: term
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: assignment
+field_identifier: term_writing
 facet_source_id: 'search_api:views_page__texts_lemma_search__page'
 widget:
   type: checkbox

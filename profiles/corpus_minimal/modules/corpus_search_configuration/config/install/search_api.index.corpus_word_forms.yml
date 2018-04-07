@@ -23,7 +23,7 @@ dependencies:
     - search_api_lemma
     - node
 id: corpus_word_forms
-name: 'Corpus : Word forms (lemma)'
+name: 'Index by Lemma'
 description: ''
 read_only: false
 field_settings:
@@ -234,7 +234,7 @@ processor_settings:
     highlight: always
     highlight_partial: 0
     excerpt: 1
-    excerpt_length: '256'
+    excerpt_length: '600'
     exclude_fields: {  }
     prefix: '<strong>'
     suffix: '</strong>'

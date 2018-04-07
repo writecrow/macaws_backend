@@ -1,1 +1,4 @@
+excluded:
+  - facets.facet_source.search_api__views_rest__corpus_search_word_forms__rest_export_1
+  - facets.facet_source.search_api__views_rest__texts_lemma_search__rest_export_1
 required: true

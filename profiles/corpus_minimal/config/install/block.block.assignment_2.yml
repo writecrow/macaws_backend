@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.assignment_keyword_page
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: assignment_2
+theme: bartik
+region: sidebar_first
+weight: -6
+provider: null
+plugin: 'facet_block:assignment_keyword_page'
+settings:
+  id: 'facet_block:assignment_keyword_page'
+  label: Assignment
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /texts/keyword
+    negate: false
+    context_mapping: {  }

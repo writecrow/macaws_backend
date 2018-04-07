@@ -2,19 +2,22 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.field_assignment
     - field.storage.node.field_draft
     - field.storage.node.field_filename
     - field.storage.node.field_id
     - node.type.text
+    - taxonomy.vocabulary.assignment
   module:
     - node
     - rest
     - serialization
+    - taxonomy
     - user
 id: texts_by_id
-label: 'Texts by ID'
+label: 'Texts by matching ID and Assigment'
 module: views
-description: 'Returns all texts matching a specified ID'
+description: 'Returns all texts matching a specified ID & Assignment number'
 tag: ''
 base_table: node_field_data
 base_field: nid
@@ -52,23 +55,10 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       pager:
-        type: mini
+        type: some
         options:
-          items_per_page: 10
+          items_per_page: 100
           offset: 0
-          id: 0
-          total_pages: null
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          tags:
-            previous: ‹‹
-            next: ››
       style:
         type: serializer
       row:
@@ -268,6 +258,69 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        field_assignment:
+          id: field_assignment
+          table: node__field_assignment
+          field: field_assignment
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: false
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
       filters:
         status:
           value: '1'
@@ -307,7 +360,7 @@ display:
             use_operator: false
             operator: field_id_value_op
             identifier: id
-            required: true
+            required: false
             remember: false
             multiple: false
             remember_roles:
@@ -328,15 +381,60 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           plugin_id: string
-      sorts:
-        field_draft_target_id:
-          id: field_draft_target_id
-          table: node__field_draft
-          field: field_draft_target_id
+        field_assignment_target_id:
+          id: field_assignment_target_id
+          table: node__field_assignment
+          field: field_assignment_target_id
           relationship: none
           group_type: group
           admin_label: ''
-          order: DESC
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_assignment_target_id_op
+            label: 'Assignment (field_assignment)'
+            description: ''
+            use_operator: false
+            operator: field_assignment_target_id_op
+            identifier: assignment
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: textfield
+          limit: true
+          vid: assignment
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
+      sorts:
+        field_filename_value:
+          id: field_filename_value
+          table: node__field_filename
+          field: field_filename_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
           exposed: false
           expose:
             label: ''
@@ -344,7 +442,16 @@ display:
       header: {  }
       footer: {  }
       empty: {  }
-      relationships: {  }
+      relationships:
+        field_assignment:
+          id: field_assignment
+          table: node__field_assignment
+          field: field_assignment
+          relationship: none
+          group_type: group
+          admin_label: 'field_assignment: Taxonomy term'
+          required: false
+          plugin_id: standard
       arguments: {  }
       display_extenders: {  }
     cache_metadata:
@@ -354,10 +461,11 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
-        - url.query_args
+        - user
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:field.storage.node.field_assignment'
         - 'config:field.storage.node.field_draft'
         - 'config:field.storage.node.field_filename'
         - 'config:field.storage.node.field_id'
@@ -424,10 +532,11 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
-        - url.query_args
+        - user
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:field.storage.node.field_assignment'
         - 'config:field.storage.node.field_draft'
         - 'config:field.storage.node.field_filename'
         - 'config:field.storage.node.field_id'
@@ -463,6 +572,9 @@ display:
             field_draft:
               alias: draft
               raw_output: false
+            field_assignment:
+              alias: assignment
+              raw_output: false
       display_description: ''
       auth: {  }
     cache_metadata:
@@ -472,9 +584,11 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
+        - user
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:field.storage.node.field_assignment'
         - 'config:field.storage.node.field_draft'
         - 'config:field.storage.node.field_filename'
         - 'config:field.storage.node.field_id'

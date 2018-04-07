@@ -71,7 +71,148 @@ display:
           items_per_page: 1
           offset: 0
       style:
-        type: serializer
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: false
+          override: false
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            field_filename: field_filename
+            field_assignment: field_assignment
+            field_college: field_college
+            field_country: field_country
+            field_draft: field_draft
+            field_gender: field_gender
+            field_id: field_id
+            field_program: field_program
+            field_semester_in_school: field_semester_in_school
+            field_term_writing: field_term_writing
+            field_toefl_listening: field_toefl_listening
+            field_toefl_reading: field_toefl_reading
+            field_toefl_speaking: field_toefl_speaking
+            field_toefl_writing: field_toefl_writing
+            field_toefl_total: field_toefl_total
+            field_text: field_text
+          info:
+            field_filename:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_assignment:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_college:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_country:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_draft:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_gender:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_id:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_program:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_semester_in_school:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_term_writing:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_toefl_listening:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_toefl_reading:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_toefl_speaking:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_toefl_writing:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_toefl_total:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_text:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
       row:
         type: fields
         options:
@@ -1056,14 +1197,14 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 0
+            max_length: 600
             word_boundary: true
             ellipsis: true
             more_link: false
             more_link_text: ''
             more_link_path: ''
             strip_tags: false
-            trim: false
+            trim: true
             preserve_tags: ''
             html: false
           element_type: ''
@@ -1164,7 +1305,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - request_format
         - url
         - 'user.node_grants:view'
         - user.permissions
@@ -1198,7 +1338,6 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - request_format
         - url
         - 'user.node_grants:view'
         - user.permissions

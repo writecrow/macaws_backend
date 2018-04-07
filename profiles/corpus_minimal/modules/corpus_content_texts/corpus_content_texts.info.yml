@@ -2,6 +2,8 @@ name: 'Corpus Content : Texts'
 type: module
 core: 8.x
 dependencies:
+  - block
+  - corpus_search_configuration
   - facets
   - facets_rest
   - field
@@ -10,6 +12,7 @@ dependencies:
   - rest
   - search_api
   - serialization
+  - system
   - taxonomy
   - text
   - user

@@ -22,7 +22,7 @@ dependencies:
     - search_api
     - node
 id: corpus_text_index
-name: 'Corpus : Keyword Index'
+name: 'Index by Keyword'
 description: ''
 read_only: false
 field_settings:
@@ -164,7 +164,7 @@ processor_settings:
     highlight: always
     highlight_partial: false
     excerpt: true
-    excerpt_length: 256
+    excerpt_length: 600
     exclude_fields: {  }
     prefix: '<strong>'
     suffix: '</strong>'

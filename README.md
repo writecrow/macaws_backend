@@ -80,17 +80,15 @@ All endpoints are accessible via https and are located at `writecrow.corporaproj
 https://api.writecrow.org/texts/id?id=10533&_format=json
 ```
 
-### All texts matching a given ID
-/texts/id?id=`ID` | 
+### All texts matching a given ID & Assignment
+/texts/id?id=`ID`&assigment=`ASSIGNMENT` | 
 ------------ |
-`/texts/id?id=10533&_format=json` | 
+`/texts/id?id=10533&assignment=2_format=json` | 
 ```
 [
   {"id":"10389","filename":"2_D_KOR_3_M_10389","draft":"D"},
   {"id":"10389","filename":"2_E_KOR_3_M_10389","draft":"E"},
-  {"id":"10389","filename":"2_F_KOR_3_M_10389","draft":"F"},
-  {"id":"10389","filename":"1_B_KOR_3_M_10389","draft":"B"},
-  {"id":"10389","filename":"1_C_KOR_3_M_10389","draft":"C"}
+  {"id":"10389","filename":"2_F_KOR_3_M_10389","draft":"F"}
  ]
 ```
 
@@ -119,7 +117,30 @@ https://api.writecrow.org/texts/id?id=10533&_format=json
 }]
 ```
 
-### Text search using lemmatized keywords
+### Text search using regular keyword(s)
+/texts/keyword?keywords=`SEARCH STRING` | 
+------------ |
+`/texts/keyword?op=and&keywords=professional+concepts&_format=json` | 
+```
+{"search_results":[{"assignment":"4",
+  "college":"A",
+  "country":"China",
+  "draft":"L",
+  "filename":"4_L_CHN_1_F_10206",
+  "gender":"F",
+  "program":"Agricultural Mech-BS",
+  "semester_in_school":"1",
+  "term_writing":"Spring 2015",
+  "toefl_listening":"28",
+  "toefl_reading":"22",
+  "toefl_speaking":"22",
+  "toefl_total":"97",
+  "toefl_writing":"25",
+  "search_api_excerpt":"\u2026 or colleagues have to be convincing , more specific and \u003Cstrong\u003Eprofessional\u003C\/strong\u003E. In most cases, Marketing plans are written for \u2026 by attracting their attention as well as explain some \u003Cstrong\u003Eprofessional\u003C\/strong\u003E concepts specifically. Last but not least, by \u2026 majors because they have to be focus on explaining \u003Cstrong\u003Eprofessional\u003C\/strong\u003E concepts and definition in their fields instead \u2026"
+}]}
+```
+
+### Text search using lemmatized keyword(s)
 /texts/lemma?keywords=`SEARCH STRING` | 
 ------------ |
 `/texts/lemma?op=and&keywords=professional+concepts&_format=json` | 

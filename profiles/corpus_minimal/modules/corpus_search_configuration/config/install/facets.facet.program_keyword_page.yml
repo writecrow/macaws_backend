@@ -2,22 +2,26 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.corpus_word_forms
-    - views.view.texts_lemma_search
+    - search_api.index.corpus_text_index
+    - views.view.texts_keyword_search
   module:
     - search_api
-id: assignment
-name: Assignment
-url_alias: assignment
+id: program_keyword_page
+name: Program
+url_alias: program
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: assignment
-facet_source_id: 'search_api:views_rest__texts_lemma_search__rest_export_1'
+field_identifier: program
+facet_source_id: 'search_api:views_page__texts_keyword_search__page'
 widget:
-  type: array
+  type: checkbox
   config:
     show_numbers: true
+    soft_limit: 5
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
@@ -39,6 +43,11 @@ processor_configs:
     settings: {  }
   list_item:
     processor_id: list_item
+    weights:
+      build: 5
+    settings: {  }
+  translate_entity:
+    processor_id: translate_entity
     weights:
       build: 5
     settings: {  }

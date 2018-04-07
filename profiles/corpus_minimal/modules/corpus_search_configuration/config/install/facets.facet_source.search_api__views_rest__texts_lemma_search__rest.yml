@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: search_api__views_rest__texts_lemma_search__rest
+name: 'search_api:views_rest__texts_lemma_search__rest'
+filter_key: texts_lemma_search__rest
+url_processor: query_string
+breadcrumb:
+  active: false
+  before: true
+  group: false

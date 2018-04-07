@@ -11,23 +11,26 @@ dependencies:
     - field.storage.node.field_program
     - field.storage.node.field_semester_in_school
     - field.storage.node.field_term_writing
+    - field.storage.node.field_text
     - field.storage.node.field_toefl_listening
     - field.storage.node.field_toefl_reading
     - field.storage.node.field_toefl_speaking
     - field.storage.node.field_toefl_total
     - field.storage.node.field_toefl_writing
-    - search_api.index.corpus_word_forms
+    - search_api.index.corpus_text_index
   module:
     - facets_rest
     - rest
     - search_api
     - serialization
-id: texts_lemma_search
-label: 'Texts Lemma Search'
+    - text
+    - user
+id: texts_keyword_search
+label: 'Texts Keyword Search'
 module: views
-description: 'Return all texts matching specified metadata and/or lemma in text'
+description: 'Return all texts matching specified metadata and/or keyword(s) in text'
 tag: ''
-base_table: search_api_index_corpus_word_forms
+base_table: search_api_index_corpus_text_index
 base_field: search_api_id
 core: 8.x
 display:
@@ -38,8 +41,9 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: tag
         options: {  }
@@ -59,10 +63,23 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       pager:
-        type: some
+        type: mini
         options:
-          items_per_page: 100
+          items_per_page: 10
           offset: 0
+          id: 0
+          total_pages: null
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          tags:
+            previous: ‹‹
+            next: ››
       style:
         type: serializer
       row:
@@ -75,7 +92,7 @@ display:
       fields:
         assignment:
           id: assignment
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: assignment
           relationship: none
           group_type: group
@@ -162,7 +179,7 @@ display:
           plugin_id: search_api_field
         college:
           id: college
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: college
           relationship: none
           group_type: group
@@ -211,7 +228,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: true
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -249,7 +266,7 @@ display:
           plugin_id: search_api_field
         country:
           id: country
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: country
           relationship: none
           group_type: group
@@ -298,7 +315,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: true
+            link: false
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -336,7 +353,7 @@ display:
           plugin_id: search_api_field
         draft:
           id: draft
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: draft
           relationship: none
           group_type: group
@@ -423,7 +440,7 @@ display:
           plugin_id: search_api_field
         filename:
           id: filename
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: filename
           relationship: none
           group_type: group
@@ -493,7 +510,7 @@ display:
           plugin_id: search_api_field
         gender:
           id: gender
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: gender
           relationship: none
           group_type: group
@@ -580,7 +597,7 @@ display:
           plugin_id: search_api_field
         program:
           id: program
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: program
           relationship: none
           group_type: group
@@ -667,7 +684,7 @@ display:
           plugin_id: search_api_field
         semester_in_school:
           id: semester_in_school
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: semester_in_school
           relationship: none
           group_type: group
@@ -754,7 +771,7 @@ display:
           plugin_id: search_api_field
         term_writing:
           id: term_writing
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: term_writing
           relationship: none
           group_type: group
@@ -841,7 +858,7 @@ display:
           plugin_id: search_api_field
         toefl_listening:
           id: toefl_listening
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: toefl_listening
           relationship: none
           group_type: group
@@ -923,7 +940,7 @@ display:
           plugin_id: search_api_field
         toefl_reading:
           id: toefl_reading
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: toefl_reading
           relationship: none
           group_type: group
@@ -1005,7 +1022,7 @@ display:
           plugin_id: search_api_field
         toefl_speaking:
           id: toefl_speaking
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: toefl_speaking
           relationship: none
           group_type: group
@@ -1087,7 +1104,7 @@ display:
           plugin_id: search_api_field
         toefl_total:
           id: toefl_total
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: toefl_total
           relationship: none
           group_type: group
@@ -1169,7 +1186,7 @@ display:
           plugin_id: search_api_field
         toefl_writing:
           id: toefl_writing
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: toefl_writing
           relationship: none
           group_type: group
@@ -1249,9 +1266,78 @@ display:
               - '1'
               - '@count'
           plugin_id: search_api_field
+        text:
+          id: text
+          table: search_api_index_corpus_text_index
+          field: text
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 600
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: true
+            trim: true
+            preserve_tags: '<strong>'
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: text_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          field_rendering: false
+          fallback_handler: search_api
+          fallback_options:
+            link_to_item: false
+            use_highlighting: false
+            multi_type: separator
+            multi_separator: ', '
+          plugin_id: search_api_field
         search_api_excerpt:
           id: search_api_excerpt
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: search_api_excerpt
           relationship: none
           group_type: group
@@ -1293,24 +1379,24 @@ display:
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
-          empty: ''
+          empty: '{{ text }}'
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
           link_to_item: false
-          use_highlighting: true
+          use_highlighting: false
           multi_type: separator
           multi_separator: ', '
           plugin_id: search_api
       filters:
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: search_api_fulltext
           relationship: none
           group_type: group
           admin_label: ''
-          operator: or
+          operator: and
           value: ''
           group: 1
           exposed: true
@@ -1347,7 +1433,7 @@ display:
       sorts:
         search_api_relevance:
           id: search_api_relevance
-          table: search_api_index_corpus_word_forms
+          table: search_api_index_corpus_text_index
           field: search_api_relevance
           relationship: none
           group_type: group
@@ -1370,6 +1456,8 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
+        - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_assignment'
         - 'config:field.storage.node.field_college'
@@ -1380,6 +1468,7 @@ display:
         - 'config:field.storage.node.field_program'
         - 'config:field.storage.node.field_semester_in_school'
         - 'config:field.storage.node.field_term_writing'
+        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_toefl_listening'
         - 'config:field.storage.node.field_toefl_reading'
         - 'config:field.storage.node.field_toefl_speaking'
@@ -1392,7 +1481,7 @@ display:
     position: 2
     display_options:
       display_extenders: {  }
-      path: texts/lemma
+      path: texts/keyword
       style:
         type: table
         options:
@@ -1405,6 +1494,7 @@ display:
           summary: ''
           description: ''
           columns:
+            text: text
             assignment: assignment
             college: college
             country: country
@@ -1421,6 +1511,13 @@ display:
             toefl_writing: toefl_writing
             search_api_excerpt: search_api_excerpt
           info:
+            text:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             assignment:
               sortable: false
               default_sort_order: asc
@@ -1545,6 +1642,8 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
+        - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_assignment'
         - 'config:field.storage.node.field_college'
@@ -1555,6 +1654,7 @@ display:
         - 'config:field.storage.node.field_program'
         - 'config:field.storage.node.field_semester_in_school'
         - 'config:field.storage.node.field_term_writing'
+        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_toefl_listening'
         - 'config:field.storage.node.field_toefl_reading'
         - 'config:field.storage.node.field_toefl_speaking'
@@ -1567,7 +1667,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: texts/lemma
+      path: texts/keyword
       pager:
         type: some
         options:
@@ -1576,6 +1676,7 @@ display:
       style:
         type: facets_serializer
         options:
+          uses_fields: false
           formats:
             json: json
             xml: xml
@@ -1598,6 +1699,7 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_assignment'
         - 'config:field.storage.node.field_college'
@@ -1608,6 +1710,7 @@ display:
         - 'config:field.storage.node.field_program'
         - 'config:field.storage.node.field_semester_in_school'
         - 'config:field.storage.node.field_term_writing'
+        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_toefl_listening'
         - 'config:field.storage.node.field_toefl_reading'
         - 'config:field.storage.node.field_toefl_speaking'
