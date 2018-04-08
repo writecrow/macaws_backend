@@ -1,4 +1,5 @@
 # "Built" components
+composer.lock
 .csslintrc
 .drush-lock-update
 .editorconfig
@@ -12,6 +13,7 @@ core/
 drush/
 example.gitignore
 index.php
+libraries/
 /modules/
 robots.txt
 sites/

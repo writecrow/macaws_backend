@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.college_keyword_page
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: college_2
+theme: bartik
+region: sidebar_first
+weight: -4
+provider: null
+plugin: 'facet_block:college_keyword_page'
+settings:
+  id: 'facet_block:college_keyword_page'
+  label: College
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /texts/keyword
+    negate: false
+    context_mapping: {  }

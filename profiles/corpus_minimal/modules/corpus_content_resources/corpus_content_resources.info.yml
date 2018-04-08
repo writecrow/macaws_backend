@@ -1,0 +1,11 @@
+name: 'Corpus Content : Resources'
+description: 'Defines the basic schema for repository resources'
+type: module
+core: 8.x
+dependencies:
+  - field
+  - menu_ui
+  - node
+  - path
+  - user
+version: 8.x-1.0

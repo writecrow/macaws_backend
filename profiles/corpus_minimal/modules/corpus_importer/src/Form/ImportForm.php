@@ -2,7 +2,7 @@
 
 namespace Drupal\corpus_importer\Form;
 
-use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\corpus_importer\ImporterService;
 
@@ -11,7 +11,16 @@ use Drupal\corpus_importer\ImporterService;
  *
  * @package Drupal\corpus_importer\Form
  */
-class ImportForm extends FormBase {
+class ImportForm extends ConfigFormBase {
+
+  /**  
+   * {@inheritdoc}  
+   */  
+  protected function getEditableConfigNames() {  
+    return [  
+      'corpus_importer.corpus_import_form',  
+    ];  
+  }  
 
   /**
    * {@inheritdoc}

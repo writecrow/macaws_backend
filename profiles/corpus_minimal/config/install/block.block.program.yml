@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.program_lemma_page
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: program
+theme: bartik
+region: sidebar_first
+weight: 3
+provider: null
+plugin: 'facet_block:program_lemma_page'
+settings:
+  id: 'facet_block:program_lemma_page'
+  label: Program
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /texts/lemma
+    negate: false
+    context_mapping: {  }

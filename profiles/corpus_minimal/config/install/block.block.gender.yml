@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.gender_lemma_page
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: gender
+theme: bartik
+region: sidebar_first
+weight: 1
+provider: null
+plugin: 'facet_block:gender_lemma_page'
+settings:
+  id: 'facet_block:gender_lemma_page'
+  label: Gender
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /texts/lemma
+    negate: false
+    context_mapping: {  }

@@ -8,16 +8,15 @@ distribution:
 # Required modules
 dependencies:
   # core
+  - block
   - block_content
   - breakpoint
   - config
   - contextual
-  - menu_link_content
   - datetime
-  - editor
+  - dynamic_page_cache
   - entity_reference
   - image
-  - menu_ui
   - node
   - options
   - path
@@ -25,19 +24,18 @@ dependencies:
   - taxonomy
   - text
   - dblog
-  - shortcut
   - toolbar
   - file
-  - rdf
   - views
-  # Contributed modules
-  # Custom modules
-  - corpus_schemata
+  # custom
+  - corpus_content_texts
+  - corpus_content_resources
+  - corpus_search_configuration
+  - corpus_importer
 
 themes:
-  - bootstrap
-  - corpus_theme
-  - adminimal_theme
+  - seven
+  - bartik
 
 version: '8.x-1.0'
 core: '8.x'

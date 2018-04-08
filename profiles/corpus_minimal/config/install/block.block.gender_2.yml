@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.gender_keyword_page
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: gender_2
+theme: bartik
+region: sidebar_first
+weight: 2
+provider: null
+plugin: 'facet_block:gender_keyword_page'
+settings:
+  id: 'facet_block:gender_keyword_page'
+  label: Gender
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /texts/keyword
+    negate: false
+    context_mapping: {  }
