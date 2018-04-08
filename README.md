@@ -80,10 +80,12 @@ All endpoints are accessible via https and are located at `writecrow.corporaproj
 https://api.writecrow.org/texts/id?id=10533&_format=json
 ```
 
-### All texts matching a given ID & Assignment
-/texts/id?id=`ID`&assigment=`ASSIGNMENT` | 
------------- |
-`/texts/id?id=10533&assignment=2_format=json` | 
+### All texts matching a given ID (& Assignment)
+| Pattern | /texts/id?id=`ID`&assigment=`ASSIGNMENT` | 
+| ------- | :---------------------------------------- |
+| Example 1 |`/texts/id?id=10533&_format=json` | 
+| Example 2 |`/texts/id?id=10533&assignment=2&_format=xml` | 
+#### Sample output
 ```
 [
   {"id":"10389","filename":"2_D_KOR_3_M_10389","draft":"D"},
@@ -93,9 +95,10 @@ https://api.writecrow.org/texts/id?id=10533&_format=json
 ```
 
 ### Single text matching a given filename
-/texts/filename?filename=`FILENAME` | 
------------- |
-`/texts/filename?filename=1_C_CHN_1_M_10285&_format=json` | 
+| Pattern | /texts/filename?filename=`FILENAME` | 
+| ------- | :------------ |
+| Example |`/texts/filename?filename=1_C_CHN_1_M_10285&_format=json` | 
+#### Sample output
 ```
 [{
   "filename":"1_C_CHN_1_M_10285",
@@ -118,11 +121,17 @@ https://api.writecrow.org/texts/id?id=10533&_format=json
 ```
 
 ### Text search using regular keyword(s)
-/texts/keyword?keywords=`SEARCH STRING` | 
------------- |
-`/texts/keyword?op=and&keywords=professional+concepts&_format=json` | 
+| Pattern | /texts/keyword?keywords=`WORD+WORD` | 
+| ------- | :------------ |
+| Single keyword | `/texts/keyword?keywords=tassets&_format=json` |
+| Multipe keywords, AND operator | `/texts/keyword?keywords=tassets+burnished&op=and&_format=json` | 
+#### Notes
+- Boolean and/or operator may be supplied when searching for multiple keywords. In the absence of a specified parameter, an "OR" search is performed.
+- Keywords are separated by a `+`
+#### Sample output
 ```
-{"search_results":[{"assignment":"4",
+{"search_results":[{
+  "assignment":"4",
   "college":"A",
   "country":"China",
   "draft":"L",
@@ -141,11 +150,19 @@ https://api.writecrow.org/texts/id?id=10533&_format=json
 ```
 
 ### Text search using lemmatized keyword(s)
-/texts/lemma?keywords=`SEARCH STRING` | 
------------- |
-`/texts/lemma?op=and&keywords=professional+concepts&_format=json` | 
+| Pattern | /texts/lemma?keywords=`WORD+WORD` | 
+| ------- | :------------ |
+| Example | `/texts/lemma?op=and&keywords=professional+concepts&_format=json` | 
+
+#### Notes
+- Keywords submitted will automatically be lemmatized
+- Currently, lemma with part of speech tagging is not supported
+- Boolean and/or operator may be supplied when searching for multiple keywords. In the absence of a specified parameter, an "OR" search is performed.
+- Keywords are separated by a `+`
+#### Sample output
 ```
-{"search_results":[{"assignment":"4",
+{"search_results":[{
+  "assignment":"4",
   "college":"A",
   "country":"China",
   "draft":"L",
