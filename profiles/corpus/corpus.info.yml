@@ -1,0 +1,40 @@
+name: corpus
+# core: 8.x
+type: profile
+description: 'A minimal configuration for a corpus web application.'
+distribution:
+  name: Corpus
+
+# Required modules
+dependencies:
+  # core
+  - block
+  - block_content
+  - breakpoint
+  - config
+  - contextual
+  - datetime
+  - dynamic_page_cache
+  - entity_reference
+  - image
+  - node
+  - options
+  - path
+  - page_cache
+  - taxonomy
+  - text
+  - dblog
+  - toolbar
+  - file
+  - views
+  # custom
+  - corpus_importer
+  - content_type_text
+
+themes:
+  - seven
+  - bartik
+
+version: '8.x-1.0'
+core: '8.x'
+project: 'corpus'

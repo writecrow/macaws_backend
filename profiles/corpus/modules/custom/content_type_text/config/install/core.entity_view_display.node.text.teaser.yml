@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.text.field_id
+    - field.field.node.text.field_toefl_listening
+    - field.field.node.text.field_toefl_reading
+    - field.field.node.text.field_toefl_speaking
+    - field.field.node.text.field_toefl_total
+    - field.field.node.text.field_toefl_writing
+    - node.type.text
+  module:
+    - user
+id: node.text.teaser
+targetEntityType: node
+bundle: text
+mode: teaser
+content:
+  links:
+    weight: 100
+    region: content
+hidden:
+  field_id: true
+  field_toefl_listening: true
+  field_toefl_reading: true
+  field_toefl_speaking: true
+  field_toefl_total: true
+  field_toefl_writing: true
