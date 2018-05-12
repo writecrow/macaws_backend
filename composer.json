@@ -13,9 +13,9 @@
   ],   
   "require": {
     "composer/installers": "1.5.0",
-    "drupal-composer/drupal-scaffold": "2.0.1",
+    "drupal-composer/drupal-scaffold": "dev-master",
     "drupal/console": "1.2.0",
-    "drupal/core": "8.5.1",
+    "drupal/core": "~8.5",
     "drupal/facets": "1.0-beta2",
     "drupal/features": "3.5",
     "drupal/plupload": "1.0-beta1",
@@ -23,7 +23,7 @@
     "drush/drush": "~8",
     "oomphinc/composer-installers-extender": "1.1.2",
     "rvtraveller/qs-composer-installer": "1.1",
-    "webflo/drupal-core-strict": "8.5.1",
+    "webflo/drupal-core-strict": "~8.5",
     "wikimedia/composer-merge-plugin": "~1.4",
     "writecrow/lorem_gutenberg": "1.1",
     "writecrow/tag_converter": "1.0",
@@ -35,12 +35,27 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "scripts": {
-    "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
     "build-assets": [
       "composer install --optimize-autoloader"
     ]
   },
   "extra": {
+    "drupal-scaffold": {
+      "excludes": [
+        "robots.txt",
+        ".csslintrc",
+        ".eslintrc",
+        ".editorconfig",
+        ".eslintignore",
+        ".eslintrc.json",
+        "web.config"
+      ],
+      "initial": {
+        "sites/default/default.services.yml": "sites/default/services.yml",
+        "sites/default/default.settings.php": "sites/default/settings.php"
+      },
+      "omit-defaults": false
+    },
     "installer-paths": {
       "core": ["type:drupal-core"],
       "modules/contrib/{$name}": ["type:drupal-module"],
@@ -49,16 +64,6 @@
       "drush/contrib/{$name}": ["type:drupal-drush"],
       "modules/custom/{$name}": ["type:drupal-custom-module"],
       "themes/custom/{$name}": ["type:drupal-custom-theme"]
-    },
-    "drupal-scaffold": {
-      "excludes": [
-        ".csslintrc",
-        ".eslintrc",
-        ".editorconfig",
-        ".eslintignore",
-        ".eslintrc.json",
-        "web.config"
-      ]
     }
   },
   "repositories": {
