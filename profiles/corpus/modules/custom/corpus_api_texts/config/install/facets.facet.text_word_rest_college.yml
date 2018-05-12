@@ -17,7 +17,7 @@ facet_source_id: 'search_api:views_rest__texts_by_word__rest_export_1'
 widget:
   type: array
   config:
-    show_numbers: false
+    show_numbers: true
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false

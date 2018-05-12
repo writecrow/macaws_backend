@@ -1452,6 +1452,60 @@ display:
             title:
               alias: filename
               raw_output: false
+            field_assignment:
+              alias: assignment
+              raw_output: false
+            field_college:
+              alias: college
+              raw_output: false
+            field_country:
+              alias: country
+              raw_output: false
+            field_course:
+              alias: course
+              raw_output: false
+            field_draft:
+              alias: draft
+              raw_output: false
+            field_gender:
+              alias: gender
+              raw_output: false
+            field_id:
+              alias: id
+              raw_output: false
+            field_institution:
+              alias: institution
+              raw_output: false
+            field_instructor:
+              alias: instructor
+              raw_output: false
+            field_program:
+              alias: program
+              raw_output: false
+            field_toefl_listening:
+              alias: toefl_listening
+              raw_output: false
+            field_toefl_reading:
+              alias: toefl_reading
+              raw_output: false
+            field_toefl_speaking:
+              alias: toefl_speaking
+              raw_output: false
+            field_toefl_total:
+              alias: toefl_total
+              raw_output: false
+            field_toefl_writing:
+              alias: toefl_writing
+              raw_output: false
+            field_year:
+              alias: year
+              raw_output: false
+            field_year_in_school:
+              alias: year_in_school
+              raw_output: false
+            field_body:
+              alias: body
+              raw_output: false
       pager:
         type: some
         options:

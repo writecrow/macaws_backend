@@ -1,1 +1,14 @@
+excluded:
+  - block.block.text_word_page_assignment
+  - block.block.text_word_page_college
+  - block.block.text_word_page_country
+  - block.block.text_word_page_course
+  - block.block.text_word_page_draft
+  - block.block.text_word_page_gender
+  - block.block.text_word_page_institution
+  - block.block.text_word_page_instructor
+  - block.block.text_word_page_program
+  - block.block.text_word_page_semester
+  - block.block.text_word_page_year
+  - block.block.text_word_page_year_in_school
 required: true
