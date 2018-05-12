@@ -124,6 +124,7 @@ class ImporterService {
    * Helper function to save data.
    */
   public static function saveNode($text, $options = []) {
+    // The key *must* match what is provided in the original text file.
     $taxonomies = [
       'Assignment' => 'assignment',
       'College' => 'college',
@@ -134,8 +135,8 @@ class ImporterService {
       'Institution' => 'institution',
       'Instructor' => 'instructor',
       'Program' => 'program',
-      'Semester' => 'semester',
-      'Year' => 'year',
+      'Semester writing' => 'semester',
+      'Year writing' => 'year',
       'Year in School' => 'year_in_school',
     ];
 
@@ -182,7 +183,11 @@ class ImporterService {
     $node->set('field_toefl_speaking', array('value' => $text['TOEFL speaking']));
     $node->set('field_toefl_reading', array('value' => $text['TOEFL reading']));
     $node->set('field_toefl_listening', array('value' => $text['TOEFL listening']));
-    $node->set('field_body', array('value' => $text['text'], 'format' => 'plain_text'));
+
+    $body = trim(html_entity_decode($text['text']));
+    // Remove unnecessary <End Header> text.
+    $body = str_replace('<End Header>', '', $body);
+    $node->set('field_body', ['value' => $body, 'format' => 'plain_text']);
     $node->save();
     // Send back metadata on what happened.
     return array($return => $text['filename']);
