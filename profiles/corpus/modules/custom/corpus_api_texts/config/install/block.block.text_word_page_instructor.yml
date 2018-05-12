@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.text_word_page_instructor
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: text_word_page_instructor
+theme: bartik
+region: sidebar_first
+weight: 3
+provider: null
+plugin: 'facet_block:text_word_page_instructor'
+settings:
+  id: 'facet_block:text_word_page_instructor'
+  label: Instructor
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /texts/word
+    negate: false
+    context_mapping: {  }
