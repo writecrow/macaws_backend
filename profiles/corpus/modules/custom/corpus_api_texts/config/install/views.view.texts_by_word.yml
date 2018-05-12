@@ -1651,6 +1651,10 @@ display:
     display_options:
       display_extenders: {  }
       path: texts/word
+      cache:
+        type: none
+      defaults:
+        cache: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1684,6 +1688,7 @@ display:
       defaults:
         style: false
         row: false
+        cache: false
       row:
         type: data_field
         options:
@@ -1712,6 +1717,8 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+      cache:
+        type: none
     cache_metadata:
       max-age: -1
       contexts:
