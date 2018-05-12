@@ -123,23 +123,28 @@ class ImporterService {
   /**
    * Helper function to save data.
    */
-  public static function saveNode($text, $options = array()) {
-    $taxonomies = array(
+  public static function saveNode($text, $options = []) {
+    $taxonomies = [
       'Assignment' => 'assignment',
-      'Draft' => 'draft',
-      'Semester in School' => 'semester_in_school',
-      'Gender' => 'gender',
-      'Program' => 'program',
       'College' => 'college',
-      'Term writing' => 'term_writing',
       'Country' => 'country',
-    );
+      'Course' => 'course',
+      'Draft' => 'draft',
+      'Gender' => 'gender',
+      'Institution' => 'institution',
+      'Instructor' => 'instructor',
+      'Program' => 'program',
+      'Semester' => 'semester',
+      'Year' => 'year',
+      'Year in School' => 'year_in_school',
+    ];
 
-    $fields = array();
+    $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
       if (in_array($name, array_keys($text))) {
         $tid = self::getTidByName($text[$name], $machine_name);
         if ($tid == 0) {
+          // Convert country IDs to readable names.
           if ($machine_name == 'country') {
             $text[$name] = CountryCodeConverter::convert($text[$name]);
           }
@@ -156,7 +161,7 @@ class ImporterService {
     if (isset($options['merge']) && $options['merge']) {
       $nodes = \Drupal::entityTypeManager()
         ->getStorage('node')
-        ->loadByProperties(['title' => $text['ID']]);
+        ->loadByProperties(['title' => $text['filename']]);
       // Default to first instance found, in the unlikely event that there
       // are more than one.
       $node = reset($nodes);
@@ -168,25 +173,19 @@ class ImporterService {
       $return = 'created';
     }
     $node->set('title', $text['filename']);
-    $node->set('field_draft', array('target_id' => $fields['draft']));
-    $node->set('field_college', array('target_id' => $fields['college']));
-    $node->set('field_gender', array('target_id' => $fields['gender']));
-    $node->set('field_program', array('target_id' => $fields['program']));
-    $node->set('field_assignment', array('target_id' => $fields['assignment']));
-    $node->set('field_semester_in_school', array('target_id' => $fields['semester_in_school']));
-    $node->set('field_term_writing', array('target_id' => $fields['term_writing']));
+    foreach ($taxonomies as $name => $machine_name) {
+      $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
+    }
     $node->set('field_id', array('value' => $text['ID']));
-    $node->set('field_toefl_total', array('value' => $text['TOEFL-total']));
-    $node->set('field_toefl_writing', array('value' => $text['TOEFL-writing']));
-    $node->set('field_toefl_speaking', array('value' => $text['TOEFL-speaking']));
-    $node->set('field_toefl_reading', array('value' => $text['TOEFL-reading']));
-    $node->set('field_toefl_listening', array('value' => $text['TOEFL-listening']));
-    $node->set('field_filename', array('value' => $text['filename']));
-    $node->set('field_country', array('target_id' => $fields['country']));
-    $node->set('field_text', array('value' => $text['text'], 'format' => 'plain_text'));
+    $node->set('field_toefl_total', array('value' => $text['TOEFL total']));
+    $node->set('field_toefl_writing', array('value' => $text['TOEFL writing']));
+    $node->set('field_toefl_speaking', array('value' => $text['TOEFL speaking']));
+    $node->set('field_toefl_reading', array('value' => $text['TOEFL reading']));
+    $node->set('field_toefl_listening', array('value' => $text['TOEFL listening']));
+    $node->set('field_body', array('value' => $text['text'], 'format' => 'plain_text'));
     $node->save();
     // Send back metadata on what happened.
-    return array($return => $text['ID']);
+    return array($return => $text['filename']);
   }
 
   /**

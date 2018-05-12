@@ -35,5 +35,5 @@ function drush_corpus_importer_corpus_import($path) {
     drush_log("Path $file doesn't exist", 'error');
     exit;
   }
-  ImporterService::import($path, array('lorem' => TRUE));
+  ImporterService::import($path, array('lorem' => FALSE));
 }
