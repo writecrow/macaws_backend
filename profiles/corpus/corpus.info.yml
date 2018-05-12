@@ -30,6 +30,7 @@ dependencies:
   # custom
   - corpus_importer
   - content_type_text
+  - corpus_api_texts
 
 themes:
   - seven
