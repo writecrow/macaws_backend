@@ -1,8 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: College
-vid: college
-description: 'Name of a college in an institution'
-hierarchy: 0
-weight: 0

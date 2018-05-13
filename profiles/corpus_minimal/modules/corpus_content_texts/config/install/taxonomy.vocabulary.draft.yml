@@ -1,8 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: Draft
-vid: draft
-description: 'Identifying value for draft number'
-hierarchy: 0
-weight: 0

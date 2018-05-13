@@ -1,8 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: 'Semester in School'
-vid: semester_in_school
-description: 'Semester the text was submitted'
-hierarchy: 0
-weight: 0

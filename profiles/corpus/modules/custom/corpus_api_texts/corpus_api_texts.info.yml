@@ -1,0 +1,20 @@
+name: 'Corpus API Texts'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - content_type_text
+  - facets
+  - facets_rest
+  - node
+  - rest
+  - search_api
+  - search_api_db
+  - search_api_lemma
+  - serialization
+  - system
+  - taxonomy
+  - text
+  - user
+  - views
+version: 8.x-1.0
