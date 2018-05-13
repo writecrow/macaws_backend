@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d94ea962afceefafeae1bc7d932e20b",
+    "content-hash": "df68c3a3248a3327c994c9ecb9293b43",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -5271,16 +5271,16 @@
         },
         {
             "name": "writecrow/tag_converter",
-            "version": "1.0",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/tag_converter.git",
-                "reference": "05a2e33f413f2a1c3d29a603e416601ebca7ecb5"
+                "reference": "1b6617f81bdb96ceecb0294c2dafc30da796ab5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/tag_converter/zipball/05a2e33f413f2a1c3d29a603e416601ebca7ecb5",
-                "reference": "05a2e33f413f2a1c3d29a603e416601ebca7ecb5",
+                "url": "https://api.github.com/repos/writecrow/tag_converter/zipball/1b6617f81bdb96ceecb0294c2dafc30da796ab5c",
+                "reference": "1b6617f81bdb96ceecb0294c2dafc30da796ab5c",
                 "shasum": ""
             },
             "require-dev": {
@@ -5317,7 +5317,7 @@
                 "conversion",
                 "corpus"
             ],
-            "time": "2017-05-13T15:52:42+00:00"
+            "time": "2018-05-12T22:49:36+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",
