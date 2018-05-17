@@ -4,6 +4,7 @@ core: 8.x
 dependencies:
   - block
   - content_type_text
+  - corpus_api_texts
   - facets
   - facets_rest
   - node

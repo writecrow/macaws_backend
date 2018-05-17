@@ -11,7 +11,7 @@ dependencies:
     - field.storage.node.field_toefl_writing
     - search_api.index.text_index_by_lemma
   module:
-    - facets_rest
+    - corpus_api_texts
     - rest
     - search_api
     - serialization
@@ -35,7 +35,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       query:
         type: views_query
@@ -1687,7 +1687,7 @@ display:
       display_extenders: {  }
       path: texts/lemma
       style:
-        type: facets_serializer
+        type: facets_serializer_plus
         options:
           uses_fields: true
           formats:
@@ -1767,7 +1767,8 @@ display:
           items_per_page: 100
           offset: 0
       cache:
-        type: none
+        type: search_api_tag
+        options: {  }
     cache_metadata:
       max-age: -1
       contexts:

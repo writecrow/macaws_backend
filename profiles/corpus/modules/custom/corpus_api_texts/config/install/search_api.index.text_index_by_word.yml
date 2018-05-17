@@ -291,21 +291,9 @@ processor_settings:
       preprocess_index: -5
       preprocess_query: -2
   ignorecase:
-    all_fields: true
+    all_fields: false
     fields:
       - body
-      - assignment
-      - college
-      - country
-      - course
-      - draft
-      - gender
-      - institution
-      - instructor
-      - program
-      - semester
-      - year
-      - year_in_school
       - id
       - filename
     weights:
@@ -358,8 +346,6 @@ processor_settings:
       h3: 2
       strong: 2
       b: 2
-      em: 1
-      u: 1
     weights:
       preprocess_index: -15
       preprocess_query: -15
