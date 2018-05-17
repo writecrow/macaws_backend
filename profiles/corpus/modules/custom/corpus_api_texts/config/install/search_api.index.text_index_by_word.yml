@@ -223,19 +223,6 @@ datasource_settings:
       selected:
         - en
 processor_settings:
-  rendered_item: {  }
-  add_url: {  }
-  aggregated_field: {  }
-  highlight:
-    highlight: always
-    highlight_partial: false
-    excerpt: true
-    excerpt_length: 256
-    exclude_fields: {  }
-    prefix: '<strong>'
-    suffix: '</strong>'
-    weights:
-      postprocess_query: 0
   entity_status: {  }
   tokenizer:
     all_fields: true
@@ -247,6 +234,30 @@ processor_settings:
     weights:
       preprocess_index: -6
       preprocess_query: -6
+  add_url: {  }
+  aggregated_field: {  }
+  rendered_item: {  }
+  transliteration:
+    all_fields: true
+    fields:
+      - body
+      - assignment
+      - college
+      - country
+      - course
+      - draft
+      - gender
+      - institution
+      - instructor
+      - program
+      - semester
+      - year
+      - year_in_school
+      - id
+      - filename
+    weights:
+      preprocess_index: -20
+      preprocess_query: -20
   stopwords:
     all_fields: true
     fields:
@@ -290,36 +301,6 @@ processor_settings:
     weights:
       preprocess_index: -5
       preprocess_query: -2
-  ignorecase:
-    all_fields: false
-    fields:
-      - body
-      - id
-      - filename
-    weights:
-      preprocess_index: -20
-      preprocess_query: -20
-  transliteration:
-    all_fields: true
-    fields:
-      - body
-      - assignment
-      - college
-      - country
-      - course
-      - draft
-      - gender
-      - institution
-      - instructor
-      - program
-      - semester
-      - year
-      - year_in_school
-      - id
-      - filename
-    weights:
-      preprocess_index: -20
-      preprocess_query: -20
   html_filter:
     all_fields: true
     fields:
@@ -349,6 +330,25 @@ processor_settings:
     weights:
       preprocess_index: -15
       preprocess_query: -15
+  ignorecase:
+    all_fields: false
+    fields:
+      - body
+      - id
+      - filename
+    weights:
+      preprocess_index: -20
+      preprocess_query: -20
+  highlight:
+    highlight: always
+    highlight_partial: false
+    excerpt: true
+    excerpt_length: 256
+    exclude_fields: {  }
+    prefix: '<strong>'
+    suffix: '</strong>'
+    weights:
+      postprocess_query: 0
 tracker_settings:
   default:
     indexing_order: fifo
