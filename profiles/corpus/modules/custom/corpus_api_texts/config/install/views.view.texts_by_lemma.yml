@@ -16,6 +16,7 @@ dependencies:
     - search_api
     - serialization
     - text
+    - user
 id: texts_by_lemma
 label: 'Texts by Lemma'
 module: views
@@ -32,8 +33,9 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
         type: search_api_tag
         options: {  }
@@ -1647,6 +1649,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1670,6 +1673,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1762,10 +1766,26 @@ display:
               alias: ''
               raw_output: false
       pager:
-        type: some
+        type: full
         options:
           items_per_page: 100
           offset: 0
+          id: 0
+          total_pages: null
+          tags:
+            previous: '‹ Previous'
+            next: 'Next ›'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
       cache:
         type: search_api_tag
         options: {  }
@@ -1776,6 +1796,8 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
+        - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
