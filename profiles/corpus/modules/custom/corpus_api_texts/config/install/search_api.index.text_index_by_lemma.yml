@@ -224,9 +224,6 @@ datasource_settings:
       selected:
         - en
 processor_settings:
-  rendered_item: {  }
-  add_url: {  }
-  aggregated_field: {  }
   entity_status: {  }
   tokenizer:
     all_fields: true
@@ -238,91 +235,9 @@ processor_settings:
     weights:
       preprocess_index: -6
       preprocess_query: -6
-  stopwords:
-    all_fields: true
-    fields:
-      - body
-    stopwords:
-      - a
-      - an
-      - and
-      - are
-      - as
-      - at
-      - be
-      - but
-      - by
-      - for
-      - if
-      - in
-      - into
-      - is
-      - it
-      - 'no'
-      - not
-      - of
-      - 'on'
-      - or
-      - s
-      - such
-      - t
-      - that
-      - the
-      - their
-      - then
-      - there
-      - these
-      - they
-      - this
-      - to
-      - was
-      - will
-      - with
-    weights:
-      preprocess_index: -5
-      preprocess_query: -2
-  ignorecase:
-    all_fields: true
-    fields:
-      - assignment
-      - body
-      - college
-      - country
-      - course
-      - draft
-      - gender
-      - institution
-      - instructor
-      - program
-      - semester
-      - filename
-      - year
-      - year_in_school
-      - id
-    weights:
-      preprocess_index: -20
-      preprocess_query: -20
-  transliteration:
-    all_fields: true
-    fields:
-      - assignment
-      - body
-      - college
-      - country
-      - course
-      - draft
-      - gender
-      - institution
-      - instructor
-      - program
-      - semester
-      - filename
-      - year
-      - year_in_school
-      - id
-    weights:
-      preprocess_index: -20
-      preprocess_query: -20
+  add_url: {  }
+  aggregated_field: {  }
+  rendered_item: {  }
   ignore_character:
     all_fields: true
     fields:
@@ -367,6 +282,70 @@ processor_settings:
     weights:
       preprocess_index: -10
       preprocess_query: -10
+  transliteration:
+    all_fields: true
+    fields:
+      - assignment
+      - body
+      - college
+      - country
+      - course
+      - draft
+      - gender
+      - institution
+      - instructor
+      - program
+      - semester
+      - filename
+      - year
+      - year_in_school
+      - id
+    weights:
+      preprocess_index: -20
+      preprocess_query: -20
+  stopwords:
+    all_fields: true
+    fields:
+      - body
+    stopwords:
+      - a
+      - an
+      - and
+      - are
+      - as
+      - at
+      - be
+      - but
+      - by
+      - for
+      - if
+      - in
+      - into
+      - is
+      - it
+      - 'no'
+      - not
+      - of
+      - 'on'
+      - or
+      - s
+      - such
+      - t
+      - that
+      - the
+      - their
+      - then
+      - there
+      - these
+      - they
+      - this
+      - to
+      - was
+      - will
+      - with
+    weights:
+      preprocess_index: -5
+      preprocess_query: -2
   html_filter:
     all_fields: true
     fields:
@@ -393,18 +372,17 @@ processor_settings:
       h3: 2
       strong: 2
       b: 2
-      em: 1
-      u: 1
     weights:
       preprocess_index: -15
       preprocess_query: -15
-  lemmatizer:
-    all_fields: 1
+  ignorecase:
+    all_fields: false
     fields:
       - body
+      - filename
     weights:
-      preprocess_index: 0
-      preprocess_query: 0
+      preprocess_index: -20
+      preprocess_query: -20
   lemma_highlight:
     highlight: always
     highlight_partial: 0
@@ -415,6 +393,13 @@ processor_settings:
     suffix: '</strong>'
     weights:
       postprocess_query: 0
+  lemmatizer:
+    all_fields: 1
+    fields:
+      - body
+    weights:
+      preprocess_index: 0
+      preprocess_query: 0
 tracker_settings:
   default:
     indexing_order: fifo

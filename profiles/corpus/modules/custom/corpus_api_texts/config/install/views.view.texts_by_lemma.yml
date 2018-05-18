@@ -11,11 +11,12 @@ dependencies:
     - field.storage.node.field_toefl_writing
     - search_api.index.text_index_by_lemma
   module:
-    - facets_rest
+    - corpus_api_texts
     - rest
     - search_api
     - serialization
     - text
+    - user
 id: texts_by_lemma
 label: 'Texts by Lemma'
 module: views
@@ -32,10 +33,11 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'access content'
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       query:
         type: views_query
@@ -1647,6 +1649,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1670,6 +1673,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1687,7 +1691,7 @@ display:
       display_extenders: {  }
       path: texts/lemma
       style:
-        type: facets_serializer
+        type: facets_serializer_plus
         options:
           uses_fields: true
           formats:
@@ -1762,12 +1766,29 @@ display:
               alias: ''
               raw_output: false
       pager:
-        type: some
+        type: full
         options:
           items_per_page: 100
           offset: 0
+          id: 0
+          total_pages: null
+          tags:
+            previous: '‹ Previous'
+            next: 'Next ›'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
       cache:
-        type: none
+        type: search_api_tag
+        options: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -1775,6 +1796,8 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
+        - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'

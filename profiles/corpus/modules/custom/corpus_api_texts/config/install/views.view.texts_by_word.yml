@@ -11,7 +11,7 @@ dependencies:
     - field.storage.node.field_toefl_writing
     - search_api.index.text_index_by_word
   module:
-    - facets_rest
+    - corpus_api_texts
     - rest
     - search_api
     - serialization
@@ -1652,7 +1652,8 @@ display:
       display_extenders: {  }
       path: texts/word
       cache:
-        type: none
+        type: search_api_tag
+        options: {  }
       defaults:
         cache: false
     cache_metadata:
@@ -1679,7 +1680,7 @@ display:
       display_extenders: {  }
       path: texts/word
       style:
-        type: facets_serializer
+        type: facets_serializer_plus
         options:
           uses_fields: true
           formats:
@@ -1718,7 +1719,8 @@ display:
             offset_label: Offset
           quantity: 9
       cache:
-        type: none
+        type: search_api_tag
+        options: {  }
     cache_metadata:
       max-age: -1
       contexts:

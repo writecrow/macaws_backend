@@ -1,11 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - search_api.index.text_index_by_word
-    - views.view.texts_by_word
-  module:
-    - search_api
+dependencies: {  }
 id: text_word_page_program
 name: text_word_page_program
 url_alias: program
