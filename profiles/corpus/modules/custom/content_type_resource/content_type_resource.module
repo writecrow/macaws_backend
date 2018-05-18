@@ -7,6 +7,26 @@
 
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\file\Entity\File;
+use writecrow\LoremGutenberg\LoremGutenberg;
+
+/**
+ * Helper function for generating demo content.
+ */
+function _content_type_resource_generate_demo_files() {
+  $file = File::create([
+    'uid' => 1,
+    'filename' => 'blank.pdf',
+    'uri' => 'public://resources/blank.pdf',
+    'status' => 1,
+  ]);
+  $file->save();
+  $test_file = __DIR__ . '/assets/blank.pdf';
+  $file_content = file_get_contents($test_file);
+  $directory = 'public://resources/';
+  file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+  $file_image = file_save_data($file_content, $directory . basename($test_file), FILE_EXISTS_REPLACE);
+}
 
 /**
  * Helper function for generating demo content.
@@ -36,7 +56,6 @@ function _content_type_resource_generate_demo_content($number = 10) {
   $taxonomies = [
     'Assignment' => 'assignment',
     'Document Type' => 'document_type',
-    'Course' => 'course',
     'Institution' => 'institution',
     'Instructor' => 'instructor',
     'File Type' => 'file_type',
@@ -44,6 +63,7 @@ function _content_type_resource_generate_demo_content($number = 10) {
     'Mode' => 'mode',
     'Semester' => 'semester',
     'Year' => 'year',
+    'Course' => 'course',
   ];
 
   while ($inc < $number) {
@@ -54,12 +74,12 @@ function _content_type_resource_generate_demo_content($number = 10) {
     $return = 'created';
     $node->set('title', $id);
     foreach ($taxonomies as $name => $machine_name) {
-      $tid = _get_random_term_from_vocabulary($machine_name);
-      $node->set('field_' . $machine_name, ['target_id' => $tid]);
+      $term = _get_random_term_from_vocabulary($machine_name);
+      $node->set('field_' . $machine_name, ['target_id' => $term->tid]);
     }
-    $node->set('field_filename', array('value' => $id . '.pdf'));
-
-    $body = 'Lorem ipsum dolor sit amet';
+    $node->set('field_filename', array('value' => $term->name . '_UA_' . $id . '.pdf'));
+    $node->set('field_file', array('target_id' => 1));
+    $body = LoremGutenberg::generate(array('sentences' => 10));
     // Remove unnecessary <End Header> text.
     $node->set('field_raw_text', ['value' => $body, 'format' => 'plain_text']);
     $node->save();
@@ -73,14 +93,11 @@ function _get_random_term_from_vocabulary($vid = '') {
   if ($vid != '') {
     $tids = [];
     $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+    $rand = array_rand($terms);
     if (empty($terms)) {
     }
     else {
-      foreach ($terms as $term) {
-        $tids[] = $term->tid;
-      }
-      $rand = array_rand($tids);
-      return $tids[$rand];
+      return $terms[$rand];
     }
 
   }
