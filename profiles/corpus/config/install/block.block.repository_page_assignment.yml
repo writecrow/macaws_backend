@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.repository_page_assignment
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: repository_page_assignment
+theme: bartik
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'facet_block:repository_page_assignment'
+settings:
+  id: 'facet_block:repository_page_assignment'
+  label: Assignment
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /repository
+    negate: false
+    context_mapping: {  }
