@@ -1,11 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - search_api.index.text_index_by_lemma
-    - views.view.texts_by_lemma
-  module:
-    - search_api
+dependencies: {  }
 id: text_lemma_rest_program
 name: text_lemma_rest_program
 url_alias: program

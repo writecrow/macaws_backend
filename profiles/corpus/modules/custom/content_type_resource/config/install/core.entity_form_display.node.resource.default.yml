@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.resource.field_course
     - field.field.node.resource.field_document_type
     - field.field.node.resource.field_file
+    - field.field.node.resource.field_file_type
     - field.field.node.resource.field_filename
     - field.field.node.resource.field_institution
     - field.field.node.resource.field_instructor
@@ -63,6 +64,15 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
     type: file_generic
+    region: content
+  field_file_type:
+    weight: 133
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   field_filename:
     weight: 131

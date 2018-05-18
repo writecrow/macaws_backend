@@ -1,11 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - search_api.index.text_index_by_lemma
-    - views.view.texts_by_lemma
-  module:
-    - search_api
+dependencies: {  }
 id: text_lemma_rest_year_in_school
 name: text_lemma_rest_year_in_school
 url_alias: year_in_school

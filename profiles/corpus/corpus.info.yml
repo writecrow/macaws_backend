@@ -32,6 +32,7 @@ dependencies:
   - content_type_text
   - content_type_resource
   - corpus_api_texts
+  - corpus_api_resources
 
 themes:
   - seven
