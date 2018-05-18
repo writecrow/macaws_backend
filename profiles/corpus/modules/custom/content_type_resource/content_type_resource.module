@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * @file
+ * Module file for content_type_resource.
+ */
+
+use Drupal\node\Entity\Node;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Helper function for generating demo content.
+ */
+function _content_type_resource_generate_demo_terms() {
+  $vids = [
+    'document_type' => ['Syllabus', 'Sample paper', 'Checklist', 'Presentation', 'Rubric', 'Lesson Plan', 'Assignment Sheet'],
+    'file_type' => ['pdf', 'doc', 'docx', 'pptx', 'odt', 'txt'],
+    'length' => ['15 weeks', '6 weeks'],
+    'mode' => ['Face-to-face', 'Online', 'Hybrid'],
+  ];
+  foreach ($vids as $vid => $terms) {
+    foreach ($terms as $term) {
+      $tid = Term::create([
+        'name' => $term,
+        'vid' => $vid,
+      ])->save();
+    }
+  }
+}
+
+/**
+ * Helper function for generating demo content.
+ */
+function _content_type_resource_generate_demo_content($number = 10) {
+  $inc = 0;
+  $taxonomies = [
+    'Assignment' => 'assignment',
+    'Document Type' => 'document_type',
+    'Course' => 'course',
+    'Institution' => 'institution',
+    'Instructor' => 'instructor',
+    'File Type' => 'file_type',
+    'Length' => 'length',
+    'Mode' => 'mode',
+    'Semester' => 'semester',
+    'Year' => 'year',
+  ];
+
+  while ($inc < $number) {
+    $inc++;
+    // Instantiate a new node object.
+    $id = rand(1000, 9999);
+    $node = Node::create(['type' => 'resource']);
+    $return = 'created';
+    $node->set('title', $id);
+    foreach ($taxonomies as $name => $machine_name) {
+      $tid = _get_random_term_from_vocabulary($machine_name);
+      $node->set('field_' . $machine_name, ['target_id' => $tid]);
+    }
+    $node->set('field_filename', array('value' => $id . '.pdf'));
+
+    $body = 'Lorem ipsum dolor sit amet';
+    // Remove unnecessary <End Header> text.
+    $node->set('field_raw_text', ['value' => $body, 'format' => 'plain_text']);
+    $node->save();
+  }
+}
+
+/**
+ * Helper function for retrieving a random (existing) TID from a VID.
+ */
+function _get_random_term_from_vocabulary($vid = '') {
+  if ($vid != '') {
+    $tids = [];
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+    if (empty($terms)) {
+    }
+    else {
+      foreach ($terms as $term) {
+        $tids[] = $term->tid;
+      }
+      $rand = array_rand($tids);
+      return $tids[$rand];
+    }
+
+  }
+  return 0;
+}
