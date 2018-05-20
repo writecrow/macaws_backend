@@ -1,14 +1,19 @@
 langcode: en
 status: true
-dependencies: {  }
-id: text_lemma_rest_draft
-name: text_lemma_rest_draft
-url_alias: draft
+dependencies:
+  config:
+    - search_api.index.resource_index
+    - views.view.repository_resources
+  module:
+    - search_api
+id: repository_rest_document_type
+name: repository_rest_document_type
+url_alias: document_type
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: draft
-facet_source_id: 'search_api:views_rest__texts_by_lemma__rest_export_1'
+field_identifier: document_type
+facet_source_id: 'search_api:views_rest__repository_resources__rest_export_1'
 widget:
   type: array
   config:
@@ -31,11 +36,6 @@ processor_configs:
     processor_id: hide_non_narrowing_result_processor
     weights:
       build: -10
-    settings: {  }
-  list_item:
-    processor_id: list_item
-    weights:
-      build: 5
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler

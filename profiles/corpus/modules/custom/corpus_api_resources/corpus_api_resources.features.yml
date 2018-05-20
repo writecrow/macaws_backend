@@ -1,0 +1,4 @@
+excluded:
+  - block.block.repository_page_assignment
+  - block.block.repository_page_file_type
+required: true
