@@ -29,6 +29,7 @@ dependencies:
   - views
   # custom
   - corpus_importer
+  - content_type_page
   - content_type_text
   - content_type_resource
   - corpus_api_texts
