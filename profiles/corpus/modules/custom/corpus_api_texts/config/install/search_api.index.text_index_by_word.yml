@@ -243,53 +243,10 @@ processor_settings:
       - body
     spaces: ''
     overlap_cjk: 1
-    minimum_word_size: '3'
+    minimum_word_size: '1'
     weights:
       preprocess_index: -6
       preprocess_query: -6
-  stopwords:
-    all_fields: true
-    fields:
-      - body
-    stopwords:
-      - a
-      - an
-      - and
-      - are
-      - as
-      - at
-      - be
-      - but
-      - by
-      - for
-      - if
-      - in
-      - into
-      - is
-      - it
-      - 'no'
-      - not
-      - of
-      - 'on'
-      - or
-      - s
-      - such
-      - t
-      - that
-      - the
-      - their
-      - then
-      - there
-      - these
-      - they
-      - this
-      - to
-      - was
-      - will
-      - with
-    weights:
-      preprocess_index: -5
-      preprocess_query: -2
   ignorecase:
     all_fields: false
     fields:
