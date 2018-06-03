@@ -27,7 +27,8 @@
     "wikimedia/composer-merge-plugin": "~1.4",
     "writecrow/lorem_gutenberg": "~1.0",
     "writecrow/tag_converter": "~1.0",
-    "writecrow/country_code_converter": "dev-master"
+    "writecrow/country_code_converter": "dev-master",
+    "drupal/pathauto": "^1.2"
   },
   "conflict": {
     "drupal/drupal": "*"
