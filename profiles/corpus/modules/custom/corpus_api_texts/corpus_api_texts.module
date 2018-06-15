@@ -25,6 +25,7 @@ function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results)
     if (!empty($phrases[1])) {
       $preprocessed_results = $results->getResultItems();
       // Loop through each result.
+      $result_items = [];
       foreach ($preprocessed_results as $item) {
         $or = FALSE;
         $and = TRUE;
