@@ -278,7 +278,7 @@ class ImporterService {
       $return = 'created';
     }
     $node->set('title', $text['File ID']);
-    $node->set('field_file', array('target_id' => $file->id()));
+    $node->set('field_file', ['target_id' => $file->id()]);
     $node->set('field_filename', ['value' => $text['filename']]);
     foreach ($taxonomies as $name => $machine_name) {
       $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
@@ -293,10 +293,13 @@ class ImporterService {
     return [$return => $text['filename']];
   }
 
+  /**
+   * Utility: save file to backend.
+   */
   public static function uploadRepositoryResource($full_path) {
     $path_parts = pathinfo($full_path);
     $path_parts['dirname'] = str_replace('/Text/', '/Original/', $path_parts['dirname']);
-    $original_wildcard = $path_parts['dirname'] . '/' .  $path_parts['filename'] . '.*';
+    $original_wildcard = $path_parts['dirname'] . '/' . $path_parts['filename'] . '.*';
     $original_file = glob($original_wildcard);
     if (!empty($original_file[0])) {
       $original_parts = pathinfo($original_file[0]);
@@ -310,14 +313,14 @@ class ImporterService {
       $file_content = file_get_contents($original_file[0]);
       $directory = 'public://resources/';
       file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-      $file_image = file_save_data($file_content, $directory . basename($test_file),  FILE_EXISTS_REPLACE);
+      $file_image = file_save_data($file_content, $directory . basename($original_file[0]), FILE_EXISTS_REPLACE);
       return $file;
     }
     else {
       print_r('File not found! ' . $original_wildcard);
     }
     return FALSE;
-  }  
+  }
 
   /**
    * Utility: find term by name and vid.
