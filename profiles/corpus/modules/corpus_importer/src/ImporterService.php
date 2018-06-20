@@ -138,11 +138,16 @@ class ImporterService {
       'Semester writing' => 'semester',
       'Year writing' => 'year',
       'Year in School' => 'year_in_school',
+      'Semester in School' => 'year_in_school',
     ];
 
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
       if (in_array($name, array_keys($text))) {
+        // Standardize N/A values.
+        if (in_array($machine_name, ['instructor', 'institution']) && in_array($text[$name], ['NA'])) {
+          $text[$name] = 'N/A';
+        }
         $tid = self::getTidByName($text[$name], $machine_name);
         if ($tid == 0) {
           // Convert country IDs to readable names.
