@@ -2,6 +2,7 @@
 
 namespace Drupal\corpus_importer;
 
+use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
 use markfullmer\TagConverter\TagConverter;
@@ -96,6 +97,7 @@ class ImporterService {
       }
       if (isset($text['File ID'])) {
         $text['type'] = 'repository';
+        $text['full_path'] = $uploaded_file['tmppath'];
         $data[] = $text;
       }
     }
@@ -220,6 +222,15 @@ class ImporterService {
    * Helper function to save repository data.
    */
   public static function saveRepositoryNode($text, $options = []) {
+    // First check if we can find the file.
+    $file = self::uploadRepositoryResource($text['full_path']);
+    if (!$file) {
+      return ['file not found' => 'Corresponding file not found for' . $text['filename']];
+    }
+    else {
+      $path_parts = pathinfo($file->getFileUri());
+      $text['File Type'] = $path_parts['extension'];
+    }
     // The key *must* match what is provided in the original text file.
     $taxonomies = [
       'Assignment' => 'assignment',
@@ -229,9 +240,9 @@ class ImporterService {
       'Institution' => 'institution',
       'Instructor' => 'instructor',
       'Document Type' => 'document_type',
-      'Semester' => 'semester',
-      'Year' => 'year',
-      'File ID' => 'filename',
+      'Course Semester' => 'semester',
+      'Course Year' => 'year',
+      'File Type' => 'file_type',
     ];
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
@@ -255,7 +266,7 @@ class ImporterService {
     if (isset($options['merge']) && $options['merge']) {
       $nodes = \Drupal::entityTypeManager()
         ->getStorage('node')
-        ->loadByProperties(['title' => $text['filename']]);
+        ->loadByProperties(['title' => $text['File ID']]);
       // Default to first instance found, in the unlikely event that there
       // are more than one.
       $node = reset($nodes);
@@ -267,6 +278,8 @@ class ImporterService {
       $return = 'created';
     }
     $node->set('title', $text['File ID']);
+    $node->set('field_file', array('target_id' => $file->id()));
+    $node->set('field_filename', ['value' => $text['filename']]);
     foreach ($taxonomies as $name => $machine_name) {
       $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
     }
@@ -279,6 +292,32 @@ class ImporterService {
     // Send back metadata on what happened.
     return [$return => $text['filename']];
   }
+
+  public static function uploadRepositoryResource($full_path) {
+    $path_parts = pathinfo($full_path);
+    $path_parts['dirname'] = str_replace('/Text/', '/Original/', $path_parts['dirname']);
+    $original_wildcard = $path_parts['dirname'] . '/' .  $path_parts['filename'] . '.*';
+    $original_file = glob($original_wildcard);
+    if (!empty($original_file[0])) {
+      $original_parts = pathinfo($original_file[0]);
+      $file = File::create([
+        'uid' => 1,
+        'filename' => $original_parts['basename'],
+        'uri' => 'public://resources/' . $original_parts['basename'],
+        'status' => 1,
+      ]);
+      $file->save();
+      $file_content = file_get_contents($original_file[0]);
+      $directory = 'public://resources/';
+      file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+      $file_image = file_save_data($file_content, $directory . basename($test_file),  FILE_EXISTS_REPLACE);
+      return $file;
+    }
+    else {
+      print_r('File not found! ' . $original_wildcard);
+    }
+    return FALSE;
+  }  
 
   /**
    * Utility: find term by name and vid.
