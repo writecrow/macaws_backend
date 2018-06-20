@@ -1,7 +1,7 @@
 langcode: en
 status: true
 dependencies: {  }
-name: Resource
+name: 'Repository Resource'
 type: resource
 description: 'The basic storage unit for repository materials. Includes relational fields to assignment, institution, year, semester, instructor, and the file itself.'
 help: ''

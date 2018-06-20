@@ -1,7 +1,7 @@
 langcode: en
 status: true
 dependencies: {  }
-name: Text
+name: 'Corpus Text'
 type: text
 description: 'The basic storage unit for corpus data. Includes relational fields to assignment, school, and TOEFL metadata.'
 help: ''
