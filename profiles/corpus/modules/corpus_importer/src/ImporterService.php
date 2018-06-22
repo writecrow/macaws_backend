@@ -16,6 +16,47 @@ use writecrow\CountryCodeConverter\CountryCodeConverter;
  */
 class ImporterService {
 
+  public static $assignments = [
+    "IR" => "Interview Report",
+    "LN" => "Literacy Narrative/Autobiography",
+    "RP" => "Research Proposal",
+    "SY" => "Literature Review Synthesis Paper",
+    "DE" => "Description and Explanation",
+    "RR" => "Register Rewrite",
+    "PA" => "Public Argument",
+    "PS" => "Position Argument",
+    "PO" => "Portfolio",
+    "RA" => "Rhetorical Analysis",
+    "CA" => "Controversy Analysis",
+    "VA" => "Variation Analysis",
+    "RF" => "Reflection",
+    "NR" => "Narrative",
+    "GA" => "Genre Analysis",
+    "PR" => "Profile",
+    "AB" => "Annotated Bibliography",
+    "RP" => "Research Proposal",
+    "LR" => "Literature Review",
+    "OL" => "Open Letter",
+    "SR" => "Summary and Response",
+    "SY" => "Synthesis",
+    "FA" => "Film Analysis",
+    "TA" => "Text Analysis",
+    "AR" => "Argumentative Paper",
+    "RA" => "Rhetorical Analysis",
+    "AB" => "Annotated Bibliography",
+  ];
+
+  public static $doc_types = [
+    "SL" => "Syllabus",
+    "LP" => "Lesson Plan",
+    "AS" => "Assignment Sheet",
+    "RU" => "Rubric",
+    "QZ" => "Quizzes",
+    "HO" => "Handout",
+    "AC" => "Activity Worksheet",
+    "SP" => "Sample Work",
+  ];
+
   /**
    * Main method: execute parsing and saving of redirects.
    *
@@ -91,7 +132,7 @@ class ImporterService {
       $file = file_get_contents($uploaded_file['tmppath']);
       $text = TagConverter::php($file);
       $text['filename'] = basename($uploaded_file['tmppath'], '.txt');
-      if (isset($text['ID'])) {
+      if (isset($text['Student ID'])) {
         $text['type'] = 'corpus';
         $data[] = $text;
       }
@@ -130,7 +171,7 @@ class ImporterService {
    *   Operational context for batch processes.
    */
   public static function save(array $text, array $options, array &$context) {
-    if (isset($text['ID'])) {
+    if (isset($text['Student ID'])) {
       $result = self::saveCorpusNode($text, $options);
     }
     if (isset($text['File ID'])) {
@@ -155,10 +196,9 @@ class ImporterService {
       'Institution' => 'institution',
       'Instructor' => 'instructor',
       'Program' => 'program',
-      'Semester writing' => 'semester',
-      'Year writing' => 'year',
+      'Course Semester' => 'semester',
+      'Course Year' => 'year',
       'Year in School' => 'year_in_school',
-      'Semester in School' => 'year_in_school',
     ];
 
     $fields = [];
@@ -167,6 +207,16 @@ class ImporterService {
         // Standardize N/A values.
         if (in_array($machine_name, ['instructor', 'institution']) && in_array($text[$name], ['NA'])) {
           $text[$name] = 'N/A';
+        }
+        if (in_array($machine_name, ['institution']) && empty($text['Institution'])) {
+          $text['Institution'] = 'Purdue University';
+        }
+        if (in_array($machine_name, ['gender']) && $text['Gender'] == 'G') {
+          $text['Gender'] = 'M';
+        }
+        if ($machine_name == 'assignment') {
+          $assignment_code = $text['Assignment'];
+          $text['Assignment'] = self::$assignments[$assignment_code];
         }
         $tid = self::getTidByName($text[$name], $machine_name);
         if ($tid == 0) {
@@ -202,7 +252,7 @@ class ImporterService {
     foreach ($taxonomies as $name => $machine_name) {
       $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
     }
-    $node->set('field_id', ['value' => $text['ID']]);
+    $node->set('field_id', ['value' => $text['Student ID']]);
     $node->set('field_toefl_total', ['value' => $text['TOEFL total']]);
     $node->set('field_toefl_writing', ['value' => $text['TOEFL writing']]);
     $node->set('field_toefl_speaking', ['value' => $text['TOEFL speaking']]);
@@ -250,6 +300,15 @@ class ImporterService {
         // Standardize N/A values.
         if (in_array($machine_name, ['instructor', 'institution']) && in_array($text[$name], ['NA'])) {
           $text[$name] = 'N/A';
+        }
+        if ($machine_name == 'document_type') {
+          $doc_code = $text['Document Type'];
+          $text['Document Type'] = self::$doc_types[$doc_code];
+          
+        }
+        if ($machine_name == 'assignment') {
+          $assignment_code = $text['Assignment'];
+          $text['Assignment'] = self::$assignments[$assignment_code];
         }
         $tid = self::getTidByName($text[$name], $machine_name);
         if ($tid == 0) {
