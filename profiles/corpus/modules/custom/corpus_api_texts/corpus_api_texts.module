@@ -16,7 +16,7 @@ use \Drupal\search_api\Query\ResultSetInterface;
  * @param \Drupal\search_api\Query\ResultSetInterface $results
  *   The search results to alter.
  */
-function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results) {
+function xcorpus_api_texts_search_api_results_alter(ResultSetInterface &$results) {
   $id = $results->getQuery()->getIndex()->id();
   $parse_mode = $results->getQuery()->getParseMode()->getConjunction();
   if ($id == 'text_index_by_word') {
