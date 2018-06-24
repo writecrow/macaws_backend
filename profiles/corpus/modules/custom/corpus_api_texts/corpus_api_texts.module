@@ -5,7 +5,7 @@
  * Modifications for text_index.
  */
 
-use \Drupal\search_api\Query\ResultSetInterface;
+use Drupal\search_api\Query\ResultSetInterface;
 
 /**
  * Alter a search query's result set.
@@ -16,7 +16,7 @@ use \Drupal\search_api\Query\ResultSetInterface;
  * @param \Drupal\search_api\Query\ResultSetInterface $results
  *   The search results to alter.
  */
-function xcorpus_api_texts_search_api_results_alter(ResultSetInterface &$results) {
+function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results) {
   $id = $results->getQuery()->getIndex()->id();
   $parse_mode = $results->getQuery()->getParseMode()->getConjunction();
   if ($id == 'text_index_by_word') {
@@ -33,6 +33,10 @@ function xcorpus_api_texts_search_api_results_alter(ResultSetInterface &$results
         $text = $text_object[0]->getText();
         $pos = 0;
         foreach ($phrases[1] as $phrase) {
+          preg_match_all("/\p{P}/", $phrase, $has_punctuation);
+          if (empty($has_punctuation[0])) {
+            continue;
+          }
           $pos = strpos($text, $phrase);
           if ($pos !== FALSE) {
             if ($parse_mode == 'OR') {
