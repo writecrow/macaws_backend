@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.text.field_toefl_speaking
     - field.field.node.text.field_toefl_total
     - field.field.node.text.field_toefl_writing
+    - field.field.node.text.field_wordcount
     - field.field.node.text.field_year
     - field.field.node.text.field_year_in_school
     - node.type.text
@@ -51,5 +52,7 @@ hidden:
   field_toefl_speaking: true
   field_toefl_total: true
   field_toefl_writing: true
+  field_wordcount: true
   field_year: true
   field_year_in_school: true
+  langcode: true

@@ -26,6 +26,7 @@ dependencies:
     - taxonomy
     - search_api
     - search_api_lemma
+    - search_api_solr
     - node
 id: text_index_by_lemma
 name: 'Text Index by Lemma'
@@ -357,6 +358,7 @@ processor_settings:
     suffix: '</strong>'
     weights:
       postprocess_query: 0
+  solr_date_range: {  }
 tracker_settings:
   default:
     indexing_order: fifo

@@ -41,3 +41,4 @@ hidden:
   field_raw_text: true
   field_semester: true
   field_year: true
+  langcode: true

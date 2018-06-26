@@ -2,6 +2,7 @@
 
 namespace Drupal\corpus_importer;
 
+use Drupal\Component\Utility\Html;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
@@ -46,16 +47,26 @@ class ImporterService {
     "AB" => "Annotated Bibliography",
   ];
 
-  public static $doc_types = [
+  public static $docTypes = [
     "SL" => "Syllabus",
     "LP" => "Lesson Plan",
     "AS" => "Assignment Sheet",
     "RU" => "Rubric",
+    "PF" => "Peer Review Form",
     "QZ" => "Quizzes",
     "HO" => "Handout",
     "AC" => "Activity Worksheet",
     "SP" => "Sample Work",
   ];
+
+  public static $countryFixes = [
+    'CHI' => 'CHN',
+    'MLY' => 'MYS',
+    'LEB' => 'LBN',
+    'TKY' => 'TUR',
+    'BRZ' => 'BRA',
+    'SDA' => 'SAU',
+  ]
 
   /**
    * Main method: execute parsing and saving of redirects.
@@ -222,6 +233,10 @@ class ImporterService {
         if ($tid == 0) {
           // Convert country IDs to readable names.
           if ($machine_name == 'country') {
+            if (in_array($text[$name] => array_keys($countryFixes))) {
+              $code = $text[$name];
+              $text[$name] = $countryFixes[$code];
+            }
             $text[$name] = CountryCodeConverter::convert($text[$name]);
           }
           self::createTerm($text[$name], $machine_name);
@@ -263,6 +278,10 @@ class ImporterService {
     // Remove unnecessary <End Header> text.
     $body = str_replace('<End Header>', '', $body);
     $node->set('field_body', ['value' => $body, 'format' => 'plain_text']);
+
+    $clean = Html::escape(strip_tags($body));
+    $node->set('field_wordcount', ['value' => str_word_count($clean)]);
+
     $node->save();
     // Send back metadata on what happened.
     return [$return => $text['filename']];
@@ -303,8 +322,7 @@ class ImporterService {
         }
         if ($machine_name == 'document_type') {
           $doc_code = $text['Document Type'];
-          $text['Document Type'] = self::$doc_types[$doc_code];
-          
+          $text['Document Type'] = self::$docTypes[$doc_code];
         }
         if ($machine_name == 'assignment') {
           $assignment_code = $text['Assignment'];

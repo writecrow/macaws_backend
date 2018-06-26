@@ -19,6 +19,7 @@ dependencies:
     - field.field.node.text.field_toefl_speaking
     - field.field.node.text.field_toefl_total
     - field.field.node.text.field_toefl_writing
+    - field.field.node.text.field_wordcount
     - field.field.node.text.field_year
     - field.field.node.text.field_year_in_school
     - node.type.text
@@ -170,6 +171,15 @@ content:
     third_party_settings: {  }
     type: number_integer
     region: content
+  field_wordcount:
+    weight: 121
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
   field_year:
     weight: 113
     label: above
@@ -189,4 +199,5 @@ content:
   links:
     weight: 100
     region: content
-hidden: {  }
+hidden:
+  langcode: true
