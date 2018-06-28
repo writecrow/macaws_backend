@@ -33,10 +33,6 @@ function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results)
         $text = $text_object[0]->getText();
         $pos = 0;
         foreach ($phrases[1] as $phrase) {
-          preg_match_all("/\p{P}/", $phrase, $has_punctuation);
-          if (empty($has_punctuation[0])) {
-            continue;
-          }
           $pos = strpos($text, $phrase);
           if ($pos !== FALSE) {
             if ($parse_mode == 'OR') {
@@ -51,8 +47,8 @@ function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results)
           }
         }
         if ($or or $and) {
-          $start = $pos - 100 < 0 ? 0 : $pos - 100;
-          $excerpt = substr($text, $start, 256);
+          $start = $pos - 50 < 0 ? 0 : $pos - 50;
+          $excerpt = substr($text, $start, 120);
           // Boldface matches.
           foreach ($phrases[1] as $phrase) {
             $excerpt = str_ireplace($phrase, '<strong>' . $phrase . '</strong>', $excerpt);

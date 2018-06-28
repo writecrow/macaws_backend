@@ -66,7 +66,7 @@ class ImporterService {
     'TKY' => 'TUR',
     'BRZ' => 'BRA',
     'SDA' => 'SAU',
-  ]
+  ];
 
   /**
    * Main method: execute parsing and saving of redirects.
@@ -214,10 +214,18 @@ class ImporterService {
 
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
+      $tid = '';
       if (in_array($name, array_keys($text))) {
         // Standardize N/A values.
         if (in_array($machine_name, ['instructor', 'institution']) && in_array($text[$name], ['NA'])) {
           $text[$name] = 'N/A';
+        }
+        if (in_array($machine_name, ['program', 'college'])) {
+          $multiples = preg_split("/\s?;\s?/", $text[$name]);
+          if (isset($multiples[1])) {
+            array_push($multiples, $text[$name]);
+          }
+          $text[$name] = $multiples;
         }
         if (in_array($machine_name, ['institution']) && empty($text['Institution'])) {
           $text['Institution'] = 'Purdue University';
@@ -229,21 +237,35 @@ class ImporterService {
           $assignment_code = $text['Assignment'];
           $text['Assignment'] = self::$assignments[$assignment_code];
         }
-        $tid = self::getTidByName($text[$name], $machine_name);
-        if ($tid == 0) {
-          // Convert country IDs to readable names.
-          if ($machine_name == 'country') {
-            if (in_array($text[$name] => array_keys($countryFixes))) {
-              $code = $text[$name];
-              $text[$name] = $countryFixes[$code];
-            }
-            $text[$name] = CountryCodeConverter::convert($text[$name]);
+        // Convert country IDs to readable names.
+        if ($machine_name == 'country') {
+          if (in_array($text[$name], array_keys(self::$countryFixes))) {
+            $code = $text[$name];
+            $text[$name] = self::$countryFixes[$code];
           }
-          self::createTerm($text[$name], $machine_name);
+          $text[$name] = CountryCodeConverter::convert($text[$name]);
+        }
+        if (is_array($text[$name])) {
+          $tids = [];
+          foreach ($text[$name] as $term) {
+            $tid = self::getTidByName($term, $machine_name);
+            if ($tid == 0) {
+              self::createTerm($term, $machine_name);
+              $tid = self::getTidByName($term, $machine_name);
+            }
+            $tids[] = $tid;
+          }
+          $fields[$machine_name] = $tids;
+        }
+        else {
           $tid = self::getTidByName($text[$name], $machine_name);
+          if ($tid == 0) {
+            self::createTerm($text[$name], $machine_name);
+            $tid = self::getTidByName($text[$name], $machine_name);
+          }
+          $fields[$machine_name] = $tid;
         }
       }
-      $fields[$machine_name] = $tid;
     }
 
     if (isset($options['lorem']) && $options['lorem']) {
@@ -265,8 +287,18 @@ class ImporterService {
     }
     $node->set('title', $text['filename']);
     foreach ($taxonomies as $name => $machine_name) {
-      $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
+      if (is_array($fields[$machine_name])) {
+        $elements = [];
+        foreach ($fields[$machine_name] as $delta => $term) {
+          $elements[] = ['delta' => $delta, 'target_id' => $term];
+        }
+        $node->set('field_' . $machine_name, $elements);
+      }
+      else {
+        $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
+      }
     }
+    
     $node->set('field_id', ['value' => $text['Student ID']]);
     $node->set('field_toefl_total', ['value' => $text['TOEFL total']]);
     $node->set('field_toefl_writing', ['value' => $text['TOEFL writing']]);
