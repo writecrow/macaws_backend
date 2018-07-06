@@ -19,6 +19,7 @@ dependencies:
   module:
     - taxonomy
     - search_api
+    - search_api_solr
     - node
 id: resource_index
 name: 'Resource Index'
@@ -233,6 +234,7 @@ processor_settings:
     weights:
       preprocess_index: -15
       preprocess_query: -15
+  solr_date_range: {  }
 tracker_settings:
   default:
     indexing_order: fifo

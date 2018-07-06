@@ -1480,7 +1480,7 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 256
+            max_length: 120
             word_boundary: true
             ellipsis: true
             more_link: false
@@ -1488,7 +1488,7 @@ display:
             more_link_path: ''
             strip_tags: true
             trim: true
-            preserve_tags: ''
+            preserve_tags: '<strong>'
             html: false
           element_type: ''
           element_class: ''

@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api_solr.solr_field_type.text_phonetic_und_7_0_0
+    - search_api_solr.solr_field_type.text_und_7_0_0
+  module:
+    - search_api_solr
+id: solr_text_by_lemma
+name: 'Solr Text by Lemma'
+description: ''
+backend: search_api_solr
+backend_config:
+  connector: standard
+  connector_config:
+    scheme: https
+    host: us-west-solr7.solrcluster.com
+    port: '443'
+    path: /solr/Solr_Text_By_Lemma
+    core: ''
+    timeout: 60
+    index_timeout: 60
+    optimize_timeout: 60
+    commit_within: 0
+    solr_version: ''
+    http_method: AUTO
+  retrieve_data: false
+  highlight_data: false
+  skip_schema_check: false
+  domain: generic
+  site_hash: false

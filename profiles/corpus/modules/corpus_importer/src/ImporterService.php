@@ -39,7 +39,6 @@ class ImporterService {
     "LR" => "Literature Review",
     "OL" => "Open Letter",
     "SR" => "Summary and Response",
-    "SY" => "Synthesis",
     "FA" => "Film Analysis",
     "TA" => "Text Analysis",
     "AR" => "Argumentative Paper",
@@ -68,6 +67,40 @@ class ImporterService {
     'SDA' => 'SAU',
   ];
 
+  public static $collegeSpecific = [
+    'Purdue University' => [
+      'US' => 'Exploratory Studies',
+      'E' => 'First Year Engineering',
+      'M' => 'School of Management',
+    ],
+    'University of Arizona' => [
+      'US' => 'College of Letters Arts & Sciences',
+      'E' => 'College of Engineering',
+      'M' => 'Eller College of Management',
+    ],
+  ];
+
+  public static $collegeGeneral = [
+    'EU' => 'College of Education',
+    'A' => 'College of Agriculture',
+    'HH' => 'College of Health & Human Sci',
+    'LA' => 'College of Liberal Arts',
+    'PC' => 'College of Pharmacy',
+    'S' => 'College of Science',
+    'PI' => 'Polytechnic Institute',
+    'T' => 'Polytechnic Institute',
+    'PP' => 'Pre-Pharmacy',
+    'CH' => 'School of Chemical Engineering',
+    'EC' => 'School of Electrical & Computer Engineering',
+    'ME' => 'School of Mechanical Engineering',
+    'CFA' => 'College of Fine Arts',
+    'SBS' => 'College of Social & Behavioral Sciences',
+    'COH' => 'College of Humanities',
+    'NUR' => 'College of Nursing',
+    'APL' => 'College of Architecture, Planning, & Landscape',
+    'MED' => 'College of Medicine',
+  ];
+
   /**
    * Main method: execute parsing and saving of redirects.
    *
@@ -79,7 +112,7 @@ class ImporterService {
   public static function import($files, $options = []) {
 
     if (PHP_SAPI == 'cli' && function_exists('drush_main')) {
-      ini_set("memory_limit", "2048M");
+      ini_set("memory_limit", "4096M");
       $paths = array_slice(scandir($files), 2);
       $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($files));
       foreach ($objects as $name => $object) {
@@ -215,10 +248,11 @@ class ImporterService {
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
       $tid = '';
+      $save = TRUE;
       if (in_array($name, array_keys($text))) {
-        // Standardize N/A values.
-        if (in_array($machine_name, ['instructor', 'institution']) && in_array($text[$name], ['NA'])) {
-          $text[$name] = 'N/A';
+        // Skip N/A values.
+        if (in_array($text[$name], ['NA', 'N/A'])) {
+          $save = FALSE;
         }
         if (in_array($machine_name, ['program', 'college'])) {
           $multiples = preg_split("/\s?;\s?/", $text[$name]);
@@ -245,25 +279,39 @@ class ImporterService {
           }
           $text[$name] = CountryCodeConverter::convert($text[$name]);
         }
-        if (is_array($text[$name])) {
-          $tids = [];
-          foreach ($text[$name] as $term) {
-            $tid = self::getTidByName($term, $machine_name);
-            if ($tid == 0) {
-              self::createTerm($term, $machine_name);
+        if ($save) {
+          if (is_array($text[$name])) {
+            $tids = [];
+            foreach ($text[$name] as $term) {
+              if ($machine_name == 'college') {
+                $instititution = $text['Institution'];
+                if (in_array($term, array_keys(self::$collegeGeneral))) {
+                  $term = self::$collegeGeneral[$term];
+                }
+                elseif (in_array($term, array_keys(self::$collegeSpecific[$instititution]))) {
+                  $term = self::$collegeSpecific[$instititution][$term];
+                }
+                else {
+                  continue;
+                }
+              }
               $tid = self::getTidByName($term, $machine_name);
+              if ($tid == 0) {
+                self::createTerm($term, $machine_name);
+                $tid = self::getTidByName($term, $machine_name);
+              }
+              $tids[] = $tid;
             }
-            $tids[] = $tid;
+            $fields[$machine_name] = $tids;
           }
-          $fields[$machine_name] = $tids;
-        }
-        else {
-          $tid = self::getTidByName($text[$name], $machine_name);
-          if ($tid == 0) {
-            self::createTerm($text[$name], $machine_name);
+          else {
             $tid = self::getTidByName($text[$name], $machine_name);
+            if ($tid == 0) {
+              self::createTerm($text[$name], $machine_name);
+              $tid = self::getTidByName($text[$name], $machine_name);
+            }
+            $fields[$machine_name] = $tid;
           }
-          $fields[$machine_name] = $tid;
         }
       }
     }
@@ -287,18 +335,20 @@ class ImporterService {
     }
     $node->set('title', $text['filename']);
     foreach ($taxonomies as $name => $machine_name) {
-      if (is_array($fields[$machine_name])) {
-        $elements = [];
-        foreach ($fields[$machine_name] as $delta => $term) {
-          $elements[] = ['delta' => $delta, 'target_id' => $term];
+      if (!empty($fields[$machine_name])) {
+        if (is_array($fields[$machine_name])) {
+          $elements = [];
+          foreach ($fields[$machine_name] as $delta => $term) {
+            $elements[] = ['delta' => $delta, 'target_id' => $term];
+          }
+          $node->set('field_' . $machine_name, $elements);
         }
-        $node->set('field_' . $machine_name, $elements);
-      }
-      else {
-        $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
+        else {
+          $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
+        }
       }
     }
-    
+
     $node->set('field_id', ['value' => $text['Student ID']]);
     $node->set('field_toefl_total', ['value' => $text['TOEFL total']]);
     $node->set('field_toefl_writing', ['value' => $text['TOEFL writing']]);
@@ -347,10 +397,12 @@ class ImporterService {
     ];
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
+      $save = TRUE;
       if (in_array($name, array_keys($text))) {
-        // Standardize N/A values.
-        if (in_array($machine_name, ['instructor', 'institution']) && in_array($text[$name], ['NA'])) {
-          $text[$name] = 'N/A';
+        // Skip N/A values.
+        if (in_array($text[$name], ['NA', 'N/A'])) {
+          $save = FALSE;
+          continue;
         }
         if ($machine_name == 'document_type') {
           $doc_code = $text['Document Type'];
@@ -366,9 +418,10 @@ class ImporterService {
           $tid = self::getTidByName($text[$name], $machine_name);
         }
       }
-      $fields[$machine_name] = $tid;
+      if ($save) {
+        $fields[$machine_name] = $tid;
+      }
     }
-
     if (isset($options['lorem']) && $options['lorem']) {
       $text['text'] = LoremGutenberg::generate(['sentences' => 10]);
     }
@@ -390,7 +443,9 @@ class ImporterService {
     $node->set('field_file', ['target_id' => $file->id()]);
     $node->set('field_filename', ['value' => $text['filename']]);
     foreach ($taxonomies as $name => $machine_name) {
-      $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
+      if (!empty($fields[$machine_name])) {
+        $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
+      }
     }
 
     $body = trim(html_entity_decode($text['text']));

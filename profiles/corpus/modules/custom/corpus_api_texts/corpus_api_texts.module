@@ -22,7 +22,8 @@ function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results)
   if ($id == 'text_index_by_word') {
     $search_keys = $results->getQuery()->getOriginalKeys();
     preg_match_all("/\"([^\"]+)\"/u", $search_keys, $phrases);
-    if (!empty($phrases[1])) {
+    $has_space = stripos($search_keys, ' ');
+    if (!empty($phrases[1]) && $has_space !== FALSE) {
       $preprocessed_results = $results->getResultItems();
       // Loop through each result.
       $result_items = [];
