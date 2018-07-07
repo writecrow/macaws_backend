@@ -6,13 +6,13 @@ dependencies:
     - views.view.repository_resources
   module:
     - search_api
-id: repository_rest_length
-name: repository_rest_length
-url_alias: length
+id: repository_rest_course_length
+name: repository_rest_course_length
+url_alias: course_length
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: length
+field_identifier: course_length
 facet_source_id: 'search_api:views_rest__repository_resources__rest_export_1'
 widget:
   type: array

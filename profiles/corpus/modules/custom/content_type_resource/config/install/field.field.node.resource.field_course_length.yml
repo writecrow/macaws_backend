@@ -2,14 +2,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_length
+    - field.storage.node.field_course_length
     - node.type.resource
-    - taxonomy.vocabulary.length
-id: node.resource.field_length
-field_name: field_length
+    - taxonomy.vocabulary.course_length
+id: node.resource.field_course_length
+field_name: field_course_length
 entity_type: node
 bundle: resource
-label: Length
+label: 'Course Length'
 description: ''
 required: false
 translatable: false
@@ -19,7 +19,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      length: length
+      course_length: course_length
     sort:
       field: name
       direction: asc

@@ -7,7 +7,7 @@ dependencies:
     - field.storage.node.field_document_type
     - field.storage.node.field_institution
     - field.storage.node.field_instructor
-    - field.storage.node.field_length
+    - field.storage.node.field_course_length
     - field.storage.node.field_mode
     - field.storage.node.field_raw_text
     - field.storage.node.field_semester
@@ -76,14 +76,14 @@ field_settings:
         - field.storage.node.field_instructor
       module:
         - taxonomy
-  length:
-    label: 'Length » Taxonomy term » Name'
+  course_length:
+    label: 'Course Length » Taxonomy term » Name'
     datasource_id: 'entity:node'
-    property_path: 'field_length:entity:name'
+    property_path: 'field_course_length:entity:name'
     type: string
     dependencies:
       config:
-        - field.storage.node.field_length
+        - field.storage.node.field_course_length
       module:
         - taxonomy
   mode:
@@ -216,7 +216,7 @@ processor_settings:
       - document_type
       - institution
       - instructor
-      - length
+      - course_length
       - mode
       - raw_text
       - semester

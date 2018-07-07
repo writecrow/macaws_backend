@@ -1,8 +1,8 @@
 langcode: en
 status: true
 dependencies: {  }
-name: Length
-vid: length
+name: 'Course Length'
+vid: course_length
 description: ''
 hierarchy: 0
 weight: 0

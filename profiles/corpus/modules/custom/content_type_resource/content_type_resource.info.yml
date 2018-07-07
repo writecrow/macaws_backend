@@ -5,6 +5,7 @@ dependencies:
   - content_type_text
   - field
   - file
+  - language
   - node
   - path
   - taxonomy

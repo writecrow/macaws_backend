@@ -74,7 +74,7 @@ display:
             filename: filename
             institution: institution
             instructor: instructor
-            length: length
+            course_length: course_length
             mode: mode
             semester: semester
             year: year
@@ -136,7 +136,7 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            length:
+            course_length:
               sortable: false
               default_sort_order: asc
               align: ''

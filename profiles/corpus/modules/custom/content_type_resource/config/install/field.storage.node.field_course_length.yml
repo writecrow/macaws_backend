@@ -4,8 +4,8 @@ dependencies:
   module:
     - node
     - taxonomy
-id: node.field_length
-field_name: field_length
+id: node.field_course_length
+field_name: field_course_length
 entity_type: node
 type: entity_reference
 settings:

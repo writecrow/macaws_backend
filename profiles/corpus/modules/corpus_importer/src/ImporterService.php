@@ -387,7 +387,7 @@ class ImporterService {
       'Assignment' => 'assignment',
       'Course' => 'course',
       'Mode' => 'mode',
-      'Length' => 'length',
+      'Length' => 'course_length',
       'Institution' => 'institution',
       'Instructor' => 'instructor',
       'Document Type' => 'document_type',
