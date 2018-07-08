@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.full
     - field.storage.node.field_assignment
     - field.storage.node.field_body
     - field.storage.node.field_college
@@ -25,7 +24,9 @@ dependencies:
     - field.storage.node.field_year_in_school
     - node.type.text
     - taxonomy.vocabulary.assignment
+    - taxonomy.vocabulary.institution
   module:
+    - corpus_api_texts
     - node
     - rest
     - serialization
@@ -52,7 +53,7 @@ display:
         options:
           perm: 'access content'
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
@@ -80,10 +81,12 @@ display:
       style:
         type: default
       row:
-        type: 'entity:node'
+        type: fields
         options:
-          relationship: none
-          view_mode: full
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
       fields:
         title:
           id: title
@@ -1416,6 +1419,56 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        concordance_views_field:
+          id: concordance_views_field
+          table: node
+          field: concordance_views_field
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+          entity_type: node
+          plugin_id: concordance_views_field
       filters:
         status:
           value: '1'
@@ -1562,6 +1615,92 @@ display:
           hierarchy: false
           error_message: true
           plugin_id: taxonomy_index_tid
+        combine:
+          id: combine
+          table: views
+          field: combine
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: word
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: combine_op
+            label: 'Combine fields filter'
+            description: ''
+            use_operator: false
+            operator: combine_op
+            identifier: search
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          fields:
+            field_body: field_body
+          plugin_id: combine
+        field_institution_target_id:
+          id: field_institution_target_id
+          table: node__field_institution
+          field: field_institution_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_institution_target_id_op
+            label: Institution
+            description: ''
+            use_operator: false
+            operator: field_institution_target_id_op
+            identifier: institution
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: textfield
+          limit: true
+          vid: institution
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
       sorts:
         title:
           id: title
@@ -1622,6 +1761,19 @@ display:
     display_options:
       display_extenders: {  }
       path: texts
+      style:
+        type: default
+        options: {  }
+      defaults:
+        style: false
+        row: false
+      row:
+        type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
     cache_metadata:
       max-age: -1
       contexts:
