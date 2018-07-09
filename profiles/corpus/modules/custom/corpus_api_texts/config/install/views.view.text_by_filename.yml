@@ -24,7 +24,10 @@ dependencies:
     - field.storage.node.field_year_in_school
     - node.type.text
     - taxonomy.vocabulary.assignment
+    - taxonomy.vocabulary.course
     - taxonomy.vocabulary.institution
+    - taxonomy.vocabulary.semester
+    - taxonomy.vocabulary.year
   module:
     - corpus_api_texts
     - node
@@ -1659,11 +1662,146 @@ display:
           hierarchy: false
           error_message: true
           plugin_id: taxonomy_index_tid
+        field_course_target_id:
+          id: field_course_target_id
+          table: node__field_course
+          field: field_course_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_course_target_id_op
+            label: 'Course (field_course)'
+            description: ''
+            use_operator: false
+            operator: field_course_target_id_op
+            identifier: course
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: textfield
+          limit: true
+          vid: course
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
+        field_semester_target_id:
+          id: field_semester_target_id
+          table: node__field_semester
+          field: field_semester_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_semester_target_id_op
+            label: 'Semester (field_semester)'
+            description: ''
+            use_operator: false
+            operator: field_semester_target_id_op
+            identifier: semester
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: textfield
+          limit: true
+          vid: semester
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
+        field_year_target_id:
+          id: field_year_target_id
+          table: node__field_year
+          field: field_year_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_year_target_id_op
+            label: 'Year (field_year)'
+            description: ''
+            use_operator: false
+            operator: field_year_target_id_op
+            identifier: year
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: textfield
+          limit: true
+          vid: year
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
       sorts:
-        title:
-          id: title
-          table: node_field_data
-          field: title
+        random:
+          id: random
+          table: views
+          field: random
           relationship: none
           group_type: group
           admin_label: ''
@@ -1671,9 +1809,7 @@ display:
           exposed: false
           expose:
             label: ''
-          entity_type: node
-          entity_field: title
-          plugin_id: standard
+          plugin_id: random
       title: 'Texts by attribute'
       header: {  }
       footer: {  }
@@ -1682,7 +1818,7 @@ display:
       arguments: {  }
       display_extenders: {  }
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -1733,7 +1869,7 @@ display:
           separator: ''
           hide_empty: false
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -1848,7 +1984,7 @@ display:
           items_per_page: 10
           offset: 0
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
