@@ -48,8 +48,8 @@ function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results)
           }
         }
         if ($or or $and) {
-          $start = $pos - 50 < 0 ? 0 : $pos - 50;
-          $excerpt = substr($text, $start, 120);
+          $start = $pos - 100 < 0 ? 0 : $pos - 100;
+          $excerpt = substr($text, $start, 1000);
           // Boldface matches.
           foreach ($phrases[1] as $phrase) {
             $excerpt = str_ireplace($phrase, '<strong>' . $phrase . '</strong>', $excerpt);

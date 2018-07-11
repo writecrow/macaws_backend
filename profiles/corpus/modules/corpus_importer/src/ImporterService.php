@@ -21,7 +21,7 @@ class ImporterService {
     "IR" => "Interview Report",
     "LN" => "Literacy Narrative/Autobiography",
     "RP" => "Research Proposal",
-    "SY" => "Literature Review Synthesis Paper",
+    "SY" => "Literature Review",
     "DE" => "Description and Explanation",
     "RR" => "Register Rewrite",
     "PA" => "Public Argument",
@@ -52,10 +52,11 @@ class ImporterService {
     "AS" => "Assignment Sheet",
     "RU" => "Rubric",
     "PF" => "Peer Review Form",
-    "QZ" => "Quizzes",
+    "QZ" => "Quiz",
     "HO" => "Handout",
     "AC" => "Activity Worksheet",
     "SP" => "Sample Work",
+    "HD" => "Handout"
   ];
 
   public static $countryFixes = [
@@ -122,6 +123,11 @@ class ImporterService {
       }
       $texts = self::convert($absolute_paths);
       foreach ($texts as $text) {
+        echo $text['filename'];
+        // Fix failures in corpus headers:
+        if (empty($text['Institution'])) {
+          $text['Institution'] = 'Purdue University';
+        }
         if ($text['type'] == 'corpus') {
           $result = self::saveCorpusNode($text, $options);
         }

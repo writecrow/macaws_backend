@@ -1486,7 +1486,7 @@ display:
             external: false
             replace_spaces: false
             path_case: none
-            trim_whitespace: false
+            trim_whitespace: true
             alt: ''
             rel: ''
             link_class: ''
@@ -1494,7 +1494,7 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 120
+            max_length: 1000
             word_boundary: true
             ellipsis: true
             more_link: false
@@ -1502,7 +1502,7 @@ display:
             more_link_path: ''
             strip_tags: true
             trim: true
-            preserve_tags: '<strong>'
+            preserve_tags: ''
             html: false
           element_type: ''
           element_class: ''
@@ -1582,7 +1582,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: '{{ body }}'
           hide_empty: false
           empty_zero: true
