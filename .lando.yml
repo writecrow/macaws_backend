@@ -1,0 +1,4 @@
+name: crow
+recipe: drupal8
+config:
+  webroot: .
