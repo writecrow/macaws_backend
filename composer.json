@@ -35,10 +35,26 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
+  "autoload": {
+    "classmap": [
+        "scripts/composer/ScriptHandler.php"
+    ],
+    "files": ["load.environment.php"]
+  },
   "scripts": {
-    "build-assets": [
-      "composer install --optimize-autoloader"
-    ]
+      "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+      "pre-install-cmd": [
+          "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+      ],
+      "pre-update-cmd": [
+          "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+      ],
+      "post-install-cmd": [
+          "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+      ],
+      "post-update-cmd": [
+          "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+      ]
   },
   "extra": {
     "drupal-scaffold": {
