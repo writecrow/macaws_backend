@@ -18,9 +18,9 @@ function corpus_importer_drush_command() {
     'arguments' => array(
       'path' => 'Path to the folder that includes the files',
     ),
-    'examples' => array(
+    'examples' => [
       'drush corpus-import /Users/jmf3658/crow-data',
-    ),
+    ],
     'aliases' => array('corpus-i'),
   );
 

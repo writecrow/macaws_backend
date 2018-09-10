@@ -2,7 +2,6 @@
 
 namespace Drupal\word_frequency;
 
-use Drupal\Component\Utility\Html;
 use Drupal\node\Entity\Node;
 
 /**
@@ -13,16 +12,16 @@ use Drupal\node\Entity\Node;
 class FrequencyService {
 
   public static function mostCommon($range = 100) {
-    // Create an object of type Select and directly 
-    // add extra detail to this query object: a condition, fields and a range
+    // Create an object of type Select and directly
+    // add extra detail to this query object: a condition, fields and a range.
     $connection = \Drupal::database();
     $query = $connection->select('word_frequency', 'f')
       ->fields('f', ['word', 'count'])
       ->orderBy('count', 'DESC')
-      ->range(0, $range); 
+      ->range(0, $range);
     $result = $query->execute();
-    return $result->fetchAllKeyed();   
-  }  
+    return $result->fetchAllKeyed();
+  }
 
   /**
    * Main method: retrieve all texts & count words sequentially.
@@ -30,13 +29,16 @@ class FrequencyService {
   public static function analyze() {
     if (PHP_SAPI == 'cli' && function_exists('drush_main')) {
       ini_set("memory_limit", "4096M");
+      print_r('Analyzing word frequency...' . PHP_EOL);
       if ($texts = self::retrieve()) {
-        foreach ($texts as $text) {
-          $result = self::count($text);
-          print_r($result . PHP_EOL);
+        if (!empty($texts)) {
+          foreach ($texts as $text) {
+            $result = self::count($text);
+            print_r($result . PHP_EOL);
+          }
         }
+
       }
-      
 
     }
     else {
@@ -70,9 +72,9 @@ class FrequencyService {
    *   IDs of texts
    */
   protected static function retrieve() {
-    $nids = \Drupal::entityQuery('node')->condition('type','text')->execute();
+    $nids = \Drupal::entityQuery('node')->condition('type', 'text')->execute();
     if (!empty($nids)) {
-      return(array_keys($nids));
+      return(array_values($nids));
     }
     return FALSE;
   }
@@ -103,8 +105,7 @@ class FrequencyService {
     $node = Node::load($node_id);
     if ($body = $node->field_body->getValue()) {
       $tokens = self::tokenize($body[0]['value']);
-      foreach ($tokens as $raw) {
-        $word = strtolower($raw);
+      foreach ($tokens as $word) {
         if (isset($frequency[$word])) {
           $frequency[$word]++;
         }
@@ -113,12 +114,12 @@ class FrequencyService {
         }
       }
       if (!empty($frequency)) {
-        foreach($frequency as $word => $count) {
+        foreach ($frequency as $word => $count) {
           $connection = \Drupal::database();
           $connection->merge('word_frequency')
             ->key(['word' => $word])
             ->fields([
-                'count' => $count,
+              'count' => $count,
             ])
             ->expression('count', 'count + :inc', [':inc' => $count])
             ->execute();
@@ -129,25 +130,16 @@ class FrequencyService {
     return $result;
   }
 
-    public function tokenize($str) {
-      $arr = array();
-      // for the character classes
-      // see http://php.net/manual/en/regexp.reference.unicode.php
-      $pat = '/
-            ([\pZ\pC]*)			# match any separator or other
-                                # in sequence
-            (
-                [^\pP\pZ\pC]+ |	# match a sequence of characters
-                                # that are not punctuation,
-                                # separator or other
-                .				# match punctuations one by one
-            )
-            ([\pZ\pC]*)			# match a sequence of separators
-                                # that follows
-        /xu';
-      preg_match_all($pat,$str,$arr);
-      return $arr[2];
+  public function tokenize($string) {
+    $tokens = preg_split("/\s|[,.!?;\"”]/", $string);
+    $result = [];
+    foreach($tokens as $token) {
+      if ($token) {
+        $result[] = $token;
+      }
     }
+    return $result;
+  }
 
   /**
    * Batch API callback.
@@ -164,6 +156,12 @@ class FrequencyService {
       drupal_set_message(count($results['created']) . ' texts analyzed.');
     }
 
+  }
+
+  public static function wipe() {
+    $connection = \Drupal::database();
+    $query = $connection->delete('word_frequency');
+    $query->execute();
   }
 
 }
