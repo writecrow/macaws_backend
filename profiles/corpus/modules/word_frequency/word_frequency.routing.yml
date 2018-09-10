@@ -1,0 +1,9 @@
+word_frequency.word_frequency_form:
+  path: '/admin/config/media/frequency'
+  defaults:
+    _form: '\Drupal\word_frequency\Form\Frequency'
+    _title: 'Word Frequency'
+  requirements:  
+    _permission: 'access administration pages'  
+  options:  
+    _admin_route: TRUE  

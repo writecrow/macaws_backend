@@ -117,13 +117,12 @@ class ImporterService {
       $paths = array_slice(scandir($files), 2);
       $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($files));
       foreach ($objects as $name => $object) {
-        if (strpos($name, '.txt') !== FALSE) {
+        if (stripos($name, '.txt') !== FALSE) {
           $absolute_paths[]['tmppath'] = $name;
         }
       }
       $texts = self::convert($absolute_paths);
       foreach ($texts as $text) {
-        echo $text['filename'];
         // Fix failures in corpus headers:
         if (empty($text['Institution'])) {
           $text['Institution'] = 'Purdue University';
@@ -168,7 +167,7 @@ class ImporterService {
   }
 
   /**
-   * Convert CSV file into readable PHP array.
+   * Convert tagged file into readable PHP array.
    *
    * @param mixed $files
    *   Simple array of filepaths.
@@ -186,9 +185,15 @@ class ImporterService {
         $text['type'] = 'corpus';
         $data[] = $text;
       }
-      if (isset($text['File ID'])) {
+      elseif (isset($text['File ID'])) {
         $text['type'] = 'repository';
         $text['full_path'] = $uploaded_file['tmppath'];
+        $data[] = $text;
+      }
+      elseif (isset($text['ID'])) {
+        // Assume that files with "ID" are corpus files.
+        $text['Student ID'] = $text['ID'];
+        $text['type'] = 'corpus';
         $data[] = $text;
       }
     }
@@ -250,7 +255,6 @@ class ImporterService {
       'Course Year' => 'year',
       'Year in School' => 'year_in_school',
     ];
-
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
       $tid = '';
@@ -312,11 +316,13 @@ class ImporterService {
           }
           else {
             $tid = self::getTidByName($text[$name], $machine_name);
-            if ($tid == 0) {
+            if ($tid == 0 && isset($text[$name])) {
               self::createTerm($text[$name], $machine_name);
               $tid = self::getTidByName($text[$name], $machine_name);
             }
-            $fields[$machine_name] = $tid;
+            if ($tid != 0) {
+              $fields[$machine_name] = $tid;
+            }
           }
         }
       }
