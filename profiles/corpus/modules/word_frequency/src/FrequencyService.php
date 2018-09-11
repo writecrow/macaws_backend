@@ -23,13 +23,27 @@ class FrequencyService {
     return $result->fetchAllKeyed();
   }
 
+  public static function totalWords() {
+    $connection = \Drupal::database();
+    $query = $connection->select('word_frequency', 'f');
+    $query->addExpression('sum(count)', 'total');
+    $result = $query->execute()->fetchAssoc();
+    $value = $result['total'];
+    return $value;
+  }
+
   public static function simpleSearch($word, $case = 'insensitive') {
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
     $connection = \Drupal::database();
-    $query = $connection->select('word_frequency', 'f')
-      ->fields('f', ['count'])
-      ->condition('word', db_like($word), 'LIKE BINARY');
+    $query = $connection->select('word_frequency', 'f')->fields('f', ['count']);
+    if ($case == 'sensitive') {
+      // 'BINARY' makes the search case-sensitive.
+      $query->condition('word', db_like($word), 'LIKE BINARY');
+    }
+    else {
+      $query->condition('word', db_like($word), 'LIKE');
+    }
     $result = $query->execute();
     return $result->fetchField();
   }

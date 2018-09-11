@@ -9,9 +9,16 @@ word_frequency.word_frequency_form:
   options:  
     _admin_route: TRUE
 word_frequency.search:
-  path: '/api/frequency/{search}'
+  path: '/api/frequency'
   defaults:
     _controller: '\Drupal\word_frequency\Controller\Frequency::search'
+    _title: 'Word Frequency'
+  requirements:  
+    _permission: 'access content'
+word_frequency.total:
+  path: '/api/words/total'
+  defaults:
+    _controller: '\Drupal\word_frequency\Controller\Frequency::totalWords'
     _title: 'Word Frequency'
   requirements:  
     _permission: 'access content'

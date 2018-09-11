@@ -47,6 +47,9 @@ sites/*/services.local.yml
 # Ignore SimpleTest multi-site environment.
 sites/simpletest
 
+# Ignore test data
+corpus_data
+
 # Packages #
 ############
 *.7z
