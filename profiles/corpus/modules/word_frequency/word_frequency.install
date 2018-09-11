@@ -6,37 +6,6 @@
  */
 
 /**
- * Implements hook_install().
- *
- * Creates some default entries on this module custom table.
- *
- * @see hook_install()
- *
- * @ingroup word_frequency
- */
-function word_frequency_install() {
-
-  // Insert some example data into our schema.
-  $entries = [
-    [
-      'word' => 'john',
-      'count' => 0,
-    ],
-    [
-      'word' => 'doe',
-      'count' => '1',
-    ],
-  ];
-  $connection = \Drupal::database();
-  foreach ($entries as $entry) {
-    $connection
-      ->insert('word_frequency')
-      ->fields($entry)
-      ->execute();
-  }
-}
-
-/**
  * Implements hook_schema().
  *
  * Defines the database tables used by this module.

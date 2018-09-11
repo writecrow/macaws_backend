@@ -23,6 +23,17 @@ class FrequencyService {
     return $result->fetchAllKeyed();
   }
 
+  public static function simpleSearch($word, $case = 'insensitive') {
+    // Create an object of type Select and directly
+    // add extra detail to this query object: a condition, fields and a range.
+    $connection = \Drupal::database();
+    $query = $connection->select('word_frequency', 'f')
+      ->fields('f', ['count'])
+      ->condition('word', db_like($word), 'LIKE BINARY');
+    $result = $query->execute();
+    return $result->fetchField();
+  }
+
   /**
    * Main method: retrieve all texts & count words sequentially.
    */

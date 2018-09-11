@@ -1,4 +1,5 @@
 word_frequency.word_frequency_form:
+  
   path: '/admin/config/media/frequency'
   defaults:
     _form: '\Drupal\word_frequency\Form\Frequency'
@@ -6,4 +7,11 @@ word_frequency.word_frequency_form:
   requirements:  
     _permission: 'access administration pages'  
   options:  
-    _admin_route: TRUE  
+    _admin_route: TRUE
+word_frequency.search:
+  path: '/api/frequency/{search}'
+  defaults:
+    _controller: '\Drupal\word_frequency\Controller\Frequency::search'
+    _title: 'Word Frequency'
+  requirements:  
+    _permission: 'access content'
