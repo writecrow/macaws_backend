@@ -150,6 +150,9 @@ class FrequencyService {
       }
       if (!empty($frequency)) {
         foreach ($frequency as $word => $count) {
+          if (strlen($word) > 250) {
+            continue;
+          }
           $connection = \Drupal::database();
           $connection->merge('word_frequency')
            ->key(['word' => utf8_decode($word)])
