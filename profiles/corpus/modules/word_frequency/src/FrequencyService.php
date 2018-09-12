@@ -37,15 +37,25 @@ class FrequencyService {
     // add extra detail to this query object: a condition, fields and a range.
     $connection = \Drupal::database();
     $query = $connection->select('word_frequency', 'f')->fields('f', ['count']);
-    if ($case == 'sensitive') {
-      // 'BINARY' makes the search case-sensitive.
-      $query->condition('word', db_like($word), 'LIKE BINARY');
-    }
-    else {
-      $query->condition('word', db_like($word), 'LIKE');
-    }
+    $query->condition('word', db_like($word), 'LIKE BINARY');
     $result = $query->execute();
-    return $result->fetchField();
+    $count = $result->fetchField();
+    if ($case == 'insensitive') {
+      if (ctype_lower($word)) {
+        $query = $connection->select('word_frequency', 'f')->fields('f', ['count']);
+        $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
+        $result = $query->execute();
+        $count = $count + $result->fetchField();
+      }
+      else {
+        $query = $connection->select('word_frequency', 'f')->fields('f', ['count']);
+        $query->condition('word', db_like(strtolower($word)), 'LIKE BINARY');
+        $result = $query->execute();
+        $count = $count + $result->fetchField();
+      }
+    }
+    
+    return $count;
   }
 
   /**
@@ -57,7 +67,7 @@ class FrequencyService {
       print_r('Analyzing word frequency...' . PHP_EOL);
       if ($texts = self::retrieve()) {
         if (!empty($texts)) {
-          foreach ($texts as $text) {
+          foreach ($texts as $key => $text) {
             $result = self::count($text);
             print_r($result . PHP_EOL);
           }
@@ -142,12 +152,12 @@ class FrequencyService {
         foreach ($frequency as $word => $count) {
           $connection = \Drupal::database();
           $connection->merge('word_frequency')
-            ->key(['word' => $word])
-            ->fields([
-              'count' => $count,
-            ])
-            ->expression('count', 'count + :inc', [':inc' => $count])
-            ->execute();
+           ->key(['word' => utf8_decode($word)])
+           ->fields([
+             'count' => $count,
+           ])
+           ->expression('count', 'count + :inc', [':inc' => $count])
+           ->execute();
         }
       }
       $result = $node_id;
@@ -158,7 +168,9 @@ class FrequencyService {
   public function tokenize($string) {
     $tokens = preg_split("/\s|[,.!?;\"”]/", $string);
     $result = [];
+    $strip_chars = ":,.!&\?;\”'()";
     foreach($tokens as $token) {
+      $token = trim($token, $strip_chars);
       if ($token) {
         $result[] = $token;
       }

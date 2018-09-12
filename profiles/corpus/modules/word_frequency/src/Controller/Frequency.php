@@ -17,22 +17,33 @@ class Frequency extends ControllerBase {
   public function search(Request $request) {
     $response = new Response();
     $case = 'insensitive';
-    $normalization = \Drupal::request()->query->get('normalization');
-    if ($normalization) {
-      $total = FrequencyService::totalWords();
-      $ratio = (int) $normalization / $total;
-    }
+    $total = FrequencyService::totalWords();
+    $ratio = 10000 / $total;
     $search = \Drupal::request()->query->get('search');
-    $search_terms = FrequencyService::tokenize($search);
-    if ($sensitivity = \Drupal::request()->query->get('case')) {
-      $case = 'sensitive';
-    }
-    foreach ($search_terms as $term) {
-      $count = FrequencyService::simpleSearch($term, $case);
-      if ($normalization) {
-        $count = number_format($count * $ratio);
+    // First check for quoted terms.
+    $pieces = explode(" ", $search);
+    $prepared = [];
+    foreach ($pieces as $piece) {
+      $length = strlen($piece);
+      if ((substr($piece, 0, 1) == '"') && (substr($piece, $length - 1, 1) == '"')) {
+        $prepared[$piece] = 'quoted';
       }
-      $result[$term] = $count;
+      else {
+        $prepared[$piece] = 'standard';
+      }
+    }
+    foreach ($prepared as $word => $type) {
+      $search = FrequencyService::tokenize($word);
+      if ($type == 'quoted') {
+        $count = FrequencyService::simpleSearch($search[0], 'sensitive');
+        $term = '"' . $search[0] . '"';
+      }
+      else {
+        $count = FrequencyService::simpleSearch($search[0]);
+        $term = $search[0];  
+      }
+      $result[$term]['raw'] = $count;
+      $result[$term]['normed'] = number_format($count * $ratio);
     }
     $response->setContent(json_encode($result));
     $response->headers->set('Content-Type', 'application/json');

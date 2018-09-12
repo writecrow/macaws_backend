@@ -16,7 +16,7 @@ word_frequency.search:
   requirements:  
     _permission: 'access content'
 word_frequency.total:
-  path: '/api/words/total'
+  path: '/api/frequency/total'
   defaults:
     _controller: '\Drupal\word_frequency\Controller\Frequency::totalWords'
     _title: 'Word Frequency'
