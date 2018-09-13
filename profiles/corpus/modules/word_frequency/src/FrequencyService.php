@@ -36,26 +36,23 @@ class FrequencyService {
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
     $connection = \Drupal::database();
-    $query = $connection->select('word_frequency', 'f')->fields('f', ['count']);
+    $query = $connection->select('word_frequency', 'f')->fields('f', ['count', 'texts']);
     $query->condition('word', db_like($word), 'LIKE BINARY');
     $result = $query->execute();
-    $count = $result->fetchField();
+    $counts = $result->fetchAssoc();
     if ($case == 'insensitive') {
+      $query = $connection->select('word_frequency', 'f')->fields('f', ['count', 'texts']);
       if (ctype_lower($word)) {
-        $query = $connection->select('word_frequency', 'f')->fields('f', ['count']);
         $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
-        $result = $query->execute();
-        $count = $count + $result->fetchField();
       }
       else {
-        $query = $connection->select('word_frequency', 'f')->fields('f', ['count']);
         $query->condition('word', db_like(strtolower($word)), 'LIKE BINARY');
-        $result = $query->execute();
-        $count = $count + $result->fetchField();
       }
+      $result = $query->execute();
+      $item = $result->fetchAssoc();
+      $counts['count'] = $counts['count'] + $item['count'];
     }
-    
-    return $count;
+    return $counts;
   }
 
   /**
@@ -68,6 +65,9 @@ class FrequencyService {
       if ($texts = self::retrieve()) {
         if (!empty($texts)) {
           foreach ($texts as $key => $text) {
+            if ($key > 10) {
+              break;
+            }
             $result = self::count($text);
             print_r($result . PHP_EOL);
           }
@@ -158,8 +158,10 @@ class FrequencyService {
            ->key(['word' => utf8_decode($word)])
            ->fields([
              'count' => $count,
+             'texts' => 1,
            ])
            ->expression('count', 'count + :inc', [':inc' => $count])
+           ->expression('texts', 'texts + 1')
            ->execute();
         }
       }

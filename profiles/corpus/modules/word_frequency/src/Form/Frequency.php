@@ -13,14 +13,14 @@ use Drupal\word_frequency\FrequencyService;
  */
 class Frequency extends ConfigFormBase {
 
-  /**  
-   * {@inheritdoc}  
-   */  
-  protected function getEditableConfigNames() {  
-    return [  
-      'word_frequency.word_frequency_form',  
-    ];  
-  }  
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return [
+      'word_frequency.word_frequency_form',
+    ];
+  }
 
   /**
    * {@inheritdoc}

@@ -18,11 +18,6 @@ function word_frequency_schema() {
   $schema['word_frequency'] = [
     'description' => 'Stores frequency data',
     'fields' => [
-      'id' => [
-        'type' => 'serial',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ],
       'word' => [
         'type' => 'varchar_ascii',
         'length' => 255,
@@ -39,14 +34,22 @@ function word_frequency_schema() {
         'size' => 'normal',
         'description' => 'The count of the word',
       ],
+      'texts' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 1,
+        'size' => 'normal',
+        'description' => 'The number of texts containing the word',
+      ],
     ],
-    'primary key' => ['id'],
+    'primary key' => ['word'],
     'unique keys' => [
       'word' => ['word']
     ],
     'indexes' => [
       'counts' => [
-        'count'
+        'count',
       ],
     ],
   ];

@@ -42,10 +42,23 @@ class Frequency extends ControllerBase {
         $count = FrequencyService::simpleSearch($search[0]);
         $term = $search[0];  
       }
-      $result[$term]['raw'] = $count;
-      $result[$term]['normed'] = number_format($count * $ratio);
+      $result[$term]['raw'] = $count['count'];
+      $result[$term]['normed'] = number_format($count['count'] * $ratio);
+      $result[$term]['texts'] = $count['texts'];
     }
-    $response->setContent(json_encode($result));
+    $output['terms'] = $result;
+    if (count($result) > 1) {
+      $totals['raw'] = 0;
+      $totals['normed'] = 0;
+      $totals['texts'] = 0;
+      foreach($result as $i) {
+        $totals['raw'] = $totals['raw'] + $i['raw'];
+        $totals['normed'] = $totals['normed'] + $i['normed'];
+        $totals['texts'] = $totals['texts'] + $i['texts'];
+      }
+      $output['totals'] = $totals;
+    }
+    $response->setContent(json_encode($output));
     $response->headers->set('Content-Type', 'application/json');
     return $response;
   }
@@ -57,4 +70,5 @@ class Frequency extends ControllerBase {
     $response->headers->set('Content-Type', 'application/json');
     return $response;
   }
+
 }
