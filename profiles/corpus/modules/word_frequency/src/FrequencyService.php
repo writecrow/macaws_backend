@@ -65,9 +65,6 @@ class FrequencyService {
       if ($texts = self::retrieve()) {
         if (!empty($texts)) {
           foreach ($texts as $key => $text) {
-            if ($key > 10) {
-              break;
-            }
             $result = self::count($text);
             print_r($result . PHP_EOL);
           }
