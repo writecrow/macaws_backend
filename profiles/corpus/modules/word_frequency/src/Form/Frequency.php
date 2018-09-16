@@ -37,7 +37,6 @@ class Frequency extends ConfigFormBase {
       '#type' => 'submit',
       '#value' => $this->t('Calculate word frequency'),
     ];
-
     return $form;
   }
 

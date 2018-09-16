@@ -40,7 +40,7 @@ class Frequency extends ControllerBase {
       }
       else {
         $count = FrequencyService::simpleSearch($search[0]);
-        $term = $search[0];  
+        $term = $search[0];
       }
       $result[$term]['raw'] = $count['count'];
       $result[$term]['normed'] = number_format($count['count'] * $ratio);
@@ -51,7 +51,7 @@ class Frequency extends ControllerBase {
       $totals['raw'] = 0;
       $totals['normed'] = 0;
       $totals['texts'] = 0;
-      foreach($result as $i) {
+      foreach ($result as $i) {
         $totals['raw'] = $totals['raw'] + $i['raw'];
         $totals['normed'] = $totals['normed'] + $i['normed'];
         $totals['texts'] = $totals['texts'] + $i['texts'];
@@ -59,6 +59,17 @@ class Frequency extends ControllerBase {
       $output['totals'] = $totals;
     }
     $response->setContent(json_encode($output));
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
+  }
+
+  public function phraseSearch(Request $request) {
+    $response = new Response();
+    $count = [];
+    if ($search = \Drupal::request()->query->get('search')) {
+      $count = FrequencyService::phraseSearch($search);
+    }
+    $response->setContent(json_encode($count));
     $response->headers->set('Content-Type', 'application/json');
     return $response;
   }

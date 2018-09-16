@@ -22,3 +22,10 @@ word_frequency.total:
     _title: 'Word Frequency'
   requirements:  
     _permission: 'access content'
+word_frequency.phrase_search:
+  path: '/api/frequency/phrase'
+  defaults:
+    _controller: '\Drupal\word_frequency\Controller\Frequency::phraseSearch'
+    _title: 'Phrasal Search'
+  requirements:  
+    _permission: 'access content'

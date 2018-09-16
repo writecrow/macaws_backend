@@ -55,6 +55,40 @@ class FrequencyService {
     return $counts;
   }
 
+  public static function phraseSearch($phrase) {
+    // Create an object of type Select and directly
+    // add extra detail to this query object: a condition, fields and a range.
+    $phrase = trim($phrase);
+    $connection = \Drupal::database();
+    $query = $connection->select('node__field_body', 'f')->fields('f', ['field_body_value']);
+    $query->condition('bundle', 'text', '=');
+    // Improve query matching by guessing likely start & end values.
+    $and_condition_1 = $query->orConditionGroup()
+      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . " %", 'LIKE BINARY')
+      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . ",%", 'LIKE BINARY')
+      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . ";%", 'LIKE BINARY')
+      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . "!%", 'LIKE BINARY')
+      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . "'%", 'LIKE BINARY')
+      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . '"%', 'LIKE BINARY')
+      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . "?%", 'LIKE BINARY');
+    $result = $query->condition($and_condition_1)->execute();
+    $raw_texts = $result->fetchAll();
+    $count = 0;
+    $normed = 0;
+    $texts = 0;
+    if (!empty($raw_texts)) {
+      $total = FrequencyService::totalWords();
+      $ratio = 10000 / $total;
+      foreach ($raw_texts as $result) {
+        $body = $result->field_body_value;
+        $count = $count + substr_count($body, $phrase);
+      }
+      $normed = number_format($count * $ratio);
+      $texts = count($raw_texts);
+    }
+    return ['raw' => $count, 'normed' => $normed, 'texts' => $texts];
+  }
+
   /**
    * Main method: retrieve all texts & count words sequentially.
    */
@@ -152,14 +186,14 @@ class FrequencyService {
           }
           $connection = \Drupal::database();
           $connection->merge('word_frequency')
-           ->key(['word' => utf8_decode($word)])
-           ->fields([
-             'count' => $count,
-             'texts' => 1,
-           ])
-           ->expression('count', 'count + :inc', [':inc' => $count])
-           ->expression('texts', 'texts + 1')
-           ->execute();
+            ->key(['word' => utf8_decode($word)])
+            ->fields([
+              'count' => $count,
+              'texts' => 1,
+            ])
+            ->expression('count', 'count + :inc', [':inc' => $count])
+            ->expression('texts', 'texts + 1')
+            ->execute();
         }
       }
       $result = $node_id;
@@ -171,7 +205,7 @@ class FrequencyService {
     $tokens = preg_split("/\s|[,.!?;\"”]/", $string);
     $result = [];
     $strip_chars = ":,.!&\?;\”'()";
-    foreach($tokens as $token) {
+    foreach ($tokens as $token) {
       $token = trim($token, $strip_chars);
       if ($token) {
         $result[] = $token;
