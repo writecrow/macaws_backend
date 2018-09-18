@@ -42,10 +42,16 @@ function word_frequency_schema() {
         'size' => 'normal',
         'description' => 'The number of texts containing the word',
       ],
+      'ids' => [
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'normal',
+        'description' => 'Comma-separated list of ids of texts containing the word',
+      ],
     ],
     'primary key' => ['word'],
     'unique keys' => [
-      'word' => ['word']
+      'word' => ['word'],
     ],
     'indexes' => [
       'counts' => [

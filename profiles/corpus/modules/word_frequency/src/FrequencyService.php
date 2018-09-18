@@ -55,6 +55,59 @@ class FrequencyService {
     return $counts;
   }
 
+  public static function countTextsContaining($words) {
+    // Note: this method was avoided, for performance & consistency reasons.
+    // Nevertheless, it's a useful example of looped query conditions.
+    // Create an object of type Select and directly
+    // add extra detail to this query object: a condition, fields and a range.
+    // $connection = \Drupal::database();
+    // $query = $connection->select('node__field_body', 'f')->fields('f', ['field_body_value']);
+    // $query->condition('bundle', 'text', '=');
+    // // Improve query matching by guessing likely start & end values.
+    // $and_condition_1 = $query->orConditionGroup();
+    // foreach ($words as $word => $type) {
+    //   if ($type == 'quoted') {
+    //     $and_condition_1->condition('field_body_value', "%" . $connection->escapeLike(' ' . $word . ' ') . "%", 'LIKE BINARY');
+    //   }
+    //   else {
+    //     $and_condition_1->condition('field_body_value', "%" . $connection->escapeLike(' ' . $word . ' ') . "%", 'LIKE');
+    //   }
+    // }
+    // $texts_count = $query->condition($and_condition_1)->countQuery()->execute()->fetchField();
+    $connection = \Drupal::database();
+    $all_ids = [];
+    foreach ($words as $word => $type) {
+      $ids = [];
+      $query = $connection->select('word_frequency', 'f')->fields('f', ['ids']);
+      $query->condition('word', db_like($word), 'LIKE BINARY');
+      $result = $query->execute();
+      $id_string = $result->fetchField();
+      if (!empty($id_string)) {
+        $ids = explode(',', $id_string);
+      }
+      // Append case-insensitive results.
+      if ($type == 'standard') {
+        $query = $connection->select('word_frequency', 'f')->fields('f', ['ids']);
+        if (ctype_lower($word)) {
+          $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
+        }
+        else {
+          $query->condition('word', db_like(strtolower($word)), 'LIKE BINARY');
+        }
+        $result = $query->execute();
+        $id_string = $result->fetchField();
+        if (!empty($id_string)) {
+          $insensitive_ids = explode(',', $id_string);
+        }
+        $ids = array_unique(array_merge($insensitive_ids, $ids));
+      }
+      if (!empty($ids)) {
+        $all_ids = array_unique(array_merge($ids, $all_ids));
+      }
+    }
+    return count($all_ids);
+  }
+
   public static function phraseSearch($phrase) {
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
@@ -103,9 +156,7 @@ class FrequencyService {
             print_r($result . PHP_EOL);
           }
         }
-
       }
-
     }
     else {
       // Convert files into machine-readable array.
@@ -190,9 +241,11 @@ class FrequencyService {
             ->fields([
               'count' => $count,
               'texts' => 1,
+              'ids' => $node_id,
             ])
             ->expression('count', 'count + :inc', [':inc' => $count])
             ->expression('texts', 'texts + 1')
+            ->expression('ids', "concat(ids, ',' :node_id)", [':node_id' => $node_id])
             ->execute();
         }
       }
@@ -201,7 +254,7 @@ class FrequencyService {
     return $result;
   }
 
-  public function tokenize($string) {
+  public static function tokenize($string) {
     $tokens = preg_split("/\s|[,.!?;\"”]/", $string);
     $result = [];
     $strip_chars = ":,.!&\?;\”'()";

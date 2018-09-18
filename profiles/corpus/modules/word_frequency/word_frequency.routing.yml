@@ -8,22 +8,23 @@ word_frequency.word_frequency_form:
     _permission: 'access administration pages'  
   options:  
     _admin_route: TRUE
-word_frequency.search:
-  path: '/api/frequency'
-  defaults:
-    _controller: '\Drupal\word_frequency\Controller\Frequency::search'
-    _title: 'Word Frequency'
-  requirements:  
-    _permission: 'access content'
 word_frequency.total:
-  path: '/api/frequency/total'
+  path: '/frequency/total'
   defaults:
     _controller: '\Drupal\word_frequency\Controller\Frequency::totalWords'
     _title: 'Word Frequency'
   requirements:  
     _permission: 'access content'
+word_frequency.search:
+  path: '/frequency/words'
+  defaults:
+    _controller: '\Drupal\word_frequency\Controller\Frequency::wordSearch'
+    _title: 'Word Frequency'
+  requirements:  
+    _permission: 'access content'
+
 word_frequency.phrase_search:
-  path: '/api/frequency/phrase'
+  path: '/frequency/phrase'
   defaults:
     _controller: '\Drupal\word_frequency\Controller\Frequency::phraseSearch'
     _title: 'Phrasal Search'
