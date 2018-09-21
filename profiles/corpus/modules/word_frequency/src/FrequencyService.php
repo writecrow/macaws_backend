@@ -36,12 +36,13 @@ class FrequencyService {
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
     $connection = \Drupal::database();
-    $query = $connection->select('word_frequency', 'f')->fields('f', ['count', 'texts']);
+    $query = $connection->select('word_frequency', 'f')->fields('f', ['count', 'ids']);
     $query->condition('word', db_like($word), 'LIKE BINARY');
     $result = $query->execute();
     $counts = $result->fetchAssoc();
+    $counts['raw'] = $counts['count'];
     if ($case == 'insensitive') {
-      $query = $connection->select('word_frequency', 'f')->fields('f', ['count', 'texts']);
+      $query = $connection->select('word_frequency', 'f')->fields('f', ['count', 'ids']);
       if (ctype_lower($word)) {
         $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
       }
@@ -50,8 +51,13 @@ class FrequencyService {
       }
       $result = $query->execute();
       $item = $result->fetchAssoc();
-      $counts['count'] = $counts['count'] + $item['count'];
+      $counts['raw'] = $counts['raw'] + $item['count'];
+      $counts['ids'] = $counts['ids'] . $item['ids'];
     }
+    $ids = explode(',', $counts['ids']);
+    unset($counts['count']);
+    $counts['texts'] = count(array_unique($ids));
+    $counts['ids'] = $ids;
     return $counts;
   }
 
@@ -113,11 +119,12 @@ class FrequencyService {
     // add extra detail to this query object: a condition, fields and a range.
     $phrase = trim($phrase);
     $connection = \Drupal::database();
-    $query = $connection->select('node__field_body', 'f')->fields('f', ['field_body_value']);
+    $query = $connection->select('node__field_body', 'f')->fields('f', ['entity_id', 'field_body_value']);
     $query->condition('bundle', 'text', '=');
     // Improve query matching by guessing likely start & end values.
     $and_condition_1 = $query->orConditionGroup()
       ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . " %", 'LIKE BINARY')
+      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . ".%", 'LIKE BINARY')
       ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . ",%", 'LIKE BINARY')
       ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . ";%", 'LIKE BINARY')
       ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . "!%", 'LIKE BINARY')
@@ -129,17 +136,18 @@ class FrequencyService {
     $count = 0;
     $normed = 0;
     $texts = 0;
+    $ids = [];
     if (!empty($raw_texts)) {
       $total = FrequencyService::totalWords();
       $ratio = 10000 / $total;
       foreach ($raw_texts as $result) {
         $body = $result->field_body_value;
         $count = $count + substr_count($body, $phrase);
+        $ids[] = $result->entity_id;
       }
-      $normed = number_format($count * $ratio);
       $texts = count($raw_texts);
     }
-    return ['raw' => $count, 'normed' => $normed, 'texts' => $texts];
+    return ['raw' => $count, 'texts' => $texts, 'ids' => $ids];
   }
 
   /**

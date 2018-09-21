@@ -17,6 +17,86 @@ class Frequency extends ControllerBase {
   /**
    * Given a search string, tokenize & return frequency data.
    */
+  public function search(Request $request) {
+    $search = \Drupal::request()->query->get('search');
+    // The following regular expression is based on https://stackoverflow.com/questions/25004629/regex-preg-split-how-do-i-split-based-on-a-delimiter-excluding-delimiters-in
+    $tokens = preg_split("/\"[^\"]*\"(*SKIP)(*F)|[ \/]+/", $search);
+    if (!empty($tokens)) {
+      $total = FrequencyService::totalWords();
+      $ratio = 10000 / $total;
+      $output = ['tokens' => []];
+      $prepared = [];
+      // Determine whether to do a phrase search or word search & case-sensitivity.
+      foreach ($tokens as $token) {
+        $length = strlen($token);
+        if ((substr($token, 0, 1) == '"') && (substr($token, $length - 1, 1) == '"')) {
+          $cleaned = substr($token, 1, $length - 2);
+          if (preg_match("/[^a-zA-Z]/", $cleaned)) {
+            // This is a quoted string. Do a phrasal search.
+            $prepared[$token] = 'phrase';
+          }
+          else {
+            // This is a case-sensitive word search.
+            $prepared[$token] = 'quoted-word';
+          }
+
+        }
+        else {
+          // This is a word. Remove punctuation.
+          $tokenized = FrequencyService::tokenize($token);
+          $token = $tokenized[0];
+          $prepared[strtolower($token)] = 'word';
+        }
+      }
+
+      // Preparation.
+      if (count($prepared) > 1) {
+        $output['totals'] = ['texts' => '0'];
+        $unique_texts = [];
+      }
+      // Retrieve counts.
+      foreach($prepared as $token => $type) {
+        switch ($type) {
+          case 'phrase':
+            $length = strlen($token);
+            $cleaned = substr($token, 1, $length - 2);
+            $data = FrequencyService::phraseSearch($cleaned);
+            break;
+
+          case 'quoted-word':
+            $length = strlen($token);
+            $cleaned = substr($token, 1, $length - 2);
+            $data = FrequencyService::simpleSearch($cleaned, 'sensitive');
+            break;
+
+          case 'word':
+            $data = FrequencyService::simpleSearch($token);
+            break;
+        }
+        $data['normed'] = number_format($data['raw'] * $ratio);
+        $texts = count(array_unique($data['ids']));
+        if (count($prepared) > 1) {
+          $unique_texts = array_unique(array_merge($unique_texts, $data['ids']));
+          $output['totals']['raw'] = $output['totals']['raw'] + $data['raw'];
+          $output['totals']['normed'] = $output['totals']['normed'] + $data['normed'];
+        }
+        $output['tokens'][$token] = ['raw' => $data['raw'], 'normed' => $data['normed'], 'texts' => $texts];
+      }
+      if (count($prepared) > 1) {
+        $output['totals']['texts'] = count($unique_texts);
+      }
+    }
+
+    // Response.
+    $response = new Response();
+    $response->setContent(json_encode($output));
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
+  }
+
+  /**
+   * Given a search string, tokenize & return frequency data.
+   */
   public function wordSearch(Request $request) {
     $response = new Response();
     $case = 'insensitive';
@@ -33,7 +113,7 @@ class Frequency extends ControllerBase {
         $prepared[$cleaned] = 'quoted';
       }
       else {
-        $prepared[$piece] = 'standard';
+        $prepared[strtolower($piece)] = 'standard';
       }
     }
     foreach ($prepared as $word => $type) {
