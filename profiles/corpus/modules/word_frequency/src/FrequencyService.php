@@ -40,6 +40,9 @@ class FrequencyService {
     $query->condition('word', db_like($word), 'LIKE BINARY');
     $result = $query->execute();
     $counts = $result->fetchAssoc();
+    if (!$counts['count']) {
+      $counts['count'] = 0;
+    }
     $counts['raw'] = $counts['count'];
     if ($case == 'insensitive') {
       $query = $connection->select('word_frequency', 'f')->fields('f', ['count', 'ids']);
@@ -52,7 +55,9 @@ class FrequencyService {
       $result = $query->execute();
       $item = $result->fetchAssoc();
       $counts['raw'] = $counts['raw'] + $item['count'];
-      $counts['ids'] = $counts['ids'] . $item['ids'];
+      if ($item['count']) {
+        $counts['ids'] = $counts['ids'] . ',' . $item['ids'];
+      } 
     }
     if (!$counts['ids']) {
       $ids = [];
