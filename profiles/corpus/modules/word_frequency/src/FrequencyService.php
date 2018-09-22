@@ -54,7 +54,12 @@ class FrequencyService {
       $counts['raw'] = $counts['raw'] + $item['count'];
       $counts['ids'] = $counts['ids'] . $item['ids'];
     }
-    $ids = explode(',', $counts['ids']);
+    if (!$counts['ids']) {
+      $ids = [];
+    }
+    else {
+      $ids = explode(',', $counts['ids']);
+    }
     unset($counts['count']);
     $counts['texts'] = count(array_unique($ids));
     $counts['ids'] = $ids;
