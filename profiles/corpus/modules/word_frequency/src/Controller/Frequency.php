@@ -6,6 +6,7 @@ use Drupal\word_frequency\FrequencyService;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\Response;
+use Drupal\Core\Cache\CacheableJsonResponse;
 
 /**
  * Class Frequency.
@@ -26,7 +27,8 @@ class Frequency extends ControllerBase {
       $ratio = 10000 / $total;
       $output = ['tokens' => []];
       $prepared = [];
-      // Determine whether to do a phrase search or word search & case-sensitivity.
+      // Determine whether to do a phrase search or word search
+      // & case-sensitivity.
       foreach ($tokens as $token) {
         $length = strlen($token);
         if ((substr($token, 0, 1) == '"') && (substr($token, $length - 1, 1) == '"')) {
@@ -55,7 +57,7 @@ class Frequency extends ControllerBase {
         $unique_texts = [];
       }
       // Retrieve counts.
-      foreach($prepared as $token => $type) {
+      foreach ($prepared as $token => $type) {
         switch ($type) {
           case 'phrase':
             $length = strlen($token);
@@ -80,7 +82,11 @@ class Frequency extends ControllerBase {
           $output['totals']['raw'] = $output['totals']['raw'] + $data['raw'];
           $output['totals']['normed'] = $output['totals']['normed'] + $data['normed'];
         }
-        $output['tokens'][$token] = ['raw' => $data['raw'], 'normed' => $data['normed'], 'texts' => $texts];
+        $output['tokens'][$token] = [
+          'raw' => $data['raw'],
+          'normed' => $data['normed'],
+          'texts' => $texts,
+        ];
       }
       if (count($prepared) > 1) {
         $output['totals']['texts'] = count($unique_texts);
@@ -88,9 +94,10 @@ class Frequency extends ControllerBase {
     }
 
     // Response.
-    $response = new Response();
+    $response = new CacheableJsonResponse([], 200);
     $response->setContent(json_encode($output));
     $response->headers->set('Content-Type', 'application/json');
+    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
 
