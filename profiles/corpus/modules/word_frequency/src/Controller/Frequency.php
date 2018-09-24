@@ -174,10 +174,11 @@ class Frequency extends ControllerBase {
    * Return the current wordcount of the entire corpus.
    */
   public function totalWords() {
-    $response = new Response();
     $count = FrequencyService::totalWords();
+    $response = new CacheableJsonResponse([], 200);
     $response->setContent(json_encode(array('total' => $count)));
     $response->headers->set('Content-Type', 'application/json');
+    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
 
