@@ -59,7 +59,9 @@ function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results)
         }
       }
       $results->setResultItems($result_items);
-      $results->setResultCount(count($result_items));
+      // For now, let's just return the "original" counts from Solr, 
+      // rather than adjusting based on what our parser found, above.
+      // $results->setResultCount(count($result_items));
     }
   }
 }

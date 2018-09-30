@@ -24,7 +24,7 @@ class Frequency extends ControllerBase {
     $tokens = preg_split("/\"[^\"]*\"(*SKIP)(*F)|[ \/]+/", $search);
     if (!empty($tokens)) {
       $total = FrequencyService::totalWords();
-      $ratio = 10000 / $total;
+      $ratio = 1000000 / $total;
       $output = ['tokens' => []];
       $prepared = [];
       // Determine whether to do a phrase search or word search
@@ -75,7 +75,8 @@ class Frequency extends ControllerBase {
             $data = FrequencyService::simpleSearch($token);
             break;
         }
-        $data['normed'] = number_format($data['raw'] * $ratio);
+
+        $data['normed'] = $data['raw'] * $ratio;
         $texts = count(array_unique($data['ids']));
         if (count($prepared) > 1) {
           $unique_texts = array_unique(array_merge($unique_texts, $data['ids']));
