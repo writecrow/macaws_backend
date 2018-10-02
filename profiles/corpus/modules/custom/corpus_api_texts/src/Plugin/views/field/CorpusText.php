@@ -68,15 +68,15 @@ class CorpusText extends FieldPluginBase {
       '106i_LN_2_IND_1_M_10369_PRD',
     ];
     if (in_array($entity->getTitle(), $fulltext)) {
-      return $text;
+      return nl2br($text);
     }
     // Default to returning a truncated version of the text.
     if (strlen($text) > 600) {
       $output = '<p>Displaying first 600 characters. For fulltext, apply for an authenticated account.</p><hr />';
-      $output .= preg_replace('/\s+?(\S+)?$/', '', substr($text, 0, 600)) . '...';
+      $output .= nl2br(preg_replace('/\s+?(\S+)?$/', '', substr($text, 0, 600)) . '...');
     }
     else {
-      $output = $text;
+      $output = nl2br($text);
     }
     return $output;
   }
