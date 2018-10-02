@@ -225,10 +225,10 @@ datasource_settings:
       selected:
         - en
 processor_settings:
-  rendered_item: {  }
+  entity_status: {  }
   add_url: {  }
   aggregated_field: {  }
-  entity_status: {  }
+  rendered_item: {  }
   html_filter:
     all_fields: true
     fields:
@@ -258,13 +258,6 @@ processor_settings:
     weights:
       preprocess_index: -15
       preprocess_query: -15
-  lemmatizer:
-    all_fields: 1
-    fields:
-      - body
-    weights:
-      preprocess_index: 0
-      preprocess_query: 0
   lemma_highlight:
     highlight: always
     highlight_partial: 0
@@ -275,6 +268,13 @@ processor_settings:
     suffix: '</strong>'
     weights:
       postprocess_query: 0
+  lemmatizer:
+    all_fields: 1
+    fields:
+      - body
+    weights:
+      preprocess_index: 0
+      preprocess_query: 0
   solr_date_range:
     weights:
       preprocess_index: 0

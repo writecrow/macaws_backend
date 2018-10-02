@@ -6,7 +6,6 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
-use Drupal\corpus_api_texts\Sentence;
 use Drupal\corpus_api_texts\Kwic;
 
 /**
@@ -82,8 +81,8 @@ class ConcordanceViewsField extends FieldPluginBase {
   /**
    * Extracts the positive keywords used in a search query.
    *
-   * @param \Drupal\search_api\Query\QueryInterface $query
-   *   The query from which to extract the keywords.
+   * @param string $string
+   *   A search string.
    *
    * @return string[]
    *   An array of all unique positive keywords used in the query.
@@ -96,7 +95,6 @@ class ConcordanceViewsField extends FieldPluginBase {
     // Assure there are no duplicates. (This is actually faster than
     // array_unique() by a factor of 3 to 4.)
     // Remove quotes from keywords.
-
     $lemmatized = [];
     foreach (array_filter($keywords_in) as $word) {
       $alpha = $word[0];
@@ -112,7 +110,7 @@ class ConcordanceViewsField extends FieldPluginBase {
       }
       $lemmatized[$lemma] = $lemma;
     }
-    
+
     $keywords = [];
     foreach (array_filter($lemmatized) as $keyword) {
       if ($keyword = trim($keyword, "'\"")) {

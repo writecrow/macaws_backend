@@ -17,4 +17,12 @@ function corpus_api_texts_views_data_alter(array &$data) {
       'id' => 'concordance_views_field',
     ),
   );
+  $data['node']['corpus_text'] = array(
+    'title' => t('Full or truncated text'),
+    'field' => array(
+      'title' => t('Full or truncated text'),
+      'help' => t('Returns full or truncated text based on parameters'),
+      'id' => 'corpus_text',
+    ),
+  );
 }

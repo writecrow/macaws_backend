@@ -224,20 +224,10 @@ datasource_settings:
       selected:
         - en
 processor_settings:
-  rendered_item: {  }
+  entity_status: {  }
   add_url: {  }
   aggregated_field: {  }
-  highlight:
-    highlight: always
-    highlight_partial: false
-    excerpt: true
-    excerpt_length: 1000
-    exclude_fields: {  }
-    prefix: '<strong>'
-    suffix: '</strong>'
-    weights:
-      postprocess_query: 0
-  entity_status: {  }
+  rendered_item: {  }
   html_filter:
     all_fields: true
     fields:
@@ -267,6 +257,16 @@ processor_settings:
     weights:
       preprocess_index: -15
       preprocess_query: -15
+  highlight:
+    highlight: always
+    highlight_partial: false
+    excerpt: true
+    excerpt_length: 1000
+    exclude_fields: {  }
+    prefix: '<strong>'
+    suffix: '</strong>'
+    weights:
+      postprocess_query: 0
   solr_date_range:
     weights:
       preprocess_index: 0
