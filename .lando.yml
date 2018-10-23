@@ -1,4 +1,4 @@
-name: crow
+name: api
 recipe: drupal8
 config:
   webroot: .
