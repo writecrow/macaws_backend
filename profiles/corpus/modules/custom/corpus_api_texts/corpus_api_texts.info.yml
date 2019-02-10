@@ -1,4 +1,4 @@
-name: 'Corpus API Texts'
+name: 'Corpus API'
 type: module
 core: 8.x
 dependencies:

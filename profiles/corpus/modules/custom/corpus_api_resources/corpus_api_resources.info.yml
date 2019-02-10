@@ -1,4 +1,4 @@
-name: 'Corpus API Resources'
+name: 'Repository API'
 type: module
 core: 8.x
 dependencies:

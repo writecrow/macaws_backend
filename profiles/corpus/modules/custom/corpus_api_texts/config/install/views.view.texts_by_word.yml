@@ -58,7 +58,7 @@ display:
       pager:
         type: some
         options:
-          items_per_page: 100
+          items_per_page: 20
           offset: 0
       style:
         type: default
@@ -1499,7 +1499,7 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 1000
+            max_length: 250
             word_boundary: true
             ellipsis: true
             more_link: false
@@ -1570,7 +1570,7 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 0
+            max_length: 140
             word_boundary: true
             ellipsis: true
             more_link: false
@@ -1876,7 +1876,7 @@ display:
       pager:
         type: full
         options:
-          items_per_page: 100
+          items_per_page: 20
           offset: 0
           id: 0
           total_pages: null
