@@ -83,7 +83,8 @@ class Frequency extends ControllerBase {
           $output['totals']['raw'] = $output['totals']['raw'] + $data['raw'];
           $output['totals']['normed'] = $output['totals']['normed'] + $data['normed'];
         }
-        $output['tokens'][$token] = [
+        $output['tokens'][] = [
+          'token' => $token,
           'raw' => $data['raw'],
           'normed' => $data['normed'],
           'texts' => $texts,
