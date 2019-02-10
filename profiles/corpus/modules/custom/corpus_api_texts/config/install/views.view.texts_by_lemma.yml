@@ -19,7 +19,7 @@ dependencies:
     - text
     - user
 id: texts_by_lemma
-label: 'Texts by Lemma'
+label: 'Corpus Search (lemma)'
 module: views
 description: ''
 tag: ''
@@ -1737,7 +1737,7 @@ display:
             group_items: {  }
           plugin_id: search_api_numeric
       sorts: {  }
-      title: 'Texts by Lemma'
+      title: 'Corpus Search (lemma)'
       header: {  }
       footer: {  }
       empty: {  }
@@ -1768,7 +1768,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: texts/lemma
+      path: corpus/lemma
     cache_metadata:
       max-age: -1
       contexts:
@@ -1793,7 +1793,7 @@ display:
     position: 2
     display_options:
       display_extenders: {  }
-      path: texts/lemma
+      path: corpus/lemma
       style:
         type: facets_serializer_plus
         options:

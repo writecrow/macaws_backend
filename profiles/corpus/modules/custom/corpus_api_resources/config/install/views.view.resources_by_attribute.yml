@@ -13,7 +13,7 @@ dependencies:
     - text
     - user
 id: resources_by_attribute
-label: 'Resources by attribute'
+label: 'Repository by Metadata'
 module: views
 description: ''
 tag: ''
@@ -1550,7 +1550,7 @@ display:
             group_items: {  }
           plugin_id: search_api_string
       sorts: {  }
-      title: 'Resources by attribute'
+      title: 'Repository by Metadata'
       header: {  }
       footer: {  }
       empty: {  }
@@ -1585,7 +1585,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: resources
+      path: repository/metadata
     cache_metadata:
       max-age: -1
       contexts:
@@ -1603,7 +1603,7 @@ display:
     position: 2
     display_options:
       display_extenders: {  }
-      path: resources
+      path: repository/metadata
       style:
         type: serializer
         options:

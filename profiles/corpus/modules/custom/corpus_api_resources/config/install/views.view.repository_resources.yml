@@ -15,7 +15,7 @@ dependencies:
     - text
     - user
 id: repository_resources
-label: 'Repository Resources'
+label: 'Repository Search'
 module: views
 description: ''
 tag: ''
@@ -1172,7 +1172,7 @@ display:
           fields: {  }
           plugin_id: search_api_fulltext
       sorts: {  }
-      title: 'Repository Resources'
+      title: 'Repository Search'
       header: {  }
       footer: {  }
       empty: {  }

@@ -19,7 +19,7 @@ dependencies:
     - text
     - user
 id: texts_by_word
-label: 'Texts by word'
+label: 'Corpus Search (word)'
 module: views
 description: ''
 tag: ''
@@ -64,6 +64,11 @@ display:
         type: default
       row:
         type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
       fields:
         filename:
           id: filename
@@ -1723,7 +1728,7 @@ display:
             group_items: {  }
           plugin_id: search_api_numeric
       sorts: {  }
-      title: 'Texts by word'
+      title: 'Corpus Search (word)'
       header:
         result:
           id: result
@@ -1763,7 +1768,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: texts/word
+      path: corpus
       cache:
         type: search_api_tag
         options: {  }
@@ -1792,7 +1797,7 @@ display:
     position: 2
     display_options:
       display_extenders: {  }
-      path: texts/word
+      path: corpus
       style:
         type: facets_serializer_plus
         options:
@@ -1835,9 +1840,6 @@ display:
             institution:
               alias: ''
               raw_output: false
-            instructor:
-              alias: ''
-              raw_output: false
             program:
               alias: ''
               raw_output: false
@@ -1869,7 +1871,7 @@ display:
               alias: wordcount
               raw_output: false
             search_api_excerpt:
-              alias: ''
+              alias: excerpt
               raw_output: false
       pager:
         type: full
