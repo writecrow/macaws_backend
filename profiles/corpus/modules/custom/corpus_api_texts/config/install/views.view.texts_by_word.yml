@@ -11,13 +11,16 @@ dependencies:
     - field.storage.node.field_toefl_writing
     - field.storage.node.field_wordcount
     - search_api.index.text_index_by_word
+    - user.role.authenticated
   module:
     - corpus_api_texts
+    - csv_serialization
     - rest
     - search_api
     - serialization
     - text
     - user
+    - views_data_export
 id: texts_by_word
 label: 'Corpus Search (word)'
 module: views
@@ -1562,7 +1565,7 @@ display:
             external: false
             replace_spaces: false
             path_case: none
-            trim_whitespace: false
+            trim_whitespace: true
             alt: ''
             rel: ''
             link_class: ''
@@ -1570,15 +1573,15 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 140
+            max_length: 0
             word_boundary: true
-            ellipsis: true
+            ellipsis: false
             more_link: false
             more_link_text: ''
             more_link_path: ''
             strip_tags: false
-            trim: false
-            preserve_tags: ''
+            trim: true
+            preserve_tags: strong
             html: false
           element_type: ''
           element_class: ''
@@ -1761,6 +1764,71 @@ display:
         - 'config:field.storage.node.field_toefl_total'
         - 'config:field.storage.node.field_toefl_writing'
         - 'config:field.storage.node.field_wordcount'
+  data_export_1:
+    display_plugin: data_export
+    id: data_export_1
+    display_title: 'Data export'
+    position: 3
+    display_options:
+      display_extenders: {  }
+      style:
+        type: data_export
+        options:
+          formats:
+            csv: csv
+          csv_settings:
+            delimiter: ','
+            enclosure: '"'
+            escape_char: \
+            strip_tags: true
+            trim: true
+            encoding: utf8
+          xls_settings:
+            xls_format: Excel2007
+            metadata:
+              creator: ''
+              last_modified_by: ''
+              title: ''
+              description: ''
+              subject: ''
+              keywords: ''
+              category: ''
+              manager: ''
+              company: ''
+      path: corpus
+      filename: ''
+      cache:
+        type: none
+      defaults:
+        cache: false
+        access: false
+      pager:
+        type: some
+        options:
+          items_per_page: 20
+          offset: 0
+      access:
+        type: role
+        options:
+          role:
+            authenticated: authenticated
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - request_format
+        - url
+        - user.roles
+      tags:
+        - 'config:field.storage.node.field_body'
+        - 'config:field.storage.node.field_id'
+        - 'config:field.storage.node.field_toefl_listening'
+        - 'config:field.storage.node.field_toefl_reading'
+        - 'config:field.storage.node.field_toefl_speaking'
+        - 'config:field.storage.node.field_toefl_total'
+        - 'config:field.storage.node.field_toefl_writing'
+        - 'config:field.storage.node.field_wordcount'
   page_1:
     display_plugin: page
     id: page_1
@@ -1895,8 +1963,7 @@ display:
             offset_label: Offset
           quantity: 9
       cache:
-        type: search_api_tag
-        options: {  }
+        type: none
     cache_metadata:
       max-age: -1
       contexts:
