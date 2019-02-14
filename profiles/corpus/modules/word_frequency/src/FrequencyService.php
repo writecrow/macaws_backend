@@ -125,39 +125,67 @@ class FrequencyService {
   }
 
   public static function phraseSearch($phrase) {
+    $terms = self::getTermMapping();
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
-    $phrase = trim($phrase);
     $connection = \Drupal::database();
-    $query = $connection->select('node__field_body', 'f')->fields('f', ['entity_id', 'field_body_value']);
-    $query->condition('bundle', 'text', '=');
-    // Improve query matching by guessing likely start & end values.
+    $query = $connection->select('node__field_body', 'f');
+    $query->leftJoin('node_field_data', 'n', 'f.entity_id = n.nid');
+    $query->leftJoin('node__field_course', 'c', 'f.entity_id = c.entity_id');
+    $query->fields('n', ['title', 'type']);
+    $query->fields('f', ['entity_id', 'field_body_value']);
+    $query->fields('c', ['field_course_target_id']);
+    $query->condition('n.type', 'text', '=');
+
+    // Apply facet conditions.
+    // $query->condition('c.field_course_target_id', '4', '=');
+
+    // Apply other field conditions (TOEFL, ID, etc.).
+
+    // Apply text conditions.
     $and_condition_1 = $query->orConditionGroup()
-      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . " %", 'LIKE BINARY')
-      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . ".%", 'LIKE BINARY')
-      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . ",%", 'LIKE BINARY')
-      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . ";%", 'LIKE BINARY')
-      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . "!%", 'LIKE BINARY')
-      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . "'%", 'LIKE BINARY')
-      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . '"%', 'LIKE BINARY')
-      ->condition('field_body_value', "%" . $connection->escapeLike(' ' . $phrase) . "?%", 'LIKE BINARY');
+      ->condition('field_body_value', "%" . $connection->escapeLike($phrase) . "%", 'LIKE BINARY');
     $result = $query->condition($and_condition_1)->execute();
+
     $raw_texts = $result->fetchAll();
     $count = 0;
     $normed = 0;
     $texts = 0;
     $ids = [];
+    $excerpts = [];
     if (!empty($raw_texts)) {
+      $inc = 0;
       $total = FrequencyService::totalWords();
       $ratio = 10000 / $total;
       foreach ($raw_texts as $result) {
         $body = $result->field_body_value;
+        if ($inc < 20) {
+          $excerpts[$result->title]['excerpt'] = self::getExcerpt($body, $phrase);
+          $excerpts[$result->title]['course'] = $terms[$result->field_course_target_id];
+        }
         $count = $count + substr_count($body, $phrase);
         $ids[] = $result->entity_id;
+        $inc++;
       }
       $texts = count($raw_texts);
     }
-    return ['raw' => $count, 'texts' => $texts, 'ids' => $ids];
+    return ['raw' => $count, 'texts' => $texts, 'ids' => $ids, 'excerpts' => $excerpts];
+  }
+
+  public static function getTermMapping() {
+    $connection = \Drupal::database();
+    $query = $connection->select('taxonomy_term_field_data', 't');
+    $query->fields('t', ['tid', 'name']);
+    $result = $query->execute();
+    return $result->fetchAllKeyed();
+  }
+
+  public static function getExcerpt($text, $token) {
+    $pos = strpos($text, $token);
+    $start = $pos - 100 < 0 ? 0 : $pos - 100;
+    $excerpt = substr($text, $start, 250);
+    // Boldface match.
+    return str_replace($token, '<mark>' . $token . '</mark>', $excerpt);
   }
 
   /**

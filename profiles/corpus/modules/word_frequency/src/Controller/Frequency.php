@@ -88,6 +88,7 @@ class Frequency extends ControllerBase {
           'raw' => $data['raw'],
           'normed' => $data['normed'],
           'texts' => $texts,
+          'excerpts' => $data['excerpts'],
         ];
       }
       if (count($prepared) > 1) {

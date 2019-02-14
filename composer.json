@@ -29,7 +29,9 @@
     "writecrow/tag_converter": "~1.0",
     "writecrow/country_code_converter": "dev-master",
     "drupal/search_api_solr": "^2.0",
-    "drupal/views_data_export": "^1.0@beta"
+    "drupal/views_data_export": "^1.0@beta",
+    "drupal/simple_oauth": "^3",
+    "drupal/restui": "^1"
   },
   "conflict": {
     "drupal/drupal": "*"

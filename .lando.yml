@@ -1,2 +1,8 @@
 name: api
 recipe: drupal8
+services:
+  # Add in phpmyadmin
+  pma:
+    type: phpmyadmin
+    hosts:
+      - database
