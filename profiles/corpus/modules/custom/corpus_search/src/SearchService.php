@@ -166,12 +166,16 @@ class SearchService {
       foreach ($matching_texts as $result) {
         $text = $result->field_body_value;
         if ($inc < 20) {
+          $excerpts[$result->title]['filename'] = $result->title;
           $excerpts[$result->title]['excerpt'] = self::getExcerpt($text, $phrase);
           $excerpts[$result->title]['assignment'] = $result->field_assignment_target_id;
           $excerpts[$result->title]['institution'] = $result->field_institution_target_id;
           $excerpts[$result->title]['draft'] = $result->field_draft_target_id;
-          $excerpts[$result->title]['toefl'] = $result->field_gender_target_id;
-          $excerpts[$result->title]['gender'] = $result->field_toefl_total_value;
+          $excerpts[$result->title]['toefl_total'] = $result->field_toefl_total_value;
+          $excerpts[$result->title]['gender'] = $result->field_gender_target_id;
+          $excerpts[$result->title]['semester'] = $result->field_semester_target_id;
+          $excerpts[$result->title]['year'] = $result->field_year_target_id;
+          $excerpts[$result->title]['course'] = $result->field_course_target_id;
         }
         $instance_count = $instance_count + substr_count($text, $phrase);
         $text_data[$result->entity_id] = [

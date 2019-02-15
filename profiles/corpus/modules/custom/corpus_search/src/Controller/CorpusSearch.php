@@ -65,6 +65,7 @@ class CorpusSearch extends ControllerBase {
     ];
 
     $results['pager']['total_items'] = count($global['text_ids']);
+    $results['pager']['subcorpus_wordcount'] = $global['subcorpus_wordcount'];
 
     // Get facet counts.
     foreach ($token_data as $t) {
@@ -93,17 +94,31 @@ class CorpusSearch extends ControllerBase {
           $facet_results[$f][$n]['active'] = TRUE;
         }
       }
+      // Ensure facets are listed alphanumerically.
+      ksort($facet_results[$f]);
     }
     $results['facets'] = $facet_results;
     // Get search excerpts.
     if (count($token_data) > 1) {
+      $filenames = [];
       foreach ($token_data as $t) {
-        $results['search_results'] = $results['search_results'] + $t['excerpts'];
+        if (isset($t['excerpts'])) {
+          foreach ($t['excerpts'] as $filename => $excerpt_data) {
+            if (!in_array($filename, $existing_filenames)) {
+              $excerpts[] = self::prepareExcerptMetadata($excerpt_data, $facet_map);
+              $filenames[] = $filename;
+            }
+          }
+          $results['search_results'] = $results['search_results'] + $excerpts;
+        }
       }
     }
     else {
       foreach ($token_data as $t) {
-        $results['search_results'] = $results['search_results'] + $t['excerpts'];
+        foreach ($t['excerpts'] as $filename => $excerpt_data) {
+          $excerpts[] = self::prepareExcerptMetadata($excerpt_data, $facet_map);
+        }
+        $results['search_results'] = $results['search_results'] + $excerpts;
       }
     }
 
@@ -130,6 +145,19 @@ class CorpusSearch extends ControllerBase {
     $response->headers->set('Content-Type', 'application/json');
     //$response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
+  }
+
+  private static function prepareExcerptMetadata($excerpt_data, $facet_map) {
+    foreach(self::$facet_ids as $facet_group) {
+      if (isset($excerpt_data[$facet_group])) {
+        $id = $excerpt_data[$facet_group];
+        if (!empty($facet_map['by_id'][$facet_group][$id])) {
+          $name = $facet_map['by_id'][$facet_group][$id];
+          $excerpt_data[$facet_group] = $name;
+        }
+      }
+    }
+    return $excerpt_data;
   }
 
   private static function updateGlobalData($global, $individual_search) {
@@ -163,7 +191,7 @@ class CorpusSearch extends ControllerBase {
     $conditions = [];
     foreach (self::$facet_ids as $id) {
       if (isset($parameters[$id])) {
-        $param_string = explode("|", $parameters[$id]);
+        $param_string = explode("+", $parameters[$id]);
         foreach ($param_string as $param) {
           if (!empty($facet_map['by_name'][$id][$param])) {
             $conditions[$id][] = $facet_map['by_name'][$id][$param];
