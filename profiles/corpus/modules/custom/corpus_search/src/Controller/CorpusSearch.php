@@ -33,9 +33,6 @@ class CorpusSearch extends ControllerBase {
    * Given a search string in query parameters, return full results.
    */
   public function search(Request $request) {
-    $search_string = $request->query->get('search');
-    $tokens = self::getTokens($search_string);
-    $results['tokens'] = $tokens;
     $facet_map = self::getFacetMap();
     $global = [
       'instance_count' => 0,
@@ -44,13 +41,27 @@ class CorpusSearch extends ControllerBase {
       'facet_counts' => [],
     ];
     $token_data = [];
-    $conditions = self::getConditions($request->query->all(), $facet_map);
-    // Get all of the token data for subsequent processing.
-    foreach ($tokens as $token => $type) {
-      $data = self::getIndividualSearchResults($token, $type, $conditions);
-      $global = self::updateGlobalData($global, $data);
-      $token_data[$token] = $data;
+
+    $search_string = $request->query->get('search');
+    if ($search_string) {
+      $tokens = self::getTokens($search_string);
+      $results['tokens'] = $tokens;
     }
+
+    $conditions = self::getConditions($request->query->all(), $facet_map);
+    // Initiate a search.
+    if (empty($tokens)) {
+      // Perform a non-text string search.
+      $data = Search::nonTextSearch($conditions);
+    }
+    else {
+      foreach ($tokens as $token => $type) {
+        $data = self::getIndividualSearchResults($token, $type, $conditions);
+      }
+    }
+    $global = self::updateGlobalData($global, $data);
+    $token_data[$token] = $data;
+
     // Get the subcorpus normalization ratio (per 1 million words).
     if (!empty($global['subcorpus_wordcount'])) {
       $ratio = 1000000 / $global['subcorpus_wordcount'];
@@ -67,16 +78,23 @@ class CorpusSearch extends ControllerBase {
     $results['pager']['subcorpus_wordcount'] = $global['subcorpus_wordcount'];
 
     // Get facet counts.
+    $processed_texts = [];
     foreach ($token_data as $t) {
       foreach ($t['text_data'] as $id => $elements) {
-        if (!in_array($id, $found_ids)) {
+        if (!in_array($id, $processed_texts)) {
           foreach (array_keys(self::$facetIDs) as $f) {
-            $name = $facet_map['by_id'][$f]{$elements[$f]};
-            $facet_results[$f][$name]['count']++;
+            if (isset($facet_map['by_id'][$f]{$elements[$f]})) {
+              $name = $facet_map['by_id'][$f]{$elements[$f]};
+              if (!isset($facet_results[$f][$name]['count'])) {
+                $facet_results[$f][$name]['count'] = 0;
+              }
+              else {
+                $facet_results[$f][$name]['count']++;
+              }
+            }
           }
-          // Ensure that this text is not counted multiple times
-          // across multiple tokens searched.
-          $found_ids[] = $id;
+          // Ensure this text is not counted multiple times.
+          $processed_texts[] = $id;
         }
       }
     }
@@ -138,11 +156,11 @@ class CorpusSearch extends ControllerBase {
     }
 
     // Response.
-    // $response = new CacheableJsonResponse([], 200);.
+    // $response = new CacheableJsonResponse([], 200);
     $response = new JsonResponse([], 200);
     $response->setContent(json_encode($results));
     $response->headers->set('Content-Type', 'application/json');
-    // $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);.
+    // $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
 
