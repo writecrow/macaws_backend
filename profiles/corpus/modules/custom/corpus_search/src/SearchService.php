@@ -2,8 +2,7 @@
 
 namespace Drupal\corpus_search;
 
-use Drupal\node\Entity\Node;
-use Drupal\word_frequency\FrequencyService as Frequency;
+use Drupal\corpus_search\Controller\CorpusSearch;
 
 /**
  * Class SearchService.
@@ -12,6 +11,9 @@ use Drupal\word_frequency\FrequencyService as Frequency;
  */
 class SearchService {
 
+  /**
+   * Retrieve matching results from word_frequency table.
+   */
   public static function simpleSearch($word, $case = 'insensitive') {
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
@@ -37,7 +39,7 @@ class SearchService {
       $counts['raw'] = $counts['raw'] + $item['count'];
       if ($item['count']) {
         $counts['ids'] = $counts['ids'] . ',' . $item['ids'];
-      } 
+      }
     }
     if (!$counts['ids']) {
       $ids = [];
@@ -51,25 +53,10 @@ class SearchService {
     return $counts;
   }
 
+  /**
+   * Count texts containing a given list of words.
+   */
   public static function countTextsContaining($words) {
-    // Note: this method was avoided, for performance & consistency reasons.
-    // Nevertheless, it's a useful example of looped query conditions.
-    // Create an object of type Select and directly
-    // add extra detail to this query object: a condition, fields and a range.
-    // $connection = \Drupal::database();
-    // $query = $connection->select('node__field_body', 'f')->fields('f', ['field_body_value']);
-    // $query->condition('bundle', 'text', '=');
-    // // Improve query matching by guessing likely start & end values.
-    // $and_condition_1 = $query->orConditionGroup();
-    // foreach ($words as $word => $type) {
-    //   if ($type == 'quoted') {
-    //     $and_condition_1->condition('field_body_value', "%" . $connection->escapeLike(' ' . $word . ' ') . "%", 'LIKE BINARY');
-    //   }
-    //   else {
-    //     $and_condition_1->condition('field_body_value', "%" . $connection->escapeLike(' ' . $word . ' ') . "%", 'LIKE');
-    //   }
-    // }
-    // $texts_count = $query->condition($and_condition_1)->countQuery()->execute()->fetchField();
     $connection = \Drupal::database();
     $all_ids = [];
     foreach ($words as $word => $type) {
@@ -104,6 +91,9 @@ class SearchService {
     return count($all_ids);
   }
 
+  /**
+   * Query the node__field_body table for exact matches.
+   */
   public static function phraseSearch($phrase, $conditions) {
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
@@ -204,13 +194,21 @@ class SearchService {
     ];
   }
 
+  /**
+   * Helper function to further limit query.
+   */
   protected static function applyConditions($query, $conditions) {
-    if ($conditions['course']) {
-      $query->condition('ce.field_course_target_id', $conditions['course'], 'IN');
+    foreach (CorpusSearch::$facetIDs as $name => $abbr) {
+      if (isset($conditions[$name])) {
+        $query->condition($abbr . '.field_' . $name . '_target_id', $conditions[$name], 'IN');
+      }
     }
     return $query;
   }
 
+  /**
+   * Helper function to return a substring.
+   */
   public static function getExcerpt($text, $token) {
     $pos = strpos($text, $token);
     $start = $pos - 100 < 0 ? 0 : $pos - 100;
@@ -233,6 +231,9 @@ class SearchService {
     return FALSE;
   }
 
+  /**
+   * Split on punctuation boundary.
+   */
   public static function tokenize($string) {
     $tokens = preg_split("/\s|[,.!?;\"”]/", $string);
     $result = [];

@@ -3,7 +3,6 @@
 namespace Drupal\corpus_search\Controller;
 
 use Drupal\corpus_search\SearchService as Search;
-use Drupal\word_frequency\FrequencyService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Controller\ControllerBase;
@@ -16,18 +15,18 @@ use Drupal\Core\Cache\CacheableJsonResponse;
  */
 class CorpusSearch extends ControllerBase {
 
-  private static $facet_ids = [
-    'assignment',
-    'college',
-    'country',
-    'course',
-    'draft',
-    'gender',
-    'institution',
-    'program',
-    'semester',
-    'year',
-    'year_in_school',
+  public static $facetIDs = [
+    'assignment' => 'at',
+    'college' => 'co',
+    'country' => 'cy',
+    'course' => 'ce',
+    'draft' => 'dr',
+    'gender' => 'ge',
+    'institution' => 'it',
+    'program' => 'pr',
+    'semester' => 'se',
+    'year' => 'yr',
+    'year_in_school' => 'ys',
   ];
 
   /**
@@ -71,7 +70,7 @@ class CorpusSearch extends ControllerBase {
     foreach ($token_data as $t) {
       foreach ($t['text_data'] as $id => $elements) {
         if (!in_array($id, $found_ids)) {
-          foreach (self::$facet_ids as $f) {
+          foreach (array_keys(self::$facetIDs) as $f) {
             $name = $facet_map['by_id'][$f]{$elements[$f]};
             $facet_results[$f][$name]['count']++;
           }
@@ -83,15 +82,17 @@ class CorpusSearch extends ControllerBase {
     }
     // Add facets that have no matches to the result set.
     // Loop through facet groups (e.g., course, assignment).
-    foreach (self::$facet_ids as $f) {
+    foreach (array_keys(self::$facetIDs) as $f) {
       // Loop through facet names (e.g., ENGL 106, ENGL 107).
       foreach ($facet_map['by_id'][$f] as $n) {
         if (!isset($facet_results[$f][$n])) {
           $facet_results[$f][$n]['count'] = 0;
         }
         $facet_id = $facet_map['by_name'][$f][$n];
-        if (in_array($facet_id, $conditions[$f])) {
-          $facet_results[$f][$n]['active'] = TRUE;
+        if (isset($conditions[$f])) {
+          if (in_array($facet_id, $conditions[$f])) {
+            $facet_results[$f][$n]['active'] = TRUE;
+          }
         }
       }
       // Ensure facets are listed alphanumerically.
@@ -99,6 +100,7 @@ class CorpusSearch extends ControllerBase {
     }
     $results['facets'] = $facet_results;
     // Get search excerpts.
+    $excerpts = [];
     if (count($token_data) > 1) {
       $filenames = [];
       foreach ($token_data as $t) {
@@ -122,11 +124,8 @@ class CorpusSearch extends ControllerBase {
       }
     }
 
-    // @testing purposes:
-    //unset($results['search_results']);
-
     // Final stage! Get frequency data!
-    // Loop through tokens once more, now the we know the subcorpus wordcount (ratio);
+    // Loop through tokens once more, now that we know the subcorpus wordcount.
     foreach ($token_data as $t => $individual_data) {
       $results['frequency']['tokens'][$t]['raw'] = $individual_data['instance_count'];
       $results['frequency']['tokens'][$t]['normed'] = $ratio * $individual_data['instance_count'];
@@ -139,16 +138,19 @@ class CorpusSearch extends ControllerBase {
     }
 
     // Response.
-    //$response = new CacheableJsonResponse([], 200);
+    // $response = new CacheableJsonResponse([], 200);.
     $response = new JsonResponse([], 200);
     $response->setContent(json_encode($results));
     $response->headers->set('Content-Type', 'application/json');
-    //$response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    // $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);.
     return $response;
   }
 
+  /**
+   * Add metadata fields to $excerpt_data array.
+   */
   private static function prepareExcerptMetadata($excerpt_data, $facet_map) {
-    foreach(self::$facet_ids as $facet_group) {
+    foreach (array_keys(self::$facetIDs) as $facet_group) {
       if (isset($excerpt_data[$facet_group])) {
         $id = $excerpt_data[$facet_group];
         if (!empty($facet_map['by_id'][$facet_group][$id])) {
@@ -160,6 +162,9 @@ class CorpusSearch extends ControllerBase {
     return $excerpt_data;
   }
 
+  /**
+   * Calculate unique texts && subcorpus wordcount.
+   */
   private static function updateGlobalData($global, $individual_search) {
     $global['instance_count'] = $global['instance_count'] + $individual_search['instance_count'];
     foreach ($individual_search['text_data'] as $id => $text_data) {
@@ -174,6 +179,9 @@ class CorpusSearch extends ControllerBase {
     return $global;
   }
 
+  /**
+   * Get map of term name-id relational data.
+   */
   public static function getFacetMap() {
     $map = [];
     $connection = \Drupal::database();
@@ -187,9 +195,12 @@ class CorpusSearch extends ControllerBase {
     return $map;
   }
 
+  /**
+   * Parse the query for user-supplied search parameters.
+   */
   protected static function getConditions($parameters, $facet_map) {
     $conditions = [];
-    foreach (self::$facet_ids as $id) {
+    foreach (array_keys(self::$facetIDs) as $id) {
       if (isset($parameters[$id])) {
         $param_string = explode("+", $parameters[$id]);
         foreach ($param_string as $param) {
@@ -203,11 +214,14 @@ class CorpusSearch extends ControllerBase {
     return $conditions;
   }
 
+  /**
+   * Determine which type of search to perform.
+   */
   protected static function getTokens($search_string) {
     $result = [];
     $tokens = preg_split("/\"[^\"]*\"(*SKIP)(*F)|[ \/]+/", $search_string);
     if (!empty($tokens)) {
-      // Determine whether to do a phrase search or word search & case-sensitivity.
+      // Determine whether to do a phrase or word search & case-sensitivity.
       foreach ($tokens as $token) {
         $length = strlen($token);
         if ((substr($token, 0, 1) == '"') && (substr($token, $length - 1, 1) == '"')) {
@@ -233,6 +247,9 @@ class CorpusSearch extends ControllerBase {
     return $result;
   }
 
+  /**
+   * Helper method to direct the type of search to the search method.
+   */
   protected static function getIndividualSearchResults($token, $type, $conditions) {
     $data = [];
     switch ($type) {
