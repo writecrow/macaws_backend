@@ -50,17 +50,18 @@ class CorpusSearch extends ControllerBase {
 
     $conditions = self::getConditions($request->query->all(), $facet_map);
     // Initiate a search.
-    if (empty($tokens)) {
+    if (!$tokens) {
       // Perform a non-text string search.
       $data = Search::nonTextSearch($conditions);
+      $token_data[] = $data;
     }
     else {
       foreach ($tokens as $token => $type) {
         $data = self::getIndividualSearchResults($token, $type, $conditions);
+        $token_data[$token] = $data;
       }
     }
     $global = self::updateGlobalData($global, $data);
-    $token_data[$token] = $data;
 
     // Get the subcorpus normalization ratio (per 1 million words).
     if (!empty($global['subcorpus_wordcount'])) {
@@ -144,23 +145,25 @@ class CorpusSearch extends ControllerBase {
 
     // Final stage! Get frequency data!
     // Loop through tokens once more, now that we know the subcorpus wordcount.
-    foreach ($token_data as $t => $individual_data) {
-      $results['frequency']['tokens'][$t]['raw'] = $individual_data['instance_count'];
-      $results['frequency']['tokens'][$t]['normed'] = $ratio * $individual_data['instance_count'];
-      $results['frequency']['tokens'][$t]['texts'] = count($individual_data['text_data']);
-    }
-    if (count($token_data) > 1) {
-      $results['frequency']['totals']['raw'] = $global['instance_count'];
-      $results['frequency']['totals']['normed'] = $ratio * $global['instance_count'];
-      $results['frequency']['totals']['texts'] = count($global['text_ids']);
+    if ($tokens) {
+      foreach ($token_data as $t => $individual_data) {
+        $results['frequency']['tokens'][$t]['raw'] = $individual_data['instance_count'];
+        $results['frequency']['tokens'][$t]['normed'] = $ratio * $individual_data['instance_count'];
+        $results['frequency']['tokens'][$t]['texts'] = count($individual_data['text_data']);
+      }
+      if (count($token_data) > 1) {
+        $results['frequency']['totals']['raw'] = $global['instance_count'];
+        $results['frequency']['totals']['normed'] = $ratio * $global['instance_count'];
+        $results['frequency']['totals']['texts'] = count($global['text_ids']);
+      }
     }
 
     // Response.
-    // $response = new CacheableJsonResponse([], 200);
-    $response = new JsonResponse([], 200);
+    $response = new CacheableJsonResponse([], 200);
+    // $response = new JsonResponse([], 200);
     $response->setContent(json_encode($results));
     $response->headers->set('Content-Type', 'application/json');
-    // $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
 
