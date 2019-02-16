@@ -3,6 +3,7 @@
 namespace Drupal\corpus_search\Controller;
 
 use Drupal\corpus_search\SearchService as Search;
+use Drupal\corpus_search\CorpusWordFrequency as Frequency;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Controller\ControllerBase;
@@ -54,15 +55,15 @@ class CorpusSearch extends ControllerBase {
       // Perform a non-text string search.
       $data = Search::nonTextSearch($conditions);
       $token_data[] = $data;
+      $global = self::updateGlobalData($global, $data);
     }
     else {
       foreach ($tokens as $token => $type) {
         $data = self::getIndividualSearchResults($token, $type, $conditions);
         $token_data[$token] = $data;
+        $global = self::updateGlobalData($global, $data);
       }
     }
-    $global = self::updateGlobalData($global, $data);
-
     // Get the subcorpus normalization ratio (per 1 million words).
     if (!empty($global['subcorpus_wordcount'])) {
       $ratio = 1000000 / $global['subcorpus_wordcount'];
@@ -117,9 +118,11 @@ class CorpusSearch extends ControllerBase {
       // Ensure facets are listed alphanumerically.
       ksort($facet_results[$f]);
     }
+
     $results['facets'] = $facet_results;
     // Get search excerpts.
     $excerpts = [];
+    // Handle 1 & multiple search terms differently.
     if (count($token_data) > 1) {
       $filenames = [];
       foreach ($token_data as $t) {
@@ -159,11 +162,11 @@ class CorpusSearch extends ControllerBase {
     }
 
     // Response.
-    $response = new CacheableJsonResponse([], 200);
-    // $response = new JsonResponse([], 200);
+    // $response = new CacheableJsonResponse([], 200);
+    $response = new JsonResponse([], 200);
     $response->setContent(json_encode($results));
     $response->headers->set('Content-Type', 'application/json');
-    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    // $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
 
@@ -259,7 +262,7 @@ class CorpusSearch extends ControllerBase {
         }
         else {
           // This is a word. Remove punctuation.
-          $tokenized = Search::tokenize($token);
+          $tokenized = Frequency::tokenize($token);
           $token = $tokenized[0];
           $result[strtolower($token)] = 'word';
         }
@@ -276,6 +279,7 @@ class CorpusSearch extends ControllerBase {
     switch ($type) {
       case 'phrase':
         $length = strlen($token);
+        // Remove quotation marks.
         $cleaned = substr($token, 1, $length - 2);
         $data = Search::phraseSearch($cleaned, $conditions);
         break;
@@ -283,11 +287,11 @@ class CorpusSearch extends ControllerBase {
       case 'quoted-word':
         $length = strlen($token);
         $cleaned = substr($token, 1, $length - 2);
-        $data = Search::simpleSearch($cleaned, 'sensitive');
+        $data = Search::simpleSearch($cleaned, $conditions, 'sensitive');
         break;
 
       case 'word':
-        $data = Search::simpleSearch($token);
+        $data = Search::simpleSearch($token, $conditions);
         break;
     }
     return $data;
