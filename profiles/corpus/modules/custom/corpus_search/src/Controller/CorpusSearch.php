@@ -4,6 +4,7 @@ namespace Drupal\corpus_search\Controller;
 
 use Drupal\corpus_search\SearchService as Search;
 use Drupal\corpus_search\CorpusWordFrequency as Frequency;
+use Drupal\corpus_search\CorpusLemmaFrequency;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Controller\ControllerBase;
@@ -43,11 +44,12 @@ class CorpusSearch extends ControllerBase {
     ];
     $token_data = [];
 
-    $search_string = $request->query->get('search');
-    if ($search_string) {
+    if ($search_string = $request->query->get('search')) {
       $tokens = self::getTokens($search_string);
       $results['tokens'] = $tokens;
     }
+    // Retrieve whether a 'lemma' search has been specified.
+    $method = $request->query->get('method');
 
     $conditions = self::getConditions($request->query->all(), $facet_map);
     // Initiate a search.
@@ -59,7 +61,7 @@ class CorpusSearch extends ControllerBase {
     }
     else {
       foreach ($tokens as $token => $type) {
-        $data = self::getIndividualSearchResults($token, $type, $conditions);
+        $data = self::getIndividualSearchResults($token, $type, $conditions, $method);
         $token_data[$token] = $data;
         $global = self::updateGlobalData($global, $data);
       }
@@ -150,6 +152,10 @@ class CorpusSearch extends ControllerBase {
     // Loop through tokens once more, now that we know the subcorpus wordcount.
     if ($tokens) {
       foreach ($token_data as $t => $individual_data) {
+        if ($method == 'lemma') {
+          $lemma = CorpusLemmaFrequency::lemmatize($t);
+          $t = implode('/', CorpusLemmaFrequency::getVariants($lemma));
+        }
         $results['frequency']['tokens'][$t]['raw'] = $individual_data['instance_count'];
         $results['frequency']['tokens'][$t]['normed'] = $ratio * $individual_data['instance_count'];
         $results['frequency']['tokens'][$t]['texts'] = count($individual_data['text_data']);
@@ -274,7 +280,7 @@ class CorpusSearch extends ControllerBase {
   /**
    * Helper method to direct the type of search to the search method.
    */
-  protected static function getIndividualSearchResults($token, $type, $conditions) {
+  protected static function getIndividualSearchResults($token, $type, $conditions, $method) {
     $data = [];
     switch ($type) {
       case 'phrase':
@@ -291,7 +297,7 @@ class CorpusSearch extends ControllerBase {
         break;
 
       case 'word':
-        $data = Search::simpleSearch($token, $conditions);
+        $data = Search::simpleSearch($token, $conditions, 'insensitive', $method);
         break;
     }
     return $data;

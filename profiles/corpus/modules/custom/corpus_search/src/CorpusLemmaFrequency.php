@@ -130,7 +130,9 @@ class CorpusLemmaFrequency {
   /**
    * The main lemmatizing function.
    */
-  public static function lemmatize($word, $module_path) {
+  public static function lemmatize($word) {
+    $module_handler = \Drupal::service('module_handler');
+    $module_path = $module_handler->getModule('search_api_lemma')->getPath();
     $alpha = $word[0];
     $path = DRUPAL_ROOT . '/' . $module_path . '/data/lemmas_' . $alpha . '.php';
     if (file_exists($path)) {
@@ -140,6 +142,27 @@ class CorpusLemmaFrequency {
       }
     }
     return $word;
+  }
+
+  public static function getVariants($lemma) {
+    $module_handler = \Drupal::service('module_handler');
+    $module_path = $module_handler->getModule('search_api_lemma')->getPath();
+    $tokens = [$lemma];
+    $path = DRUPAL_ROOT . '/' . $module_path . '/data/roots_' . $lemma[0] . '.php';
+    if (file_exists($path)) {
+      require $path;
+    }
+    // Get lemma variants for highlighting in search excerpts.
+    if (isset($root_map[$lemma])) {
+      $lemmas = explode(',', $root_map[$lemma]);
+      // Add original root!
+      $lemmas[] = $lemma;
+      usort($lemmas, function($a, $b) {
+        return mb_strlen($b) - mb_strlen($a);
+      });
+      $tokens = $lemmas;
+    }
+    return $tokens;
   }
 
   /**

@@ -3,6 +3,7 @@
 namespace Drupal\corpus_search;
 
 use Drupal\corpus_search\Controller\CorpusSearch;
+use Drupal\corpus_search\CorpusLemmaFrequency;
 
 /**
  * Class SearchService.
@@ -14,37 +15,57 @@ class SearchService {
   /**
    * Retrieve matching results from word_frequency table.
    */
-  public static function simpleSearch($word, $conditions, $case = 'insensitive') {
+  public static function simpleSearch($word, $conditions, $case = 'insensitive', $method = 'word') {
     // First get the IDs of texts that match the search conditions,
     // irrespective of text search criterion.
     $pre_textstring_data = self::getTextsMatchingConditions($conditions);
 
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
-    $connection = \Drupal::database();
-    $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['count', 'ids']);
-    $query->condition('word', db_like($word), 'LIKE BINARY');
-    $result = $query->execute();
-    $counts = $result->fetchAssoc();
-    if (!$counts['count']) {
-      $counts['count'] = 0;
-    }
-    $counts['raw'] = $counts['count'];
-    if ($case == 'insensitive') {
-      $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['count', 'ids']);
-      if (ctype_lower($word)) {
-        $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
-      }
-      else {
-        $query->condition('word', db_like(strtolower($word)), 'LIKE BINARY');
-      }
+    if ($method == 'lemma') {
+      $module_handler = \Drupal::service('module_handler');
+      $module_path = $module_handler->getModule('search_api_lemma')->getPath();
+      // Get lemma stem.
+      $lemma = CorpusLemmaFrequency::lemmatize(strtolower($word));
+      $tokens = CorpusLemmaFrequency::getVariants($lemma);
+      $connection = \Drupal::database();
+      $query = $connection->select('corpus_lemma_frequency', 'f')->fields('f', ['count', 'ids']);
+      $query->condition('word', db_like($lemma), 'LIKE BINARY');
       $result = $query->execute();
-      $item = $result->fetchAssoc();
-      $counts['raw'] = $counts['raw'] + $item['count'];
-      if ($item['count']) {
-        $counts['ids'] = $counts['ids'] . ',' . $item['ids'];
+      $counts = $result->fetchAssoc();
+      if (!$counts['count']) {
+        $counts['count'] = 0;
+      }
+      $counts['raw'] = $counts['count'];
+    }
+    else {
+      $tokens = [$word];
+      $connection = \Drupal::database();
+      $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['count', 'ids']);
+      $query->condition('word', db_like($word), 'LIKE BINARY');
+      $result = $query->execute();
+      $counts = $result->fetchAssoc();
+      if (!$counts['count']) {
+        $counts['count'] = 0;
+      }
+      $counts['raw'] = $counts['count'];
+      if ($case == 'insensitive') {
+        $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['count', 'ids']);
+        if (ctype_lower($word)) {
+          $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
+        }
+        else {
+          $query->condition('word', db_like(strtolower($word)), 'LIKE BINARY');
+        }
+        $result = $query->execute();
+        $item = $result->fetchAssoc();
+        $counts['raw'] = $counts['raw'] + $item['count'];
+        if ($item['count']) {
+          $counts['ids'] = $counts['ids'] . ',' . $item['ids'];
+        }
       }
     }
+
     if (!$counts['ids']) {
       $text_ids = [];
     }
@@ -79,7 +100,7 @@ class SearchService {
     foreach ($excerpt_ids as $nid) {
       $title = $pre_textstring_data[$nid]['filename'];
       $excerpts[$title]['filename'] = $title;
-      $excerpts[$title]['excerpt'] = self::getExcerpt($body_text_by_id[$nid], $word, $case);
+      $excerpts[$title]['excerpt'] = self::getExcerpt($body_text_by_id[$nid], $tokens, $case, $method);
       $excerpts[$title]['assignment'] = $pre_textstring_data[$nid]['assignment'];
       $excerpts[$title]['institution'] = $pre_textstring_data[$nid]['institution'];
       $excerpts[$title]['draft'] = $pre_textstring_data[$nid]['draft'];
@@ -347,7 +368,7 @@ class SearchService {
         $text = $result->field_body_value;
         if ($inc < 20) {
           $excerpts[$result->title]['filename'] = $result->title;
-          $excerpts[$result->title]['excerpt'] = self::getExcerpt($text, $phrase, 'sensitive');
+          $excerpts[$result->title]['excerpt'] = self::getExcerpt($text, [$phrase], 'sensitive');
           $excerpts[$result->title]['assignment'] = $result->field_assignment_target_id;
           $excerpts[$result->title]['institution'] = $result->field_institution_target_id;
           $excerpts[$result->title]['draft'] = $result->field_draft_target_id;
@@ -386,26 +407,45 @@ class SearchService {
   /**
    * Helper function to return a substring.
    */
-  public static function getExcerpt($text, $token, $case = "insensitive") {
+  public static function getExcerpt($text, $tokens, $case = "insensitive", $method = "word") {
     $text = strip_tags($text);
+    if ($method == "lemma") {
+      foreach ($tokens as $lemma) {
+        $pos = stripos($text, $lemma);
+        if ($pos > 0) {
+          $start = $pos - 50 < 0 ? 0 : $pos - 50;
+          $excerpt = substr($text, $start, 150);
+          // @todo: preg_replace.
+          $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
+          $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
+          // Boldface match.
+          $return = str_replace($lemma . '', '<mark>' . $lemma . '</mark>', $word_boundary);
+          $return = str_replace(strtolower($lemma) . '', '<mark>' . strtolower($lemma) . '</mark>', $return);
+          $excerpt_list[] = str_replace(ucfirst($lemma) . '', '<mark>' . ucfirst($lemma) . '</mark>', $return);
+        }
+      }
+      return implode('<br />', $excerpt_list);
+    }
+
+    // Handle non-lemma search excerpts.
     switch ($case) {
       case "sensitive":
-        $pos = strpos($text, $token);
+        $pos = strpos($text, $tokens[0]);
         $start = $pos - 100 < 0 ? 0 : $pos - 100;
         $excerpt = substr($text, $start, 300);
         $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
         // Boldface match.
-        return str_replace($token, '<mark>' . $token . '</mark>', $word_boundary);
+        return str_replace($tokens[0], '<mark>' . $tokens[0] . '</mark>', $word_boundary);
 
       case "insensitive":
-        $pos = stripos($text, $token);
+        $pos = stripos($text, $tokens[0]);
         $start = $pos - 100 < 0 ? 0 : $pos - 100;
         $excerpt = substr($text, $start, 300);
         $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
         // Boldface match.
-        $return = str_replace($token, '<mark>' . $token . '</mark>', $word_boundary);
-        $return = str_replace(strtolower($token), '<mark>' . strtolower($token) . '</mark>', $return);
-        $return = str_replace(ucfirst($token), '<mark>' . ucfirst($token) . '</mark>', $return);
+        $return = str_replace($tokens[0], '<mark>' . $tokens[0] . '</mark>', $word_boundary);
+        $return = str_replace(strtolower($tokens[0]), '<mark>' . strtolower($tokens[0]) . '</mark>', $return);
+        $return = str_replace(ucfirst($tokens[0]), '<mark>' . ucfirst($tokens[0]) . '</mark>', $return);
         return $return;
 
     }
