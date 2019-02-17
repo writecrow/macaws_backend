@@ -4,6 +4,7 @@ namespace Drupal\corpus_search;
 
 use Drupal\corpus_search\Controller\CorpusSearch;
 use Drupal\corpus_search\CorpusLemmaFrequency;
+use Drupal\Core\Cache\CacheBackendInterface;
 
 /**
  * Class SearchService.
@@ -128,58 +129,72 @@ class SearchService {
    * - self::nonTextSearch()
    */
   public static function getTextsMatchingConditions($conditions) {
-    // Create an object of type Select and directly
-    // add extra detail to this query object: a condition, fields and a range.
-    $connection = \Drupal::database();
-    $query = $connection->select('node_field_data', 'n');
-    $query->leftJoin('node__field_assignment', 'at', 'n.nid = at.entity_id');
-    $query->leftJoin('node__field_college', 'co', 'n.nid = co.entity_id');
-    $query->leftJoin('node__field_country', 'cy', 'n.nid = cy.entity_id');
-    $query->leftJoin('node__field_course', 'ce', 'n.nid = ce.entity_id');
-    $query->leftJoin('node__field_draft', 'dr', 'n.nid = dr.entity_id');
-    $query->leftJoin('node__field_gender', 'ge', 'n.nid = ge.entity_id');
-    $query->leftJoin('node__field_institution', 'it', 'n.nid = it.entity_id');
-    $query->leftJoin('node__field_program', 'pr', 'n.nid = pr.entity_id');
-    $query->leftJoin('node__field_semester', 'se', 'n.nid = se.entity_id');
-    $query->leftJoin('node__field_toefl_total', 'tt', 'n.nid = tt.entity_id');
-    $query->leftJoin('node__field_year_in_school', 'ys', 'n.nid = ys.entity_id');
-    $query->leftJoin('node__field_year', 'yr', 'n.nid = yr.entity_id');
-    $query->leftJoin('node__field_wordcount', 'wc', 'n.nid = wc.entity_id');
-
-    $query->fields('n', ['title', 'type', 'nid']);
-    $query->fields('at', ['field_assignment_target_id']);
-    $query->fields('co', ['field_college_target_id']);
-    $query->fields('cy', ['field_country_target_id']);
-    $query->fields('ce', ['field_course_target_id']);
-    $query->fields('dr', ['field_draft_target_id']);
-    $query->fields('ge', ['field_gender_target_id']);
-    $query->fields('it', ['field_institution_target_id']);
-    $query->fields('pr', ['field_program_target_id']);
-    $query->fields('se', ['field_semester_target_id']);
-    $query->fields('tt', ['field_toefl_total_value']);
-    $query->fields('ys', ['field_year_in_school_target_id']);
-    $query->fields('yr', ['field_year_target_id']);
-    $query->fields('wc', ['field_wordcount_value']);
-
-    $query->condition('n.type', 'text', '=');
-
-    // Apply facet conditions.
-    if (!empty($conditions)) {
-      $query = self::applyConditions($query, $conditions);
+    if (empty($conditions)) {
+      $cache_id = md5('corpus_search_no_conditions');
     }
-
-    // Apply other field conditions (TOEFL, ID, etc.).
-    // @todo.
-
-    $result = $query->execute();
-    $matching_texts = $result->fetchAll();
-    $text_data = [];
-    if (!empty($matching_texts)) {
-      foreach ($matching_texts as $result) {
-        $text_data[$result->nid] = self::populateTextMetadata($result);
+    else {
+      $cachestring = 'corpus_search_conditions_';
+      foreach ($conditions as $condition => $values) {
+        $cachestring .= $condition . "=" . implode('+', $values);
       }
+      $cache_id = md5($cachestring);
     }
-    return $text_data;
+    if ($cache = \Drupal::cache()->get($cache_id)) {
+      return $cache->data;
+    }
+    else {
+      $connection = \Drupal::database();
+      $query = $connection->select('node_field_data', 'n');
+      $query->leftJoin('node__field_assignment', 'at', 'n.nid = at.entity_id');
+      $query->leftJoin('node__field_college', 'co', 'n.nid = co.entity_id');
+      $query->leftJoin('node__field_country', 'cy', 'n.nid = cy.entity_id');
+      $query->leftJoin('node__field_course', 'ce', 'n.nid = ce.entity_id');
+      $query->leftJoin('node__field_draft', 'dr', 'n.nid = dr.entity_id');
+      $query->leftJoin('node__field_gender', 'ge', 'n.nid = ge.entity_id');
+      $query->leftJoin('node__field_institution', 'it', 'n.nid = it.entity_id');
+      $query->leftJoin('node__field_program', 'pr', 'n.nid = pr.entity_id');
+      $query->leftJoin('node__field_semester', 'se', 'n.nid = se.entity_id');
+      $query->leftJoin('node__field_toefl_total', 'tt', 'n.nid = tt.entity_id');
+      $query->leftJoin('node__field_year_in_school', 'ys', 'n.nid = ys.entity_id');
+      $query->leftJoin('node__field_year', 'yr', 'n.nid = yr.entity_id');
+      $query->leftJoin('node__field_wordcount', 'wc', 'n.nid = wc.entity_id');
+
+      $query->fields('n', ['title', 'type', 'nid']);
+      $query->fields('at', ['field_assignment_target_id']);
+      $query->fields('co', ['field_college_target_id']);
+      $query->fields('cy', ['field_country_target_id']);
+      $query->fields('ce', ['field_course_target_id']);
+      $query->fields('dr', ['field_draft_target_id']);
+      $query->fields('ge', ['field_gender_target_id']);
+      $query->fields('it', ['field_institution_target_id']);
+      $query->fields('pr', ['field_program_target_id']);
+      $query->fields('se', ['field_semester_target_id']);
+      $query->fields('tt', ['field_toefl_total_value']);
+      $query->fields('ys', ['field_year_in_school_target_id']);
+      $query->fields('yr', ['field_year_target_id']);
+      $query->fields('wc', ['field_wordcount_value']);
+
+      $query->condition('n.type', 'text', '=');
+
+      // Apply facet conditions.
+      if (!empty($conditions)) {
+        $query = self::applyConditions($query, $conditions);
+      }
+
+      // Apply other field conditions (TOEFL, ID, etc.).
+      // @todo.
+
+      $result = $query->execute();
+      $matching_texts = $result->fetchAll();
+      $text_data = [];
+      if (!empty($matching_texts)) {
+        foreach ($matching_texts as $result) {
+          $text_data[$result->nid] = self::populateTextMetadata($result);
+        }
+      }
+      \Drupal::cache()->set($cache_id, $text_data, CacheBackendInterface::CACHE_PERMANENT);
+      return $text_data;
+    }
   }
 
   /**
@@ -267,7 +282,7 @@ class SearchService {
         $text = $result->field_body_value;
         if ($inc < 20) {
           $excerpts[$result->title]['filename'] = $result->title;
-          $excerpts[$result->title]['excerpt'] = substr($text, 0, 250);
+          $excerpts[$result->title]['excerpt'] = substr(strip_tags($text), 0, 250);
           $excerpts[$result->title]['assignment'] = $result->field_assignment_target_id;
           $excerpts[$result->title]['institution'] = $result->field_institution_target_id;
           $excerpts[$result->title]['draft'] = $result->field_draft_target_id;
