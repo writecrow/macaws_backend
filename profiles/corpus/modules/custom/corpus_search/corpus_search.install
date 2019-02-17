@@ -59,5 +59,49 @@ function corpus_search_schema() {
       ],
     ],
   ];
+  $schema['corpus_lemma_frequency'] = [
+    'description' => 'Stores frequency data',
+    'fields' => [
+      'word' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'binary' => TRUE,
+        'description' => 'Unique word',
+      ],
+      'count' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'normal',
+        'description' => 'The count of the word, globally',
+      ],
+      'texts' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 1,
+        'size' => 'normal',
+        'description' => 'The number of texts containing the word, globally',
+      ],
+      'ids' => [
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'normal',
+        'description' => 'Key-value of text ids & instance counts.',
+      ],
+    ],
+    'primary key' => ['word'],
+    'unique keys' => [
+      'word' => ['word'],
+    ],
+    'indexes' => [
+      'counts' => [
+        'count',
+      ],
+    ],
+  ];
   return $schema;
 }

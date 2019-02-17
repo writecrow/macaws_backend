@@ -28,28 +28,6 @@ class CorpusWordFrequency {
         }
       }
     }
-    else {
-      // Convert files into machine-readable array.
-      $texts = self::retrieve();
-      drupal_set_message(count($texts) . ' texts analyzed.');
-
-      // Save valid texts.
-      foreach ($texts as $text) {
-        $operations[] = [
-          ['\Drupal\word_frequency\FrequencyService', 'processor'],
-          [$text],
-        ];
-      }
-
-      $batch = [
-        'title' => t('Calculating Frequency'),
-        'operations' => $operations,
-        'finished' => ['\Drupal\word_frequency\FrequencyService', 'finish'],
-        'file' => drupal_get_path('module', 'word_frequency') . '/word_frequency.module',
-      ];
-
-      batch_set($batch);
-    }
   }
 
   /**
