@@ -3,7 +3,6 @@
 namespace Drupal\corpus_search;
 
 use Drupal\corpus_search\Controller\CorpusSearch;
-use Drupal\corpus_search\CorpusLemmaFrequency;
 use Drupal\Core\Cache\CacheBackendInterface;
 
 /**
@@ -450,18 +449,24 @@ class SearchService {
     $text = strip_tags($text);
     if ($method == "lemma") {
       foreach ($tokens as $lemma) {
-        $pos = stripos($text, $lemma);
-        if ($pos > 0) {
-          $start = $pos - 50 < 0 ? 0 : $pos - 50;
-          $excerpt = substr($text, $start, 150);
-          // @todo: preg_replace.
-          $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
-          $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
-          // Boldface match.
-          $return = str_replace($lemma . '', '<mark>' . $lemma . '</mark>', $word_boundary);
-          $return = str_replace(strtolower($lemma) . '', '<mark>' . strtolower($lemma) . '</mark>', $return);
-          $excerpt_list[] = str_replace(ucfirst($lemma) . '', '<mark>' . ucfirst($lemma) . '</mark>', $return);
+        preg_match('/[^a-zA-Z>]' . $lemma . '[^a-zA-Z<]/i', $text, $match);
+        if (isset($match[0])) {
+          $first_char = substr($match[0], 0, 1);
+          $last_char = substr($match[0], -1);
+          $pos = stripos($text, $match[0]);
+          if ($pos > 0) {
+            $start = $pos - 50 < 0 ? 0 : $pos - 50;
+            $excerpt = substr($text, $start, 125);
+            $replacement = $first_char . '<mark>' . strtolower($lemma) . '</mark>' . $last_char;
+            $excerpt = preg_replace('/[^a-zA-Z>]' . strtolower($lemma) . '[^a-zA-Z<]/', $replacement, $excerpt);
+            $replacement = $first_char . '<mark>' . ucfirst($lemma) . '</mark>' . $last_char;
+            $excerpt = preg_replace('/[^a-zA-Z>]' . ucfirst($lemma) . '[^a-zA-Z<]/', $replacement, $excerpt);
+            $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
+            $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
+            $excerpt_list[] = $word_boundary;
+          }
         }
+
       }
       return implode('<br />', $excerpt_list);
     }
