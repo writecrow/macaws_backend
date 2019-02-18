@@ -86,36 +86,39 @@ class SearchService {
     $intersected_text_ids = array_intersect($matching_text_ids, $matching_condition_ids);
 
     // Get text data for intersected ids.
-    foreach ($intersected_text_ids as $id) {
-      // Sum up the instance count across texts.
-      $instance_count = $instance_count + $text_ids[$id];
-      // Create a temporary array of instance counts to sort by "relevance".
-      $temp_sorted_by_instances[$id] = $text_ids[$id];
-      $text_data[] = $pre_textstring_data[$id];
+    $instance_count = 0;
+    $text_data = [];
+    $excerpts = [];
+    if (!empty($intersected_text_ids)) {
+      foreach ($intersected_text_ids as $id) {
+        // Sum up the instance count across texts.
+        $instance_count = $instance_count + $text_ids[$id];
+        // Create a temporary array of instance counts to sort by "relevance".
+        $temp_sorted_by_instances[$id] = $text_ids[$id];
+        $text_data[] = $pre_textstring_data[$id];
+      }
+      // Final step! Get excerpts!
+      arsort($temp_sorted_by_instances);
+      $excerpt_ids = array_slice(array_keys($temp_sorted_by_instances), 0, 19);
+      $body_text_by_id = self::getNodeBodys($excerpt_ids);
+      foreach ($excerpt_ids as $nid) {
+        $title = $pre_textstring_data[$nid]['filename'];
+        $excerpts[$title]['filename'] = $title;
+        $excerpts[$title]['excerpt'] = self::getExcerpt($body_text_by_id[$nid], $tokens, $case, $method);
+        $excerpts[$title]['assignment'] = $pre_textstring_data[$nid]['assignment'];
+        $excerpts[$title]['institution'] = $pre_textstring_data[$nid]['institution'];
+        $excerpts[$title]['draft'] = $pre_textstring_data[$nid]['draft'];
+        $excerpts[$title]['toefl_total'] = $pre_textstring_data[$nid]['toefl_total'];
+        $excerpts[$title]['gender'] = $pre_textstring_data[$nid]['gender'];
+        $excerpts[$title]['semester'] = $pre_textstring_data[$nid]['semester'];
+        $excerpts[$title]['year'] = $pre_textstring_data[$nid]['year'];
+        $excerpts[$title]['course'] = $pre_textstring_data[$nid]['course'];
+      }
     }
 
-    // Final step! Get excerpts!
-    arsort($temp_sorted_by_instances);
-    $excerpt_ids = array_slice(array_keys($temp_sorted_by_instances), 0, 19);
-    $body_text_by_id = self::getNodeBodys($excerpt_ids);
-    foreach ($excerpt_ids as $nid) {
-      $title = $pre_textstring_data[$nid]['filename'];
-      $excerpts[$title]['filename'] = $title;
-      $excerpts[$title]['excerpt'] = self::getExcerpt($body_text_by_id[$nid], $tokens, $case, $method);
-      $excerpts[$title]['assignment'] = $pre_textstring_data[$nid]['assignment'];
-      $excerpts[$title]['institution'] = $pre_textstring_data[$nid]['institution'];
-      $excerpts[$title]['draft'] = $pre_textstring_data[$nid]['draft'];
-      $excerpts[$title]['toefl_total'] = $pre_textstring_data[$nid]['toefl_total'];
-      $excerpts[$title]['gender'] = $pre_textstring_data[$nid]['gender'];
-      $excerpts[$title]['semester'] = $pre_textstring_data[$nid]['semester'];
-      $excerpts[$title]['year'] = $pre_textstring_data[$nid]['year'];
-      $excerpts[$title]['course'] = $pre_textstring_data[$nid]['course'];
-    }
-
-    $counts['texts'] = count($intersected_text_ids);
     return [
       'instance_count' => $instance_count,
-      'text_count' => $counts['texts'],
+      'text_count' => count($intersected_text_ids),
       'text_data' => $text_data,
       'excerpts' => $excerpts,
     ];
@@ -135,7 +138,13 @@ class SearchService {
     else {
       $cachestring = 'corpus_search_conditions_';
       foreach ($conditions as $condition => $values) {
-        $cachestring .= $condition . "=" . implode('+', $values);
+        if (is_array($values)) {
+          $criterion = implode('+', $values);
+        }
+        else {
+          $criterion = $values;
+        }
+        $cachestring .= $condition . "=" . $criterion;
       }
       $cache_id = md5($cachestring);
     }
@@ -151,6 +160,7 @@ class SearchService {
       $query->leftJoin('node__field_course', 'ce', 'n.nid = ce.entity_id');
       $query->leftJoin('node__field_draft', 'dr', 'n.nid = dr.entity_id');
       $query->leftJoin('node__field_gender', 'ge', 'n.nid = ge.entity_id');
+      $query->leftJoin('node__field_id', 'id', 'n.nid = id.entity_id');
       $query->leftJoin('node__field_institution', 'it', 'n.nid = it.entity_id');
       $query->leftJoin('node__field_program', 'pr', 'n.nid = pr.entity_id');
       $query->leftJoin('node__field_semester', 'se', 'n.nid = se.entity_id');
@@ -166,6 +176,7 @@ class SearchService {
       $query->fields('ce', ['field_course_target_id']);
       $query->fields('dr', ['field_draft_target_id']);
       $query->fields('ge', ['field_gender_target_id']);
+      $query->fields('id', ['field_id_value']);
       $query->fields('it', ['field_institution_target_id']);
       $query->fields('pr', ['field_program_target_id']);
       $query->fields('se', ['field_semester_target_id']);
@@ -236,6 +247,7 @@ class SearchService {
     $query->leftJoin('node__field_draft', 'dr', 'n.nid = dr.entity_id');
     $query->leftJoin('node__field_gender', 'ge', 'n.nid = ge.entity_id');
     $query->leftJoin('node__field_institution', 'it', 'n.nid = it.entity_id');
+    $query->leftJoin('node__field_id', 'id', 'f.entity_id = id.entity_id');
     $query->leftJoin('node__field_program', 'pr', 'n.nid = pr.entity_id');
     $query->leftJoin('node__field_semester', 'se', 'n.nid = se.entity_id');
     $query->leftJoin('node__field_toefl_total', 'tt', 'n.nid = tt.entity_id');
@@ -251,6 +263,7 @@ class SearchService {
     $query->fields('ce', ['field_course_target_id']);
     $query->fields('dr', ['field_draft_target_id']);
     $query->fields('ge', ['field_gender_target_id']);
+    $query->fields('id', ['field_id_value']);
     $query->fields('it', ['field_institution_target_id']);
     $query->fields('pr', ['field_program_target_id']);
     $query->fields('se', ['field_semester_target_id']);
@@ -333,6 +346,7 @@ class SearchService {
     $query->leftJoin('node__field_course', 'ce', 'f.entity_id = ce.entity_id');
     $query->leftJoin('node__field_draft', 'dr', 'f.entity_id = dr.entity_id');
     $query->leftJoin('node__field_gender', 'ge', 'f.entity_id = ge.entity_id');
+    $query->leftJoin('node__field_id', 'id', 'f.entity_id = id.entity_id');
     $query->leftJoin('node__field_institution', 'it', 'f.entity_id = it.entity_id');
     $query->leftJoin('node__field_program', 'pr', 'f.entity_id = pr.entity_id');
     $query->leftJoin('node__field_semester', 'se', 'f.entity_id = se.entity_id');
@@ -349,6 +363,7 @@ class SearchService {
     $query->fields('ce', ['field_course_target_id']);
     $query->fields('dr', ['field_draft_target_id']);
     $query->fields('ge', ['field_gender_target_id']);
+    $query->fields('id', ['field_id_value']);
     $query->fields('it', ['field_institution_target_id']);
     $query->fields('pr', ['field_program_target_id']);
     $query->fields('se', ['field_semester_target_id']);
@@ -415,6 +430,15 @@ class SearchService {
       if (isset($conditions[$name])) {
         $query->condition($abbr . '.field_' . $name . '_target_id', $conditions[$name], 'IN');
       }
+    }
+    if (isset($conditions['id'])) {
+      $query->condition('id.field_id_value', $conditions['id'], '=');
+    }
+    if (isset($conditions['toefl_total_min'])) {
+      $query->condition('tt.field_toefl_total_value', (int) $conditions['toefl_total_min'], '>=');
+    }
+    if (isset($conditions['toefl_total_max'])) {
+      $query->condition('tt.field_toefl_total_value', (int) $conditions['toefl_total_max'], '<=');
     }
     return $query;
   }

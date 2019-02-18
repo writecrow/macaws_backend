@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
+use Drupal\Component\Utility\Xss;
 
 /**
  * Corpus Search endpoint controller.
@@ -35,6 +36,7 @@ class CorpusSearch extends ControllerBase {
    * Given a search string in query parameters, return full results.
    */
   public function search(Request $request) {
+    $ratio = 1;
     $facet_map = self::getFacetMap();
     $global = [
       'instance_count' => 0,
@@ -150,7 +152,7 @@ class CorpusSearch extends ControllerBase {
 
     // Final stage! Get frequency data!
     // Loop through tokens once more, now that we know the subcorpus wordcount.
-    if ($tokens) {
+    if (isset($tokens)) {
       foreach ($token_data as $t => $individual_data) {
         if ($method == 'lemma') {
           $lemma = CorpusLemmaFrequency::lemmatize($t);
@@ -168,11 +170,11 @@ class CorpusSearch extends ControllerBase {
     }
 
     // Response.
-    $response = new CacheableJsonResponse([], 200);
-    // $response = new JsonResponse([], 200);
+    // $response = new CacheableJsonResponse([], 200);
+    $response = new JsonResponse([], 200);
     $response->setContent(json_encode($results));
     $response->headers->set('Content-Type', 'application/json');
-    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    // $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
 
@@ -232,13 +234,23 @@ class CorpusSearch extends ControllerBase {
     $conditions = [];
     foreach (array_keys(self::$facetIDs) as $id) {
       if (isset($parameters[$id])) {
-        $param_string = explode("+", $parameters[$id]);
-        foreach ($param_string as $param) {
+        $condition = Xss::filter($parameters[$id]);
+        $param_list = explode("+", $condition);
+        foreach ($param_list as $param) {
           if (!empty($facet_map['by_name'][$id][$param])) {
             $conditions[$id][] = $facet_map['by_name'][$id][$param];
           }
         }
       }
+    }
+    if (isset($parameters['id'])) {
+      $conditions['id'] = Xss::filter($parameters['id']);
+    }
+    if (isset($parameters['toefl_total_min'])) {
+      $conditions['toefl_total_min'] = Xss::filter($parameters['toefl_total_min']);
+    }
+    if (isset($parameters['toefl_total_max'])) {
+      $conditions['toefl_total_max'] = Xss::filter($parameters['toefl_total_max']);
     }
 
     return $conditions;

@@ -67,6 +67,7 @@ class CorpusWordFrequency {
    */
   public static function count($node_id) {
     $result = FALSE;
+    // @todo -- swap out for direct DB query.
     $node = Node::load($node_id);
     if ($body = $node->field_body->getValue()) {
       $tokens = self::tokenize($body[0]['value']);
