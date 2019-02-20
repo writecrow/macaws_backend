@@ -14,7 +14,7 @@ use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Component\Utility\Xss;
 
 /**
- * Corpus Search endpoint controller.
+ * Corpus Search endpoint.
  *
  * @package Drupal\corpus_search\Controller
  */
@@ -46,24 +46,24 @@ class CorpusSearch extends ControllerBase {
 
     if ($search_string = $request->query->get('search')) {
       $tokens = self::getTokens(urldecode($search_string));
-      $results['tokens'] = $tokens;
       // Is this and "and" or "or" text search?
       $op = Xss::filter($request->query->get('op'));
       // Retrieve whether a 'lemma' search has been specified.
       $method = Xss::filter($request->query->get('method'));
       foreach ($tokens as $token => $type) {
-        $data = self::getIndividualSearchResults($token, $type, $conditions, $method);
-        $token_data[$token] = $data;
-        $global = self::updateGlobalData($global, $data, $op);
+        $individual_search = self::getIndividualSearchResults($token, $type, $conditions, $method);
+        $token_data[$token] = $individual_search;
+        $global = self::updateGlobalData($global, $individual_search, $all_texts_metadata, $op);
       }
+      $matching_texts = array_intersect_key($all_texts_metadata, $global['text_ids']);
     }
     else {
       // Perform a non-text string search.
       $global['text_ids'] = Search::nonTextSearch($conditions);
       $matching_texts = array_intersect_key($all_texts_metadata, array_flip($global['text_ids']));
-      foreach ($matching_texts as $t) {
-        $global['subcorpus_wordcount'] += $t['wordcount'];
-      }
+    }
+    foreach ($matching_texts as $t) {
+      $global['subcorpus_wordcount'] += $t['wordcount'];
     }
 
     // Get the subcorpus normalization ratio (per 1 million words).
@@ -75,36 +75,10 @@ class CorpusSearch extends ControllerBase {
     $results['pager']['subcorpus_wordcount'] = $global['subcorpus_wordcount'];
     $results['facets'] = TextMetadata::countFacets($matching_texts, $facet_map, $conditions);
     $results['search_results'] = Excerpt::getExcerpts($matching_texts, $tokens, $facet_map, 20);
-    /*
-    // Get search excerpts.
-    $excerpts = [];
-    // Handle 1 & multiple search terms differently.
-    if (count($token_data) > 1) {
-      $filenames = [];
-      foreach ($token_data as $t) {
-        if (isset($t['excerpts'])) {
-          foreach ($t['excerpts'] as $filename => $excerpt_data) {
-            if (!in_array($filename, $existing_filenames)) {
-              $excerpts[] = self::prepareExcerptMetadata($excerpt_data, $facet_map);
-              $filenames[] = $filename;
-            }
-          }
-          $results['search_results'] = $results['search_results'] + $excerpts;
-        }
-      }
-    }
-    else {
-      foreach ($token_data as $t) {
-        foreach ($t['excerpts'] as $filename => $excerpt_data) {
-          $excerpts[] = self::prepareExcerptMetadata($excerpt_data, $facet_map);
-        }
-        $results['search_results'] = $results['search_results'] + $excerpts;
-      }
-    } */
 
     // Final stage! Get frequency data!
     // Loop through tokens once more, now that we know the subcorpus wordcount.
-/*     if (isset($tokens)) {
+    if (!empty($token_data)) {
       foreach ($token_data as $t => $individual_data) {
         if ($method == 'lemma') {
           $lemma = CorpusLemmaFrequency::lemmatize($t);
@@ -112,14 +86,14 @@ class CorpusSearch extends ControllerBase {
         }
         $results['frequency']['tokens'][$t]['raw'] = $individual_data['instance_count'];
         $results['frequency']['tokens'][$t]['normed'] = $ratio * $individual_data['instance_count'];
-        $results['frequency']['tokens'][$t]['texts'] = count($individual_data['text_data']);
+        $results['frequency']['tokens'][$t]['texts'] = count($individual_data['text_ids']);
       }
       if (count($token_data) > 1) {
         $results['frequency']['totals']['raw'] = $global['instance_count'];
         $results['frequency']['totals']['normed'] = $ratio * $global['instance_count'];
         $results['frequency']['totals']['texts'] = count($global['text_ids']);
       }
-    } */
+    }
 
     // Response.
     // $response = new CacheableJsonResponse([], 200);
@@ -131,30 +105,14 @@ class CorpusSearch extends ControllerBase {
   }
 
   /**
-   * Add metadata fields to $excerpt_data array.
-   */
-  private static function prepareExcerptMetadata($excerpt_data, $facet_map) {
-    foreach (array_keys(TextMetadata::$facetIDs) as $facet_group) {
-      if (isset($excerpt_data[$facet_group])) {
-        $id = $excerpt_data[$facet_group];
-        if (!empty($facet_map['by_id'][$facet_group][$id])) {
-          $name = $facet_map['by_id'][$facet_group][$id];
-          $excerpt_data[$facet_group] = $name;
-        }
-      }
-    }
-    return $excerpt_data;
-  }
-
-  /**
    * Calculate unique texts && subcorpus wordcount.
    */
-  private static function updateGlobalData($global, $individual_search, $op = "or") {
+  private static function updateGlobalData($global, $individual_search, $all_texts_metadata, $op = "or") {
     switch ($op) {
       case "and":
         if (!isset($global['text_ids'])) {
           $global['text_ids'] = [];
-          // This is the first time through the search. 
+          // This is the first time through the search.
           // Set the global text IDs to the search results.
           foreach ($individual_search['text_data'] as $id => $text_data) {
             // Get an exclusive list of all text ids matching search criteria.
@@ -173,15 +131,14 @@ class CorpusSearch extends ControllerBase {
           }
         }
         break;
+
       default:
         $global['instance_count'] = $global['instance_count'] + $individual_search['instance_count'];
-        foreach ($individual_search['text_data'] as $id => $text_data) {
-          // Get an exclusive list of all text ids matching search criteria.
+        foreach ($individual_search['text_ids'] as $id => $text_data) {
+          // Get an *exclusive* list of all text ids matching search criteria.
           $global['text_ids'][$id] = 1;
           // Increment subcorpus wordcount.
-          $global['subcorpus_wordcount'] = $global['subcorpus_wordcount'] + $text_data['wordcount'];
-          // @todo Update individual facet counts.
-          // @todo -- for visualizations.
+          $global['subcorpus_wordcount'] = $global['subcorpus_wordcount'] + $all_texts_metadata[$id]['wordcount'];
         }
         break;
     }

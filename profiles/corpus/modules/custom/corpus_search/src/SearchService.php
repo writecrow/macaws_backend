@@ -17,7 +17,7 @@ class SearchService {
   public static function simpleSearch($word, $conditions, $case = 'insensitive', $method = 'word') {
     // First get the IDs of texts that match the search conditions,
     // irrespective of text search criterion.
-    $pre_textstring_data = self::getTextsMatchingConditions($conditions);
+    $condition_matches = self::nonTextSearch($conditions);
 
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
@@ -66,22 +66,18 @@ class SearchService {
     }
 
     if (!$counts['ids']) {
-      $text_ids = [];
+      $text_counts = [];
     }
     else {
       // The ids are stored in the format NID:COUNT,NID:COUNT.
       $id_pairs = explode(',', $counts['ids']);
       foreach ($id_pairs as $pair) {
         $nid_and_count = explode(':', $pair);
-        $text_ids{$nid_and_count[0]} = $nid_and_count[1];
+        $text_counts{$nid_and_count[0]} = $nid_and_count[1];
       }
     }
-    // Get an associative array of text IDs containing the string search.
-    $matching_text_ids = array_unique(array_keys($text_ids));
-    // Get an associative array of text IDs matching the filter conditions.
-    $matching_condition_ids = array_keys($pre_textstring_data);
-    // Intersect them.
-    $intersected_text_ids = array_intersect($matching_text_ids, $matching_condition_ids);
+    // Limit list to intersected NIDs from condition search & token search.
+    $intersected_text_ids = array_intersect(array_unique(array_keys($text_counts)), array_values($condition_matches));
 
     // Get text data for intersected ids.
     $instance_count = 0;
@@ -90,34 +86,16 @@ class SearchService {
     if (!empty($intersected_text_ids)) {
       foreach ($intersected_text_ids as $id) {
         // Sum up the instance count across texts.
-        $instance_count = $instance_count + $text_ids[$id];
+        $instance_count = $instance_count + $text_counts[$id];
         // Create a temporary array of instance counts to sort by "relevance".
-        $temp_sorted_by_instances[$id] = $text_ids[$id];
-        $text_data[$id] = $pre_textstring_data[$id];
+        $text_data[$id] = $text_counts[$id];
       }
-      // Final step! Get excerpts!
-      arsort($temp_sorted_by_instances);
-      $excerpt_ids = array_slice(array_keys($temp_sorted_by_instances), 0, 19);
-      $body_text_by_id = self::getNodeBodys($excerpt_ids);
-      foreach ($excerpt_ids as $nid) {
-        $title = $pre_textstring_data[$nid]['filename'];
-        $excerpts[$title]['filename'] = $title;
-        $excerpts[$title]['excerpt'] = self::getExcerpt($body_text_by_id[$nid], $tokens, $case, $method);
-        $excerpts[$title]['assignment'] = $pre_textstring_data[$nid]['assignment'];
-        $excerpts[$title]['institution'] = $pre_textstring_data[$nid]['institution'];
-        $excerpts[$title]['draft'] = $pre_textstring_data[$nid]['draft'];
-        $excerpts[$title]['toefl_total'] = $pre_textstring_data[$nid]['toefl_total'];
-        $excerpts[$title]['gender'] = $pre_textstring_data[$nid]['gender'];
-        $excerpts[$title]['semester'] = $pre_textstring_data[$nid]['semester'];
-        $excerpts[$title]['year'] = $pre_textstring_data[$nid]['year'];
-        $excerpts[$title]['course'] = $pre_textstring_data[$nid]['course'];
-      }
+      arsort($text_data);
     }
     return [
       'instance_count' => $instance_count,
       'text_count' => count($intersected_text_ids),
-      'text_data' => $text_data,
-      'excerpts' => $excerpts,
+      'text_ids' => $text_data,
     ];
   }
 
@@ -236,10 +214,6 @@ class SearchService {
     $query = $connection->select('node_field_data', 'n')
       ->fields('n', ['nid', 'title', 'type'])
       ->condition('n.type', 'text', '=');
-    $query->leftJoin('node__field_wordcount', 'wc', 'n.nid = wc.entity_id');
-    $query->fields('wc', ['field_wordcount_value']);
-    $query->leftJoin('node__field_toefl_total', 'tt', 'n.nid = tt.entity_id');
-    $query->fields('tt', ['field_toefl_total_value']);
     // Apply facet/filter conditions.
     if (!empty($conditions)) {
       $query = self::applyConditions($query, $conditions);
