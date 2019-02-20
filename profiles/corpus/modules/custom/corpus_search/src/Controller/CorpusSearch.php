@@ -4,6 +4,8 @@ namespace Drupal\corpus_search\Controller;
 
 use Drupal\corpus_search\SearchService as Search;
 use Drupal\corpus_search\CorpusWordFrequency as Frequency;
+use Drupal\corpus_search\TextMetadata;
+use Drupal\corpus_search\Excerpt;
 use Drupal\corpus_search\CorpusLemmaFrequency;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,112 +20,62 @@ use Drupal\Component\Utility\Xss;
  */
 class CorpusSearch extends ControllerBase {
 
-  public static $facetIDs = [
-    'assignment' => 'at',
-    'college' => 'co',
-    'country' => 'cy',
-    'course' => 'ce',
-    'draft' => 'dr',
-    'gender' => 'ge',
-    'institution' => 'it',
-    'program' => 'pr',
-    'semester' => 'se',
-    'year' => 'yr',
-    'year_in_school' => 'ys',
-  ];
-
   /**
    * Given a search string in query parameters, return full results.
    */
   public function search(Request $request) {
     $ratio = 1;
-    $facet_map = self::getFacetMap();
-    $global = [
-      'instance_count' => 0,
-      'text_ids' => [],
-      'subcorpus_wordcount' => 0,
-      'facet_counts' => [],
-    ];
     $token_data = [];
-
-    if ($search_string = $request->query->get('search')) {
-      $tokens = self::getTokens($search_string);
-      $results['tokens'] = $tokens;
-    }
-    // Retrieve whether a 'lemma' search has been specified.
-    $method = $request->query->get('method');
-
-    $conditions = self::getConditions($request->query->all(), $facet_map);
-    // Initiate a search.
-    if (!$tokens) {
-      // Perform a non-text string search.
-      $data = Search::nonTextSearch($conditions);
-      $token_data[] = $data;
-      $global = self::updateGlobalData($global, $data);
-    }
-    else {
-      foreach ($tokens as $token => $type) {
-        $data = self::getIndividualSearchResults($token, $type, $conditions, $method);
-        $token_data[$token] = $data;
-        $global = self::updateGlobalData($global, $data);
-      }
-    }
-    // Get the subcorpus normalization ratio (per 1 million words).
-    if (!empty($global['subcorpus_wordcount'])) {
-      $ratio = 1000000 / $global['subcorpus_wordcount'];
-    }
-
+    $tokens = [];
     $results = [
       'search_results' => [],
       'facets' => [],
       'pager' => [],
       'frequency' => [],
     ];
+    $global = [
+      'instance_count' => 0,
+      'subcorpus_wordcount' => 0,
+      'facet_counts' => [],
+    ];
+    // @todo: limit facet map to just Text matches (& cache?).
+    $facet_map = TextMetadata::getFacetMap();
+    $all_texts_metadata = TextMetadata::getAll();
+    // Get all facet/filter conditions.
+    $conditions = self::getConditions($request->query->all(), $facet_map);
+
+    if ($search_string = $request->query->get('search')) {
+      $tokens = self::getTokens(urldecode($search_string));
+      $results['tokens'] = $tokens;
+      // Is this and "and" or "or" text search?
+      $op = Xss::filter($request->query->get('op'));
+      // Retrieve whether a 'lemma' search has been specified.
+      $method = Xss::filter($request->query->get('method'));
+      foreach ($tokens as $token => $type) {
+        $data = self::getIndividualSearchResults($token, $type, $conditions, $method);
+        $token_data[$token] = $data;
+        $global = self::updateGlobalData($global, $data, $op);
+      }
+    }
+    else {
+      // Perform a non-text string search.
+      $global['text_ids'] = Search::nonTextSearch($conditions);
+      $matching_texts = array_intersect_key($all_texts_metadata, array_flip($global['text_ids']));
+      foreach ($matching_texts as $t) {
+        $global['subcorpus_wordcount'] += $t['wordcount'];
+      }
+    }
+
+    // Get the subcorpus normalization ratio (per 1 million words).
+    if (!empty($global['subcorpus_wordcount'])) {
+      $ratio = 1000000 / $global['subcorpus_wordcount'];
+    }
 
     $results['pager']['total_items'] = count($global['text_ids']);
     $results['pager']['subcorpus_wordcount'] = $global['subcorpus_wordcount'];
-
-    // Get facet counts.
-    $processed_texts = [];
-    foreach ($token_data as $t) {
-      foreach ($t['text_data'] as $id => $elements) {
-        if (!in_array($id, $processed_texts)) {
-          foreach (array_keys(self::$facetIDs) as $f) {
-            if (isset($facet_map['by_id'][$f]{$elements[$f]})) {
-              $name = $facet_map['by_id'][$f]{$elements[$f]};
-              if (!isset($facet_results[$f][$name]['count'])) {
-                $facet_results[$f][$name]['count'] = 0;
-              }
-              else {
-                $facet_results[$f][$name]['count']++;
-              }
-            }
-          }
-          // Ensure this text is not counted multiple times.
-          $processed_texts[] = $id;
-        }
-      }
-    }
-    // Add facets that have no matches to the result set.
-    // Loop through facet groups (e.g., course, assignment).
-    foreach (array_keys(self::$facetIDs) as $f) {
-      // Loop through facet names (e.g., ENGL 106, ENGL 107).
-      foreach ($facet_map['by_id'][$f] as $n) {
-        if (!isset($facet_results[$f][$n])) {
-          $facet_results[$f][$n]['count'] = 0;
-        }
-        $facet_id = $facet_map['by_name'][$f][$n];
-        if (isset($conditions[$f])) {
-          if (in_array($facet_id, $conditions[$f])) {
-            $facet_results[$f][$n]['active'] = TRUE;
-          }
-        }
-      }
-      // Ensure facets are listed alphanumerically.
-      ksort($facet_results[$f]);
-    }
-
-    $results['facets'] = $facet_results;
+    $results['facets'] = TextMetadata::countFacets($matching_texts, $facet_map, $conditions);
+    $results['search_results'] = Excerpt::getExcerpts($matching_texts, $tokens, $facet_map, 20);
+    /*
     // Get search excerpts.
     $excerpts = [];
     // Handle 1 & multiple search terms differently.
@@ -148,11 +100,11 @@ class CorpusSearch extends ControllerBase {
         }
         $results['search_results'] = $results['search_results'] + $excerpts;
       }
-    }
+    } */
 
     // Final stage! Get frequency data!
     // Loop through tokens once more, now that we know the subcorpus wordcount.
-    if (isset($tokens)) {
+/*     if (isset($tokens)) {
       foreach ($token_data as $t => $individual_data) {
         if ($method == 'lemma') {
           $lemma = CorpusLemmaFrequency::lemmatize($t);
@@ -167,7 +119,7 @@ class CorpusSearch extends ControllerBase {
         $results['frequency']['totals']['normed'] = $ratio * $global['instance_count'];
         $results['frequency']['totals']['texts'] = count($global['text_ids']);
       }
-    }
+    } */
 
     // Response.
     // $response = new CacheableJsonResponse([], 200);
@@ -182,7 +134,7 @@ class CorpusSearch extends ControllerBase {
    * Add metadata fields to $excerpt_data array.
    */
   private static function prepareExcerptMetadata($excerpt_data, $facet_map) {
-    foreach (array_keys(self::$facetIDs) as $facet_group) {
+    foreach (array_keys(TextMetadata::$facetIDs) as $facet_group) {
       if (isset($excerpt_data[$facet_group])) {
         $id = $excerpt_data[$facet_group];
         if (!empty($facet_map['by_id'][$facet_group][$id])) {
@@ -197,34 +149,43 @@ class CorpusSearch extends ControllerBase {
   /**
    * Calculate unique texts && subcorpus wordcount.
    */
-  private static function updateGlobalData($global, $individual_search) {
-    $global['instance_count'] = $global['instance_count'] + $individual_search['instance_count'];
-    foreach ($individual_search['text_data'] as $id => $text_data) {
-      // Get an exclusive list of all text ids matching search criteria.
-      $global['text_ids'][$id] = 1;
-      // Increment subcorpus wordcount.
-      $global['subcorpus_wordcount'] = $global['subcorpus_wordcount'] + $text_data['wordcount'];
-      // @todo Update individual facet counts.
-      // @todo -- for visualizations.
-
+  private static function updateGlobalData($global, $individual_search, $op = "or") {
+    switch ($op) {
+      case "and":
+        if (!isset($global['text_ids'])) {
+          $global['text_ids'] = [];
+          // This is the first time through the search. 
+          // Set the global text IDs to the search results.
+          foreach ($individual_search['text_data'] as $id => $text_data) {
+            // Get an exclusive list of all text ids matching search criteria.
+            $global['text_ids'][$id] = $text_data['wordcount'];
+          }
+        }
+        else {
+          // Intersect search results.
+          $current_global = array_keys($global['text_ids']);
+          $current_search = array_keys($individual_search['text_data']);
+          $shared_ids = array_intersect($current_global, $current_search);
+          foreach ($global['text_ids'] as $i => $w) {
+            if (!in_array($i, $shared_ids)) {
+              unset($global['text_ids'][$i]);
+            }
+          }
+        }
+        break;
+      default:
+        $global['instance_count'] = $global['instance_count'] + $individual_search['instance_count'];
+        foreach ($individual_search['text_data'] as $id => $text_data) {
+          // Get an exclusive list of all text ids matching search criteria.
+          $global['text_ids'][$id] = 1;
+          // Increment subcorpus wordcount.
+          $global['subcorpus_wordcount'] = $global['subcorpus_wordcount'] + $text_data['wordcount'];
+          // @todo Update individual facet counts.
+          // @todo -- for visualizations.
+        }
+        break;
     }
     return $global;
-  }
-
-  /**
-   * Get map of term name-id relational data.
-   */
-  public static function getFacetMap() {
-    $map = [];
-    $connection = \Drupal::database();
-    $query = $connection->select('taxonomy_term_field_data', 't');
-    $query->fields('t', ['tid', 'vid', 'name']);
-    $result = $query->execute()->fetchAll();
-    foreach ($result as $i) {
-      $map['by_name'][$i->vid][$i->name] = $i->tid;
-      $map['by_id'][$i->vid][$i->tid] = $i->name;
-    }
-    return $map;
   }
 
   /**
@@ -232,7 +193,7 @@ class CorpusSearch extends ControllerBase {
    */
   protected static function getConditions($parameters, $facet_map) {
     $conditions = [];
-    foreach (array_keys(self::$facetIDs) as $id) {
+    foreach (array_keys(TextMetadata::$facetIDs) as $id) {
       if (isset($parameters[$id])) {
         $condition = Xss::filter($parameters[$id]);
         $param_list = explode("+", $condition);

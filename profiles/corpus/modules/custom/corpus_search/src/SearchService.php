@@ -2,7 +2,6 @@
 
 namespace Drupal\corpus_search;
 
-use Drupal\corpus_search\Controller\CorpusSearch;
 use Drupal\Core\Cache\CacheBackendInterface;
 
 /**
@@ -51,7 +50,7 @@ class SearchService {
       $counts['raw'] = $counts['count'];
       if ($case == 'insensitive') {
         $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['count', 'ids']);
-        if (ctype_lower($word)) {
+        if (ctype_lower($word[0])) {
           $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
         }
         else {
@@ -94,7 +93,7 @@ class SearchService {
         $instance_count = $instance_count + $text_ids[$id];
         // Create a temporary array of instance counts to sort by "relevance".
         $temp_sorted_by_instances[$id] = $text_ids[$id];
-        $text_data[] = $pre_textstring_data[$id];
+        $text_data[$id] = $pre_textstring_data[$id];
       }
       // Final step! Get excerpts!
       arsort($temp_sorted_by_instances);
@@ -114,7 +113,6 @@ class SearchService {
         $excerpts[$title]['course'] = $pre_textstring_data[$nid]['course'];
       }
     }
-
     return [
       'instance_count' => $instance_count,
       'text_count' => count($intersected_text_ids),
@@ -233,89 +231,21 @@ class SearchService {
    * Query for texts, without any text search conditions.
    */
   public static function nonTextSearch($conditions) {
-    // Create an object of type Select and directly
-    // add extra detail to this query object: a condition, fields and a range.
+    // @todo: consider caching this, too?
     $connection = \Drupal::database();
-    $query = $connection->select('node_field_data', 'n');
-
-    $query->leftJoin('node__field_body', 'f', 'n.nid = f.entity_id');
-    $query->leftJoin('node__field_assignment', 'at', 'n.nid = at.entity_id');
-    $query->leftJoin('node__field_college', 'co', 'n.nid = co.entity_id');
-    $query->leftJoin('node__field_country', 'cy', 'n.nid = cy.entity_id');
-    $query->leftJoin('node__field_course', 'ce', 'n.nid = ce.entity_id');
-    $query->leftJoin('node__field_draft', 'dr', 'n.nid = dr.entity_id');
-    $query->leftJoin('node__field_gender', 'ge', 'n.nid = ge.entity_id');
-    $query->leftJoin('node__field_institution', 'it', 'n.nid = it.entity_id');
-    $query->leftJoin('node__field_id', 'id', 'f.entity_id = id.entity_id');
-    $query->leftJoin('node__field_program', 'pr', 'n.nid = pr.entity_id');
-    $query->leftJoin('node__field_semester', 'se', 'n.nid = se.entity_id');
-    $query->leftJoin('node__field_toefl_total', 'tt', 'n.nid = tt.entity_id');
-    $query->leftJoin('node__field_year_in_school', 'ys', 'n.nid = ys.entity_id');
-    $query->leftJoin('node__field_year', 'yr', 'n.nid = yr.entity_id');
+    $query = $connection->select('node_field_data', 'n')
+      ->fields('n', ['nid', 'title', 'type'])
+      ->condition('n.type', 'text', '=');
     $query->leftJoin('node__field_wordcount', 'wc', 'n.nid = wc.entity_id');
-
-    $query->fields('n', ['title', 'type', 'nid']);
-    $query->fields('f', ['field_body_value']);
-    $query->fields('at', ['field_assignment_target_id']);
-    $query->fields('co', ['field_college_target_id']);
-    $query->fields('cy', ['field_country_target_id']);
-    $query->fields('ce', ['field_course_target_id']);
-    $query->fields('dr', ['field_draft_target_id']);
-    $query->fields('ge', ['field_gender_target_id']);
-    $query->fields('id', ['field_id_value']);
-    $query->fields('it', ['field_institution_target_id']);
-    $query->fields('pr', ['field_program_target_id']);
-    $query->fields('se', ['field_semester_target_id']);
-    $query->fields('tt', ['field_toefl_total_value']);
-    $query->fields('ys', ['field_year_in_school_target_id']);
-    $query->fields('yr', ['field_year_target_id']);
     $query->fields('wc', ['field_wordcount_value']);
-
-    $query->condition('n.type', 'text', '=');
-
-    // Apply facet conditions.
+    $query->leftJoin('node__field_toefl_total', 'tt', 'n.nid = tt.entity_id');
+    $query->fields('tt', ['field_toefl_total_value']);
+    // Apply facet/filter conditions.
     if (!empty($conditions)) {
       $query = self::applyConditions($query, $conditions);
     }
-
-    // Apply other field conditions (TOEFL, ID, etc.).
-    // @todo.
-
-    $result = $query->execute();
-
-    $matching_texts = $result->fetchAll();
-    $instance_count = 0;
-    $text_count = 0;
-    $text_data = [];
-    $excerpts = [];
-    if (!empty($matching_texts)) {
-      $inc = 0;
-      foreach ($matching_texts as $result) {
-        $text = $result->field_body_value;
-        if ($inc < 20) {
-          $excerpts[$result->title]['filename'] = $result->title;
-          $excerpts[$result->title]['excerpt'] = substr(strip_tags($text), 0, 250);
-          $excerpts[$result->title]['assignment'] = $result->field_assignment_target_id;
-          $excerpts[$result->title]['institution'] = $result->field_institution_target_id;
-          $excerpts[$result->title]['draft'] = $result->field_draft_target_id;
-          $excerpts[$result->title]['toefl_total'] = $result->field_toefl_total_value;
-          $excerpts[$result->title]['gender'] = $result->field_gender_target_id;
-          $excerpts[$result->title]['semester'] = $result->field_semester_target_id;
-          $excerpts[$result->title]['year'] = $result->field_year_target_id;
-          $excerpts[$result->title]['course'] = $result->field_course_target_id;
-        }
-        $instance_count++;
-        $text_data[$result->nid] = self::populateTextMetadata($result);
-        $inc++;
-      }
-      $text_count = count($matching_texts);
-    }
-    return [
-      'instance_count' => $instance_count,
-      'text_count' => $text_count,
-      'text_data' => $text_data,
-      'excerpts' => $excerpts,
-    ];
+    $results = $query->execute()->fetchCol();
+    return $results;
   }
 
   /**
@@ -425,12 +355,16 @@ class SearchService {
    * Helper function to further limit query.
    */
   protected static function applyConditions($query, $conditions) {
-    foreach (CorpusSearch::$facetIDs as $name => $abbr) {
+    foreach (TextMetadata::$facetIDs as $name => $abbr) {
       if (isset($conditions[$name])) {
+        $query->join('node__field_' . $name, $abbr, 'n.nid = ' . $abbr . '.entity_id');
+        $query->fields($abbr, ['field_' . $name . '_target_id']);
         $query->condition($abbr . '.field_' . $name . '_target_id', $conditions[$name], 'IN');
       }
     }
     if (isset($conditions['id'])) {
+      $query->join('node__field_id', 'id', 'n.nid = id.entity_id');
+      $query->fields('id', ['field_id_value']);
       $query->condition('id.field_id_value', $conditions['id'], '=');
     }
     if (isset($conditions['toefl_total_min'])) {
@@ -443,7 +377,7 @@ class SearchService {
   }
 
   /**
-   * Helper function to return a substring.
+   * Helper function to return a highlighted string.
    */
   public static function getExcerpt($text, $tokens, $case = "insensitive", $method = "word") {
     $text = strip_tags($text);
@@ -470,24 +404,24 @@ class SearchService {
       }
       return implode('<br />', $excerpt_list);
     }
-
+    $word = $tokens[0];
     // Handle non-lemma search excerpts.
     switch ($case) {
       case "sensitive":
-        $pos = strpos($text, $tokens[0]);
+        $pos = strpos($text, $word);
         $start = $pos - 100 < 0 ? 0 : $pos - 100;
         $excerpt = substr($text, $start, 300);
         $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
         // Boldface match.
-        return str_replace($tokens[0], '<mark>' . $tokens[0] . '</mark>', $word_boundary);
+        return str_replace($word, '<mark>' . $word . '</mark>', $word_boundary);
 
       case "insensitive":
-        $pos = stripos($text, $tokens[0]);
+        $pos = stripos($text, $word);
         $start = $pos - 100 < 0 ? 0 : $pos - 100;
         $excerpt = substr($text, $start, 300);
         $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
         // Boldface match.
-        $return = str_replace($tokens[0], '<mark>' . $tokens[0] . '</mark>', $word_boundary);
+        $return = str_replace($word, '<mark>' . $tokens[0] . '</mark>', $word_boundary);
         $return = str_replace(strtolower($tokens[0]), '<mark>' . strtolower($tokens[0]) . '</mark>', $return);
         $return = str_replace(ucfirst($tokens[0]), '<mark>' . ucfirst($tokens[0]) . '</mark>', $return);
         return $return;

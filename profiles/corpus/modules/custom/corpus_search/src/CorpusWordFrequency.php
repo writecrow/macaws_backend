@@ -2,8 +2,6 @@
 
 namespace Drupal\corpus_search;
 
-use Drupal\node\Entity\Node;
-
 /**
  * Class CorpusWordFrequency.
  *
@@ -20,10 +18,11 @@ class CorpusWordFrequency {
       print_r('Analyzing word frequency...' . PHP_EOL);
       if ($texts = self::retrieve()) {
         if (!empty($texts)) {
-          $inc = 0;
+          $inc = 1;
           foreach ($texts as $key => $text) {
             $result = self::count($text);
-            print_r($result . PHP_EOL);
+            print_r($inc . PHP_EOL);
+            $inc++;
           }
         }
       }
@@ -45,21 +44,6 @@ class CorpusWordFrequency {
   }
 
   /**
-   * Batch processor for counting.
-   *
-   * @param int $node_id
-   *   An individual node id.
-   * @param str[] $context
-   *   Operational context for batch processes.
-   */
-  public static function processor($node_id, array &$context) {
-    $result = self::count($node_id);
-    if ($result) {
-      $context['results'][$node_id][] = $node_id;
-    }
-  }
-
-  /**
    * Count words in an individual entity.
    *
    * @param int $node_id
@@ -67,10 +51,13 @@ class CorpusWordFrequency {
    */
   public static function count($node_id) {
     $result = FALSE;
-    // @todo -- swap out for direct DB query.
-    $node = Node::load($node_id);
-    if ($body = $node->field_body->getValue()) {
-      $tokens = self::tokenize($body[0]['value']);
+    $connection = \Drupal::database();
+    $query = $connection->select('node__field_body', 'n');
+    $query->fields('n', ['field_body_value', 'entity_id']);
+    $query->condition('n.entity_id', $node_id, '=');
+    $result = $query->execute()->fetchCol();
+    if (!empty($result[0])) {
+      $tokens = self::tokenize(strip_tags($result[0]));
       foreach ($tokens as $word) {
         if (isset($frequency[$word])) {
           $frequency[$word]++;
@@ -107,33 +94,27 @@ class CorpusWordFrequency {
    * Split on word boundaries.
    */
   public static function tokenize($string) {
-    $tokens = preg_split("/\s|[,.!?;\"”]/", $string);
+    // Remove URLs.
+    $regex = "@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@";
+    $string = preg_replace($regex, ' ', $string);
+
+    // This regex is similar to any non-word character (\W),
+    // but retains the following symbols: @'#$%
+    $tokens = preg_split("/\s|[,.!?:*&;\"()\[\]_+=”]/", $string);
     $result = [];
-    $strip_chars = ":,.!&\?;\”'()#$^%@*";
+    $strip_chars = ":,.!&\?;-\”'()^*";
     foreach ($tokens as $token) {
+      if (strlen($token) == 1) {
+        if (!in_array($token, ["a", "i", "I", "A"])) {
+          continue;
+        }
+      }
       $token = trim($token, $strip_chars);
       if ($token) {
         $result[] = $token;
       }
     }
     return $result;
-  }
-
-  /**
-   * Batch API callback.
-   */
-  public static function finish($success, $results, $operations) {
-    if (!$success) {
-      $message = t('Finished, with possible errors.');
-      drupal_set_message($message, 'warning');
-    }
-    if (isset($results['updated'])) {
-      drupal_set_message(count($results['updated']) . ' texts updated.');
-    }
-    if (isset($results['created'])) {
-      drupal_set_message(count($results['created']) . ' texts analyzed.');
-    }
-
   }
 
   /**
