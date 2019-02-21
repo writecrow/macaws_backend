@@ -62,6 +62,21 @@ class CorpusSearch extends ControllerBase {
       $global['text_ids'] = Search::nonTextSearch($conditions);
       $matching_texts = array_intersect_key($all_texts_metadata, array_flip($global['text_ids']));
     }
+    if ($op == 'and' && !empty($token_data)) {
+      $updated_token_data = [];
+      // Do additional counting operation for AND instance counts.
+      foreach ($matching_texts as $id => $placeholder) {
+        foreach ($token_data as $token => $data) {
+          if (isset($data['text_ids'][$id])) {
+            $updated_token_data[$token]['instance_count'] += $data['text_ids'][$id];
+            $updated_token_data[$token]['text_count']++;
+            $updated_token_data[$token]['text_ids'][$id] = 1;
+            $global['instance_count'] += $data['text_ids'][$id];
+          }
+        }
+      }
+      $token_data = $updated_token_data;
+    }
     foreach ($matching_texts as $t) {
       $global['subcorpus_wordcount'] += $t['wordcount'];
     }
@@ -70,7 +85,9 @@ class CorpusSearch extends ControllerBase {
     if (!empty($global['subcorpus_wordcount'])) {
       $ratio = 1000000 / $global['subcorpus_wordcount'];
     }
-
+    if (!isset($matching_texts)) {
+      $matching_texts = [];
+    }
     $results['pager']['total_items'] = count($global['text_ids']);
     $results['pager']['subcorpus_wordcount'] = $global['subcorpus_wordcount'];
     $results['facets'] = TextMetadata::countFacets($matching_texts, $facet_map, $conditions);
@@ -114,20 +131,19 @@ class CorpusSearch extends ControllerBase {
           $global['text_ids'] = [];
           // This is the first time through the search.
           // Set the global text IDs to the search results.
-          foreach ($individual_search['text_data'] as $id => $text_data) {
+          foreach ($individual_search['text_ids'] as $id => $text_data) {
             // Get an exclusive list of all text ids matching search criteria.
-            $global['text_ids'][$id] = $text_data['wordcount'];
+            $global['text_ids'][$id] = 1;
           }
         }
         else {
           // Intersect search results.
           $current_global = array_keys($global['text_ids']);
-          $current_search = array_keys($individual_search['text_data']);
+          $global['text_ids'] = [];
+          $current_search = array_keys($individual_search['text_ids']);
           $shared_ids = array_intersect($current_global, $current_search);
-          foreach ($global['text_ids'] as $i => $w) {
-            if (!in_array($i, $shared_ids)) {
-              unset($global['text_ids'][$i]);
-            }
+          foreach (array_values($shared_ids) as $id) {
+            $global['text_ids'][$id] = 1;
           }
         }
         break;
@@ -135,10 +151,8 @@ class CorpusSearch extends ControllerBase {
       default:
         $global['instance_count'] = $global['instance_count'] + $individual_search['instance_count'];
         foreach ($individual_search['text_ids'] as $id => $text_data) {
-          // Get an *exclusive* list of all text ids matching search criteria.
+          // Get a *combined* list of all text ids matching search criteria.
           $global['text_ids'][$id] = 1;
-          // Increment subcorpus wordcount.
-          $global['subcorpus_wordcount'] = $global['subcorpus_wordcount'] + $all_texts_metadata[$id]['wordcount'];
         }
         break;
     }
@@ -223,11 +237,11 @@ class CorpusSearch extends ControllerBase {
       case 'quoted-word':
         $length = strlen($token);
         $cleaned = substr($token, 1, $length - 2);
-        $data = Search::simpleSearch($cleaned, $conditions, 'sensitive');
+        $data = Search::wordSearch($cleaned, $conditions, 'sensitive');
         break;
 
       case 'word':
-        $data = Search::simpleSearch($token, $conditions, 'insensitive', $method);
+        $data = Search::wordSearch($token, $conditions, 'insensitive', $method);
         break;
     }
     return $data;

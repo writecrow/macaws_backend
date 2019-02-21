@@ -14,7 +14,7 @@ class SearchService {
   /**
    * Retrieve matching results from word_frequency table.
    */
-  public static function simpleSearch($word, $conditions, $case = 'insensitive', $method = 'word') {
+  public static function wordSearch($word, $conditions, $case = 'insensitive', $method = 'word') {
     // First get the IDs of texts that match the search conditions,
     // irrespective of text search criterion.
     $condition_matches = self::nonTextSearch($conditions);
@@ -77,54 +77,6 @@ class SearchService {
   }
 
   /**
-   * Query for texts, without any text search conditions.
-   */
-  public static function nonTextSearch($conditions) {
-    if (empty($conditions)) {
-      $cache_id = md5('corpus_search_no_conditions');
-    }
-    else {
-      $cachestring = 'corpus_search_conditions_';
-      foreach ($conditions as $condition => $values) {
-        if (is_array($values)) {
-          $criterion = implode('+', $values);
-        }
-        else {
-          $criterion = $values;
-        }
-        $cachestring .= $condition . "=" . $criterion;
-      }
-      $cache_id = md5($cachestring);
-    }
-    if ($cache = \Drupal::cache()->get($cache_id)) {
-      return $cache->data;
-    }
-
-    $connection = \Drupal::database();
-    $query = $connection->select('node_field_data', 'n')
-      ->fields('n', ['nid', 'title', 'type'])
-      ->condition('n.type', 'text', '=');
-    // Apply facet/filter conditions.
-    if (!empty($conditions)) {
-      $query = self::applyConditions($query, $conditions);
-    }
-    $results = $query->execute()->fetchCol();
-    \Drupal::cache()->set($cache_id, $results, CacheBackendInterface::CACHE_PERMANENT);
-    return $results;
-  }
-
-  /**
-   * Get full text of specified nodes.
-   */
-  public static function getNodeBodys($nids) {
-    $connection = \Drupal::database();
-    $query = $connection->select('node__field_body', 'f');
-    $query->condition('f.entity_id', $nids, 'IN');
-    $query->fields('f', ['entity_id', 'field_body_value']);
-    return $query->execute()->fetchAllKeyed();
-  }
-
-  /**
    * Query the node__field_body table for exact matches.
    */
   public static function phraseSearch($phrase, $conditions) {
@@ -162,6 +114,43 @@ class SearchService {
       'text_count' => count($text_data),
       'text_ids' => $text_data,
     ];
+  }
+
+  /**
+   * Query for texts, without any text search conditions.
+   */
+  public static function nonTextSearch($conditions) {
+    if (empty($conditions)) {
+      $cache_id = md5('corpus_search_no_conditions');
+    }
+    else {
+      $cachestring = 'corpus_search_conditions_';
+      foreach ($conditions as $condition => $values) {
+        if (is_array($values)) {
+          $criterion = implode('+', $values);
+        }
+        else {
+          $criterion = $values;
+        }
+        $cachestring .= $condition . "=" . $criterion;
+      }
+      $cache_id = md5($cachestring);
+    }
+    if ($cache = \Drupal::cache()->get($cache_id)) {
+      return $cache->data;
+    }
+
+    $connection = \Drupal::database();
+    $query = $connection->select('node_field_data', 'n')
+      ->fields('n', ['nid', 'title', 'type'])
+      ->condition('n.type', 'text', '=');
+    // Apply facet/filter conditions.
+    if (!empty($conditions)) {
+      $query = self::applyConditions($query, $conditions);
+    }
+    $results = $query->execute()->fetchCol();
+    \Drupal::cache()->set($cache_id, $results, CacheBackendInterface::CACHE_PERMANENT);
+    return $results;
   }
 
   /**

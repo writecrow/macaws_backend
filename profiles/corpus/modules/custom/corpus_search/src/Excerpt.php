@@ -18,6 +18,9 @@ class Excerpt {
    *   The words/phrases to be highlighted.
    */
   public static function getExcerpts(array $matching_texts, array $tokens, $facet_map, $limit = 20) {
+    if (empty($matching_texts)) {
+      return [];
+    }
     $connection = \Drupal::database();
     $query = $connection->select('node__field_body', 'n')
       ->fields('n', ['entity_id', 'field_body_value'])

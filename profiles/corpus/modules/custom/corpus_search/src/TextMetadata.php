@@ -25,6 +25,9 @@ class TextMetadata {
     'year_in_school' => 'ys',
   ];
 
+  /**
+   * Retrieve metadata for all texts in one go!
+   */
   public static function getAll() {
     $cache_id = md5('corpus_search_all_texts');
     if ($cache = \Drupal::cache()->get($cache_id)) {
@@ -90,6 +93,9 @@ class TextMetadata {
     return $map;
   }
 
+  /**
+   * Loop through the facets & increment each item's count.
+   */
   public static function countFacets($matching_texts, $facet_map, $conditions) {
     foreach ($matching_texts as $id => $elements) {
       foreach (array_keys(self::$facetIDs) as $f) {
