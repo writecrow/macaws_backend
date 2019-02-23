@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cda0014e4482883ef56f778f511ac414",
+    "content-hash": "be4d42535c243d0b9d7d2d8ecf95ef23",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -2348,6 +2348,76 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_data_export"
             }
+        },
+        {
+            "name": "drupal/xhprof",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/XHProf",
+                "reference": "03636cb96b111fe62a63be7709cdca5870688279"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta1+50-dev",
+                    "datestamp": "1521629284",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Steven Merrill",
+                    "homepage": "https://www.drupal.org/user/218671"
+                },
+                {
+                    "name": "amateescu",
+                    "homepage": "https://www.drupal.org/user/729614"
+                },
+                {
+                    "name": "andypost",
+                    "homepage": "https://www.drupal.org/user/118908"
+                },
+                {
+                    "name": "beejeebus",
+                    "homepage": "https://www.drupal.org/user/38580"
+                },
+                {
+                    "name": "lussoluca",
+                    "homepage": "https://www.drupal.org/user/138068"
+                },
+                {
+                    "name": "moshe weitzman",
+                    "homepage": "https://www.drupal.org/user/23"
+                },
+                {
+                    "name": "msonnabaum",
+                    "homepage": "https://www.drupal.org/user/75278"
+                },
+                {
+                    "name": "pifantastic",
+                    "homepage": "https://www.drupal.org/user/737486"
+                }
+            ],
+            "description": "Provides code profiling with XHProf integration.",
+            "homepage": "https://www.drupal.org/project/xhprof",
+            "support": {
+                "source": "http://cgit.drupalcode.org/xhprof"
+            },
+            "time": "2018-10-12T12:04:52+00:00"
         },
         {
             "name": "drush/drush",
@@ -6361,7 +6431,8 @@
     "stability-flags": {
         "drupal-composer/drupal-scaffold": 20,
         "writecrow/country_code_converter": 20,
-        "drupal/views_data_export": 10
+        "drupal/views_data_export": 10,
+        "drupal/xhprof": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

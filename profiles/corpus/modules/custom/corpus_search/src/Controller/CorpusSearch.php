@@ -26,6 +26,7 @@ class CorpusSearch extends ControllerBase {
   public function search(Request $request) {
     $ratio = 1;
     $token_data = [];
+    $op = 'or';
     $tokens = [];
     $results = [
       'search_results' => [],

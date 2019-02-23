@@ -59,7 +59,49 @@ class Excerpt {
    * How shall we highlight this thing?
    */
   public static function highlightExcerpt($text, $tokens) {
-    return substr(strip_tags($text), 0, 250);
+    $text = strip_tags($text);
+    if (empty($tokens)) {
+      return substr(strip_tags($text), 0, 250);
+    }
+    foreach ($tokens as $lemma => $type) {
+      // Determine whether the token is quoted or not.
+      $quoted = FALSE;
+      $first = substr($lemma, 0, 1);
+      $last = substr($lemma, -1);
+      if ($first == '"' && $last == '"') {
+        $lemma = trim($lemma, '"');
+        $quoted = TRUE;
+      }
+      if ($quoted) {
+        preg_match('/' . $lemma . '/', $text, $match);
+      }
+      else {
+        preg_match('/[^a-zA-Z>]' . $lemma . '[^a-zA-Z<]/i', $text, $match);
+      }
+      if (isset($match[0])) {
+        $first_char = substr($match[0], 0, 1);
+        $last_char = substr($match[0], -1);
+        if ($quoted) {
+          $pos = strpos($text, $match[0]);
+        }
+        else {
+          $pos = stripos($text, $match[0]);
+        }
+
+        if ($pos > 0) {
+          $start = $pos - 50 < 0 ? 0 : $pos - 50;
+          $excerpt = substr($text, $start, 125);
+          $replacement = $first_char . '<mark>' . strtolower($lemma) . '</mark>' . $last_char;
+          $excerpt = preg_replace('/[^a-zA-Z>]' . strtolower($lemma) . '[^a-zA-Z<]/', $replacement, $excerpt);
+          $replacement = $first_char . '<mark>' . ucfirst($lemma) . '</mark>' . $last_char;
+          $excerpt = preg_replace('/[^a-zA-Z>]' . ucfirst($lemma) . '[^a-zA-Z<]/', $replacement, $excerpt);
+          $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
+          $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
+          $excerpt_list[] = $word_boundary;
+        }
+      }
+    }
+    return implode('<br />', $excerpt_list);
   }
 
   /**

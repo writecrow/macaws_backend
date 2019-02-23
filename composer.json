@@ -31,7 +31,8 @@
     "drupal/search_api_solr": "^2.0",
     "drupal/views_data_export": "^1.0@beta",
     "drupal/simple_oauth": "^3",
-    "drupal/restui": "^1"
+    "drupal/restui": "^1",
+    "drupal/xhprof": "1.x-dev"
   },
   "conflict": {
     "drupal/drupal": "*"
