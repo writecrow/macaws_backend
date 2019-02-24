@@ -32,7 +32,8 @@
     "drupal/views_data_export": "^1.0@beta",
     "drupal/simple_oauth": "^3",
     "drupal/restui": "^1",
-    "drupal/xhprof": "1.x-dev"
+    "drupal/xhprof": "1.x-dev",
+    "zaporylie/composer-drupal-optimizations": "^1.1"
   },
   "conflict": {
     "drupal/drupal": "*"
