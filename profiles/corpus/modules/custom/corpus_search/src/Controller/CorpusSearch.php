@@ -45,8 +45,8 @@ class CorpusSearch extends ControllerBase {
     // Get all facet/filter conditions.
     $conditions = self::getConditions($request->query->all(), $facet_map);
 
-    if ($search_string = $request->query->get('search')) {
-      $tokens = self::getTokens(urldecode($search_string));
+    if ($search_string = strip_tags(urldecode($request->query->get('search')))) {
+      $tokens = self::getTokens($search_string);
       // Is this and "and" or "or" text search?
       $op = Xss::filter($request->query->get('op'));
       // Retrieve whether a 'lemma' search has been specified.
