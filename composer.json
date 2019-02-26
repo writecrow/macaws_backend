@@ -33,7 +33,8 @@
     "drupal/simple_oauth": "^3",
     "drupal/restui": "^1",
     "drupal/xhprof": "1.x-dev",
-    "zaporylie/composer-drupal-optimizations": "^1.1"
+    "zaporylie/composer-drupal-optimizations": "^1.1",
+    "drupal/rabbit_hole": "^1.0@beta"
   },
   "conflict": {
     "drupal/drupal": "*"

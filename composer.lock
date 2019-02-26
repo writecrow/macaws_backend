@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36c1cb2277be12f8339c8c03f367ed7d",
+    "content-hash": "49860231434b8be62c486e5076f873d5",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -1166,6 +1166,53 @@
             "time": "2018-09-21T15:23:08+00:00"
         },
         {
+            "name": "drupal/access_by_entity",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/access_by_entity",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/access_by_entity-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "3411377e514cb4d3524046410c8e17caaef923a6"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1504100644",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "zakaria.elhariri",
+                    "homepage": "https://www.drupal.org/user/2656193"
+                }
+            ],
+            "description": "A simple way to manage permissions (view/edit/delete) by entity.",
+            "homepage": "https://www.drupal.org/project/access_by_entity",
+            "support": {
+                "source": "http://cgit.drupalcode.org/access_by_entity"
+            }
+        },
+        {
             "name": "drupal/config_update",
             "version": "1.6.0",
             "source": {
@@ -2057,6 +2104,74 @@
             "homepage": "https://www.drupal.org/project/plupload",
             "support": {
                 "source": "http://cgit.drupalcode.org/plupload"
+            }
+        },
+        {
+            "name": "drupal/rabbit_hole",
+            "version": "1.0.0-beta5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/rabbit_hole",
+                "reference": "8.x-1.0-beta5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/rabbit_hole-8.x-1.0-beta5.zip",
+                "reference": "8.x-1.0-beta5",
+                "shasum": "93698de4f5e42f19dddab0052494c1ed009af330"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "require-dev": {
+                "drupal/file_entity": "*",
+                "drupal/group": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta5",
+                    "datestamp": "1550891284",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Dylan Donkersgoed",
+                    "homepage": "https://www.drupal.org/user/2803351"
+                },
+                {
+                    "name": "Odd Hill",
+                    "homepage": "https://www.drupal.org/user/789934"
+                },
+                {
+                    "name": "mparker17",
+                    "homepage": "https://www.drupal.org/user/536298"
+                },
+                {
+                    "name": "olofbokedal",
+                    "homepage": "https://www.drupal.org/user/1198438"
+                },
+                {
+                    "name": "shumushin",
+                    "homepage": "https://www.drupal.org/user/22093"
+                }
+            ],
+            "description": "Change what happens when viewing entities, e.g. redirect node types that users shouldn't see",
+            "homepage": "https://www.drupal.org/project/rabbit_hole",
+            "support": {
+                "source": "https://cgit.drupalcode.org/rabbit_hole",
+                "issues": "https://www.drupal.org/project/issues/rabbit_hole"
             }
         },
         {
@@ -6707,7 +6822,8 @@
         "drupal-composer/drupal-scaffold": 20,
         "writecrow/country_code_converter": 20,
         "drupal/views_data_export": 10,
-        "drupal/xhprof": 20
+        "drupal/xhprof": 20,
+        "drupal/rabbit_hole": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
