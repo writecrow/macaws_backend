@@ -92,15 +92,17 @@ class CorpusSearch extends ControllerBase {
     $results['pager']['total_items'] = count($global['text_ids']);
     $results['pager']['subcorpus_wordcount'] = $global['subcorpus_wordcount'];
     $results['facets'] = TextMetadata::countFacets($matching_texts, $facet_map, $conditions);
-    $results['search_results'] = Excerpt::getExcerpts($matching_texts, $tokens, $facet_map, 20);
 
-    // Final stage! Get frequency data!
+    $excerpt_tokens = array_keys($tokens);
+    // Get frequency data!
     // Loop through tokens once more, now that we know the subcorpus wordcount.
     if (!empty($token_data)) {
       foreach ($token_data as $t => $individual_data) {
         if ($method == 'lemma') {
           $lemma = CorpusLemmaFrequency::lemmatize($t);
-          $t = implode('/', CorpusLemmaFrequency::getVariants($lemma));
+          $variants = CorpusLemmaFrequency::getVariants($lemma);
+          $excerpt_tokens = $excerpt_tokens + $variants;
+          $t = implode('/', $variants);
         }
         $results['frequency']['tokens'][$t]['raw'] = $individual_data['instance_count'];
         $results['frequency']['tokens'][$t]['normed'] = $ratio * $individual_data['instance_count'];
@@ -112,13 +114,16 @@ class CorpusSearch extends ControllerBase {
         $results['frequency']['totals']['texts'] = count($global['text_ids']);
       }
     }
+    // This runs after the frequency data to take advantage of the updated $tokens,
+    // if any, from a lemma search.
+    $results['search_results'] = Excerpt::getExcerpts($matching_texts, $excerpt_tokens, $facet_map, 20);
 
     // Response.
-    $response = new CacheableJsonResponse([], 200);
-    //$response = new JsonResponse([], 200);
+    //$response = new CacheableJsonResponse([], 200);
+    $response = new JsonResponse([], 200);
     $response->setContent(json_encode($results));
     $response->headers->set('Content-Type', 'application/json');
-    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    //$response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
 

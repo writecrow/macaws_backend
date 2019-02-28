@@ -99,11 +99,12 @@ class SearchService {
     $text_data = [];
     if (!empty($intersected_text_ids)) {
       foreach ($intersected_text_ids as $id) {
-        $count = substr_count(strip_tags($phrase_matches[$id]), $phrase);
-        if ($count != 0) {
+        $count = self::countPhraseMatches($phrase_matches[$id], $phrase);
+        if ($count > 0) {
           // Sum up the instance count across texts.
           $instance_count = $instance_count + $count;
           // Create a temporary array of instance counts to sort by "relevance".
+          // This also ensures that false positives are filtered out.
           $text_data[$id] = $count;
         }
       }
@@ -115,6 +116,44 @@ class SearchService {
       'text_ids' => $text_data,
     ];
   }
+
+  /**
+   * Count the number of phrase matches in a given text.
+   *
+   * This is the final gateway for determining whether a text
+   * actually has the phrase, taking the burden/complexity off
+   * the SQL query.
+   */
+  private static function countPhraseMatches($text, $phrase) {
+    $first = 'alpha';
+    $last = 'alpha';
+    preg_match('/[^a-zA-Z]/', substr($phrase, 0, 1), $non_alpha);
+    if (isset($non_alpha[0])) {
+      $first = 'non_alpha';
+    }
+    preg_match('/[^a-zA-Z]/', substr($phrase, -1), $non_alpha);
+    if (isset($non_alpha[0])) {
+      $last = 'non_alpha';
+    }
+    $rstart = self::$regex{$first}['start'];
+    $rend = self::$regex{$last}['end'];
+    preg_match_all($rstart . $phrase . $rend, $text, $matches);
+    if (isset($matches[0])) {
+      return count($matches[0]);
+    }
+    return 0;
+  }
+
+  private static $regex = [
+    'alpha' => [
+      'start' => '/[^a-zA-Z>]',
+      'end' => '[^a-zA-Z<]/',
+    ],
+    'non_alpha' => [
+      'start' => '/',
+      'end' => '/',
+    ],
+  ];
 
   /**
    * Query for texts, without any text search conditions.

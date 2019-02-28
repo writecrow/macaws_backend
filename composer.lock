@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49860231434b8be62c486e5076f873d5",
+    "content-hash": "b93981c47a414ecf96044e80af19932c",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -6475,6 +6475,42 @@
             "time": "2017-08-11T01:21:54+00:00"
         },
         {
+            "name": "writecrow/highlighter",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/writecrow/highlighter.git",
+                "reference": "4a9da479000dac51d7589ca30baebbc546124635"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/4a9da479000dac51d7589ca30baebbc546124635",
+                "reference": "4a9da479000dac51d7589ca30baebbc546124635",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "writecrow\\Highlighter\\": [
+                        "src/",
+                        "test/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Fullmer",
+                    "email": "mfullmer@gmail.com"
+                }
+            ],
+            "description": "Highlights words/phrases per specified parameters",
+            "time": "2019-02-27T19:59:03+00:00"
+        },
+        {
             "name": "writecrow/lorem_gutenberg",
             "version": "1.1",
             "source": {
@@ -6823,7 +6859,8 @@
         "writecrow/country_code_converter": 20,
         "drupal/views_data_export": 10,
         "drupal/xhprof": 20,
-        "drupal/rabbit_hole": 10
+        "drupal/rabbit_hole": 10,
+        "writecrow/highlighter": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

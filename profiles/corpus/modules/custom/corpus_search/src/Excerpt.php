@@ -2,6 +2,8 @@
 
 namespace Drupal\corpus_search;
 
+use writecrow\Highlighter\HighlightExcerpt;
+
 /**
  * Class Excerpt.
  *
@@ -30,7 +32,7 @@ class Excerpt {
     $sliced_matches = array_intersect_key($matching_texts, $results);
     foreach ($sliced_matches as $id => $metadata) {
       $excerpts[] = [
-        'excerpt' => self::highlightExcerpt($results[$id], $tokens),
+        'excerpt' => HighlightExcerpt::highlight($results[$id], $tokens),
         'filename' => $metadata['filename'],
         'assignment' => self::getFacetName($metadata['assignment'], 'assignment', $facet_map),
         'course' => self::getFacetName($metadata['course'], 'course', $facet_map),
@@ -53,108 +55,6 @@ class Excerpt {
       return $facet_map['by_id'][$facet_group][$id];
     }
     return $id;
-  }
-
-  /**
-   * How shall we highlight this thing?
-   */
-  public static function highlightExcerpt($text, $tokens) {
-    $text = strip_tags($text);
-    if (empty($tokens)) {
-      return substr(strip_tags($text), 0, 250);
-    }
-    foreach ($tokens as $lemma => $type) {
-      // Determine whether the token is quoted or not.
-      $quoted = FALSE;
-      $first = substr($lemma, 0, 1);
-      $last = substr($lemma, -1);
-      if ($first == '"' && $last == '"') {
-        $lemma = trim($lemma, '"');
-        $quoted = TRUE;
-      }
-      if ($quoted) {
-        preg_match('/' . $lemma . '/', $text, $match);
-      }
-      else {
-        preg_match('/[^a-zA-Z>]' . $lemma . '[^a-zA-Z<]/i', $text, $match);
-      }
-      if (isset($match[0])) {
-        $first_char = substr($match[0], 0, 1);
-        $last_char = substr($match[0], -1);
-        if ($quoted) {
-          $pos = strpos($text, $match[0]);
-        }
-        else {
-          $pos = stripos($text, $match[0]);
-        }
-
-        if ($pos > 0) {
-          $start = $pos - 50 < 0 ? 0 : $pos - 50;
-          $excerpt = substr($text, $start, 125);
-          $replacement = $first_char . '<mark>' . strtolower($lemma) . '</mark>' . $last_char;
-          $excerpt = preg_replace('/[^a-zA-Z>]' . strtolower($lemma) . '[^a-zA-Z<]/', $replacement, $excerpt);
-          $replacement = $first_char . '<mark>' . ucfirst($lemma) . '</mark>' . $last_char;
-          $excerpt = preg_replace('/[^a-zA-Z>]' . ucfirst($lemma) . '[^a-zA-Z<]/', $replacement, $excerpt);
-          $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
-          $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
-          $excerpt_list[] = $word_boundary;
-        }
-      }
-    }
-    return implode('<br />', $excerpt_list);
-  }
-
-  /**
-   * Helper function to return a highlighted string.
-   */
-  public static function getExcerptFancy($text, $tokens, $case = "insensitive", $method = "word") {
-    $text = strip_tags($text);
-    if ($method == "lemma") {
-      foreach ($tokens as $lemma) {
-        preg_match('/[^a-zA-Z>]' . $lemma . '[^a-zA-Z<]/i', $text, $match);
-        if (isset($match[0])) {
-          $first_char = substr($match[0], 0, 1);
-          $last_char = substr($match[0], -1);
-          $pos = stripos($text, $match[0]);
-          if ($pos > 0) {
-            $start = $pos - 50 < 0 ? 0 : $pos - 50;
-            $excerpt = substr($text, $start, 125);
-            $replacement = $first_char . '<mark>' . strtolower($lemma) . '</mark>' . $last_char;
-            $excerpt = preg_replace('/[^a-zA-Z>]' . strtolower($lemma) . '[^a-zA-Z<]/', $replacement, $excerpt);
-            $replacement = $first_char . '<mark>' . ucfirst($lemma) . '</mark>' . $last_char;
-            $excerpt = preg_replace('/[^a-zA-Z>]' . ucfirst($lemma) . '[^a-zA-Z<]/', $replacement, $excerpt);
-            $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
-            $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
-            $excerpt_list[] = $word_boundary;
-          }
-        }
-
-      }
-      return implode('<br />', $excerpt_list);
-    }
-    $word = $tokens[0];
-    // Handle non-lemma search excerpts.
-    switch ($case) {
-      case "sensitive":
-        $pos = strpos($text, $word);
-        $start = $pos - 100 < 0 ? 0 : $pos - 100;
-        $excerpt = substr($text, $start, 300);
-        $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
-        // Boldface match.
-        return str_replace($word, '<mark>' . $word . '</mark>', $word_boundary);
-
-      case "insensitive":
-        $pos = stripos($text, $word);
-        $start = $pos - 100 < 0 ? 0 : $pos - 100;
-        $excerpt = substr($text, $start, 300);
-        $word_boundary = substr($excerpt, strpos($excerpt, ' '), strrpos($excerpt, ' '));
-        // Boldface match.
-        $return = str_replace($word, '<mark>' . $tokens[0] . '</mark>', $word_boundary);
-        $return = str_replace(strtolower($tokens[0]), '<mark>' . strtolower($tokens[0]) . '</mark>', $return);
-        $return = str_replace(ucfirst($tokens[0]), '<mark>' . ucfirst($tokens[0]) . '</mark>', $return);
-        return $return;
-
-    }
   }
 
 }

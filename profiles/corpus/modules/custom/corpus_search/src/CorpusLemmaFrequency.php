@@ -147,6 +147,7 @@ class CorpusLemmaFrequency {
   public static function getVariants($lemma) {
     $module_handler = \Drupal::service('module_handler');
     $module_path = $module_handler->getModule('search_api_lemma')->getPath();
+    // Make sure the original value is included!
     $tokens = [$lemma];
     $path = DRUPAL_ROOT . '/' . $module_path . '/data/roots_' . $lemma[0] . '.php';
     if (file_exists($path)) {
