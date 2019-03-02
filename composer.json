@@ -35,7 +35,8 @@
     "drupal/xhprof": "1.x-dev",
     "zaporylie/composer-drupal-optimizations": "^1.1",
     "drupal/rabbit_hole": "^1.0@beta",
-    "writecrow/highlighter": "dev-master"
+    "writecrow/highlighter": "dev-master",
+    "drupal/adminimal_theme": "^1.4"
   },
   "conflict": {
     "drupal/drupal": "*"
