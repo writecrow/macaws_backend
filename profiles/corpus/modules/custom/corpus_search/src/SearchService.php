@@ -15,46 +15,49 @@ class SearchService {
    * Retrieve matching results from word_frequency table.
    */
   public static function wordSearch($word, $conditions, $case = 'insensitive', $method = 'word') {
-    // First get the IDs of texts that match the search conditions,
-    // irrespective of text search criterion.
-    $condition_matches = self::nonTextSearch($conditions);
-
-    // Create an object of type Select and directly
-    // add extra detail to this query object: a condition, fields and a range.
-    if ($method == 'lemma') {
-      $module_handler = \Drupal::service('module_handler');
-      $module_path = $module_handler->getModule('search_api_lemma')->getPath();
-      // Get lemma stem.
-      $lemma = CorpusLemmaFrequency::lemmatize(strtolower($word));
-      $tokens = CorpusLemmaFrequency::getVariants($lemma);
-      $connection = \Drupal::database();
-      $query = $connection->select('corpus_lemma_frequency', 'f')->fields('f', ['ids']);
-      $query->condition('word', db_like($lemma), 'LIKE BINARY');
-      $result = $query->execute()->fetchAssoc();
-      $word_matches = self::arrangeTextCountResults($result['ids']);
+    $cache_id = md5('corpus_search_word_' . $word . $case . $method);
+    if ($cache = \Drupal::cache()->get($cache_id)) {
+      $word_matches = $cache->data;
     }
     else {
-      $tokens = [$word];
-      $connection = \Drupal::database();
-      $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['ids']);
-      $query->condition('word', db_like($word), 'LIKE BINARY');
-      $result = $query->execute()->fetchAssoc();
-      $word_matches = self::arrangeTextCountResults($result['ids']);
-
-      if ($case == 'insensitive') {
-        $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['ids']);
-        if (ctype_lower($word[0])) {
-          $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
-        }
-        else {
-          $query->condition('word', db_like(strtolower($word)), 'LIKE BINARY');
-        }
+      if ($method == 'lemma') {
+        $module_handler = \Drupal::service('module_handler');
+        $module_path = $module_handler->getModule('search_api_lemma')->getPath();
+        // Get lemma stem.
+        $lemma = CorpusLemmaFrequency::lemmatize(strtolower($word));
+        $tokens = CorpusLemmaFrequency::getVariants($lemma);
+        $connection = \Drupal::database();
+        $query = $connection->select('corpus_lemma_frequency', 'f')->fields('f', ['ids']);
+        $query->condition('word', db_like($lemma), 'LIKE BINARY');
         $result = $query->execute()->fetchAssoc();
-        $insensitive = self::arrangeTextCountResults($result['ids']);
-        $word_matches = $word_matches + $insensitive;
+        $word_matches = self::arrangeTextCountResults($result['ids']);
       }
+      else {
+        $tokens = [$word];
+        $connection = \Drupal::database();
+        $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['ids']);
+        $query->condition('word', db_like($word), 'LIKE BINARY');
+        $result = $query->execute()->fetchAssoc();
+        $word_matches = self::arrangeTextCountResults($result['ids']);
+        if ($case == 'insensitive') {
+          $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['ids']);
+          if (ctype_lower($word[0])) {
+            $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
+          }
+          else {
+            $query->condition('word', db_like(strtolower($word)), 'LIKE BINARY');
+          }
+          $result = $query->execute()->fetchAssoc();
+          $insensitive = self::arrangeTextCountResults($result['ids']);
+          $word_matches = $word_matches + $insensitive;
+        }
+      }
+      \Drupal::cache()->set($cache_id, $word_matches, CacheBackendInterface::CACHE_PERMANENT);
     }
 
+    // Get the IDs of texts that match the search conditions,
+    // irrespective of text search criterion.
+    $condition_matches = self::nonTextSearch($conditions);
     // Limit list to intersected NIDs from condition search & token search.
     $intersected_text_ids = array_intersect(array_unique(array_keys($word_matches)), array_values($condition_matches));
     // Get text data for intersected ids.
