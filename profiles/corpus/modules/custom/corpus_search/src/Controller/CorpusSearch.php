@@ -114,16 +114,16 @@ class CorpusSearch extends ControllerBase {
         $results['frequency']['totals']['texts'] = count($global['text_ids']);
       }
     }
-    // This runs after the frequency data to take advantage of the updated $tokens,
-    // if any, from a lemma search.
+    // This runs after the frequency data to take advantage of the
+    // updated $tokens, if any, from a lemma search.
     $results['search_results'] = Excerpt::getExcerpts($matching_texts, $excerpt_tokens, $facet_map, 20);
 
     // Response.
-    //$response = new CacheableJsonResponse([], 200);
-    $response = new JsonResponse([], 200);
+    $response = new CacheableJsonResponse([], 200);
+    // $response = new JsonResponse([], 200); .
     $response->setContent(json_encode($results));
     $response->headers->set('Content-Type', 'application/json');
-    //$response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
 
