@@ -21,6 +21,20 @@ use Drupal\Component\Utility\Xss;
 class CorpusSearch extends ControllerBase {
 
   /**
+   * The Controller endpoint.
+   */
+  public function endpoint(Request $request) {
+    // Response.
+    $results = self::search($request);
+    $response = new CacheableJsonResponse([], 200);
+    // $response = new JsonResponse([], 200); .
+    $response->setContent(json_encode($results));
+    $response->headers->set('Content-Type', 'application/json');
+    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    return $response;
+  }
+
+  /**
    * Given a search string in query parameters, return full results.
    */
   public function search(Request $request) {
@@ -118,13 +132,7 @@ class CorpusSearch extends ControllerBase {
     // updated $tokens, if any, from a lemma search.
     $results['search_results'] = Excerpt::getExcerpts($matching_texts, $excerpt_tokens, $facet_map, 20);
 
-    // Response.
-    $response = new CacheableJsonResponse([], 200);
-    // $response = new JsonResponse([], 200); .
-    $response->setContent(json_encode($results));
-    $response->headers->set('Content-Type', 'application/json');
-    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
-    return $response;
+    return $results;
   }
 
   /**
