@@ -61,7 +61,7 @@ class CorpusText extends FieldPluginBase {
     }
     // Default to returning a truncated version of the text.
     if (strlen($text) > 600) {
-      $output = '<p>Displaying first 600 characters. For fulltext, apply for an account.</p><hr />';
+      $output = '<h3>(Excerpted)</h3><p>Displaying first 600 characters. For fulltext, apply for an account by emailing <a href="mailto:collaborate@writecrow.org">collaborate@writecrow.org</a></p><hr />';
       $output .= nl2br(preg_replace('/\s+?(\S+)?$/', '', substr($text, 0, 600)) . '...');
     }
     else {

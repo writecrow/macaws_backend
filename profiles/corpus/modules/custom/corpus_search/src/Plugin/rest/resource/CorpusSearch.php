@@ -2,18 +2,14 @@
 
 namespace Drupal\corpus_search\Plugin\rest\resource;
 
-use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\corpus_search\Controller\CorpusSearch as Corpus;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
-use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
 
 /**
  * Provides a resource to get corpus search results.
@@ -31,7 +27,14 @@ use Drupal\node\Entity\Node;
 class CorpusSearch extends ResourceBase {
 
   /**
-   * The HTTP request.
+   * A curent user instance.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
+   * The request.
    *
    * @var \Symfony\Component\HttpFoundation\Request
    */
@@ -50,11 +53,14 @@ class CorpusSearch extends ResourceBase {
    *   The available serialization formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user instance.
    * @param Symfony\Component\HttpFoundation\Request $current_request
    *   The current request.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, Request $current_request) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user, Request $current_request) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
+    $this->currentUser = $current_user;
     $this->currentRequest = $current_request;
   }
 
@@ -68,6 +74,7 @@ class CorpusSearch extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('example_rest'),
+      $container->get('current_user'),
       $container->get('request_stack')->getCurrentRequest()
     );
   }
@@ -82,10 +89,16 @@ class CorpusSearch extends ResourceBase {
    *   Throws exception expected.
    */
   public function get($type = NULL) {
-
     $data = Corpus::search($this->currentRequest);
+    $user = User::load($this->currentUser->id());
+    if ($user->hasRole('export_access')) {
+      $data['exportable'] = TRUE;
+    }
+    // Used to verify caching:
+    $data['timestamp'] = time();
     $response = new ResourceResponse($data);
-    $response->addCacheableDependency($data);
+    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    $response->getCacheableMetadata()->addCacheContexts(['user']);
     return $response;
   }
 

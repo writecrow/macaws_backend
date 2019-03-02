@@ -8,9 +8,9 @@ use Drupal\corpus_search\TextMetadata;
 use Drupal\corpus_search\Excerpt;
 use Drupal\corpus_search\CorpusLemmaFrequency;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Component\Utility\Xss;
 
 /**
@@ -38,6 +38,16 @@ class CorpusSearch extends ControllerBase {
    * Given a search string in query parameters, return full results.
    */
   public function search(Request $request) {
+    // @todo: limit facet map to just Text matches (& cache?).
+    $facet_map = TextMetadata::getFacetMap();
+    // Get all facet/filter conditions.
+    $conditions = self::getConditions($request->query->all(), $facet_map);
+    // Check for presence of cached data.
+    $cache_id = self::getCacheString($request);
+    if ($cache = \Drupal::cache()->get($cache_id)) {
+      return $cache->data;
+    }
+    $all_texts_metadata = TextMetadata::getAll();
     $ratio = 1;
     $token_data = [];
     $op = 'or';
@@ -53,12 +63,6 @@ class CorpusSearch extends ControllerBase {
       'subcorpus_wordcount' => 0,
       'facet_counts' => [],
     ];
-    // @todo: limit facet map to just Text matches (& cache?).
-    $facet_map = TextMetadata::getFacetMap();
-    $all_texts_metadata = TextMetadata::getAll();
-    // Get all facet/filter conditions.
-    $conditions = self::getConditions($request->query->all(), $facet_map);
-
     if ($search_string = strip_tags(urldecode($request->query->get('search')))) {
       $tokens = self::getTokens($search_string);
       // Is this and "and" or "or" text search?
@@ -131,7 +135,7 @@ class CorpusSearch extends ControllerBase {
     // This runs after the frequency data to take advantage of the
     // updated $tokens, if any, from a lemma search.
     $results['search_results'] = Excerpt::getExcerpts($matching_texts, $excerpt_tokens, $facet_map, 20);
-
+    \Drupal::cache()->set($cache_id, $results, CacheBackendInterface::CACHE_PERMANENT);
     return $results;
   }
 
@@ -233,6 +237,14 @@ class CorpusSearch extends ControllerBase {
       }
     }
     return $result;
+  }
+
+  /**
+   * Helper function to get a specific cache id.
+   */
+  private static function getCacheString($request) {
+    $cachestring = 'corpus_search_output_' . $request->getRequestUri();
+    return md5($cachestring);
   }
 
   /**
