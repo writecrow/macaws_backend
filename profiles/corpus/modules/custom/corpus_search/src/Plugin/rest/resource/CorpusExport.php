@@ -5,6 +5,7 @@ namespace Drupal\corpus_search\Plugin\rest\resource;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\corpus_search\Controller\CorpusSearch as Corpus;
+use Drupal\corpus_search\Excerpt;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,14 +17,14 @@ use Psr\Log\LoggerInterface;
  * This is modeled on https://www.drupal.org/project/drupal/issues/2884721.
  *
  * @RestResource(
- *   id = "corpus_search",
- *   label = @Translation("Corpus search"),
+ *   id = "corpus_export",
+ *   label = @Translation("Corpus export"),
  *   uri_paths = {
- *     "canonical" = "/corpus"
+ *     "canonical" = "/corpus/export"
  *   }
  * )
  */
-class CorpusSearch extends ResourceBase {
+class CorpusExport extends ResourceBase {
 
   /**
    * A curent user instance.
@@ -88,10 +89,9 @@ class CorpusSearch extends ResourceBase {
    *   Throws exception expected.
    */
   public function get($type = NULL) {
-    $data = Corpus::getSearchResults($this->currentRequest);
-    // Used to verify caching:
-    // $data['timestamp'] = time();
-    $response = new ResourceResponse($data);
+    $data = Corpus::search($this->currentRequest);
+    $output = Excerpt::getExcerpts($data['matching_texts'], $data['tokens'], $data['facet_map'], 20);
+    $response = new ResourceResponse($output);
     $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }

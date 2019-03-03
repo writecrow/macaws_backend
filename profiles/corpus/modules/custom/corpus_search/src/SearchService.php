@@ -2,8 +2,6 @@
 
 namespace Drupal\corpus_search;
 
-use Drupal\Core\Cache\CacheBackendInterface;
-
 /**
  * Class SearchService.
  *
@@ -52,7 +50,7 @@ class SearchService {
           $word_matches = $word_matches + $insensitive;
         }
       }
-      \Drupal::cache()->set($cache_id, $word_matches, CacheBackendInterface::CACHE_PERMANENT);
+      \Drupal::cache()->set($cache_id, $word_matches, REQUEST_TIME + (2500000));
     }
 
     // Get the IDs of texts that match the search conditions,
@@ -191,7 +189,7 @@ class SearchService {
       $query = self::applyConditions($query, $conditions);
     }
     $results = $query->execute()->fetchCol();
-    \Drupal::cache()->set($cache_id, $results, CacheBackendInterface::CACHE_PERMANENT);
+    \Drupal::cache()->set($cache_id, $results, REQUEST_TIME + (2500000));
     return $results;
   }
 

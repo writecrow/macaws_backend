@@ -10,7 +10,6 @@ use Drupal\corpus_search\CorpusLemmaFrequency;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Component\Utility\Xss;
 
 /**
@@ -21,11 +20,14 @@ use Drupal\Component\Utility\Xss;
 class CorpusSearch extends ControllerBase {
 
   /**
-   * The Controller endpoint.
+   * The Controller endpoint -- for testing purposes.
+   *
+   * The actual REST endpoint is
+   * Drupal\corpus_search\Plugin\rest\resource\CorpusSearch.
    */
-  public function endpoint(Request $request) {
+  public static function endpoint(Request $request) {
     // Response.
-    $results = self::search($request);
+    $results = self::getSearchResults($request);
     $response = new CacheableJsonResponse([], 200);
     // $response = new JsonResponse([], 200); .
     $response->setContent(json_encode($results));
@@ -35,18 +37,29 @@ class CorpusSearch extends ControllerBase {
   }
 
   /**
+   * The main function used for generating data.
+   *
+   * Provides an array of data for search results output & for CSV exporting.
+   */
+  public static function getSearchResults(Request $request) {
+    // Check for presence of cached data.
+    $cache_id = self::getCacheString($request);
+    if ($cache = \Drupal::cache()->get($cache_id) && $cache->expire > time()) {
+      return $cache->data;
+    }
+    $search_data = self::search($request);
+    \Drupal::cache()->set($cache_id, $search_data['output'], REQUEST_TIME + (2500000));
+    return $search_data['output'];
+  }
+
+  /**
    * Given a search string in query parameters, return full results.
    */
-  public function search(Request $request) {
+  public static function search(Request $request) {
     // @todo: limit facet map to just Text matches (& cache?).
     $facet_map = TextMetadata::getFacetMap();
     // Get all facet/filter conditions.
     $conditions = self::getConditions($request->query->all(), $facet_map);
-    // Check for presence of cached data.
-    $cache_id = self::getCacheString($request);
-    if ($cache = \Drupal::cache()->get($cache_id)) {
-      return $cache->data;
-    }
     $all_texts_metadata = TextMetadata::getAll();
     $ratio = 1;
     $token_data = [];
@@ -135,8 +148,12 @@ class CorpusSearch extends ControllerBase {
     // This runs after the frequency data to take advantage of the
     // updated $tokens, if any, from a lemma search.
     $results['search_results'] = Excerpt::getExcerpts($matching_texts, $excerpt_tokens, $facet_map, 20);
-    \Drupal::cache()->set($cache_id, $results, CacheBackendInterface::CACHE_PERMANENT);
-    return $results;
+    // Build the output for use in the search data and for CSV exporting.
+    $search_results['output'] = $results;
+    $search_results['matching_texts'] = $matching_texts;
+    $search_results['tokens'] = $excerpt_tokens;
+    $search_results['facet_map'] = $facet_map;
+    return $search_results;
   }
 
   /**

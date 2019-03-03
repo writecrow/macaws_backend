@@ -2,8 +2,6 @@
 
 namespace Drupal\corpus_search;
 
-use Drupal\Core\Cache\CacheBackendInterface;
-
 /**
  * Class SearchService.
  *
@@ -73,7 +71,7 @@ class TextMetadata {
         $texts[$result->nid] = self::populateTextMetadata($result);
       }
     }
-    \Drupal::cache()->set($cache_id, $texts, CacheBackendInterface::CACHE_PERMANENT);
+    \Drupal::cache()->set($cache_id, $texts, REQUEST_TIME + (2500000));
     return $texts;
   }
 
