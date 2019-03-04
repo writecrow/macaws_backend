@@ -209,6 +209,10 @@ class SearchService {
       $query->fields('id', ['field_id_value']);
       $query->condition('id.field_id_value', $conditions['id'], '=');
     }
+    if (isset($conditions['toefl_total_min']) || isset($conditions['toefl_total_max'])) {
+      $query->join('node__field_toefl_total', 'tt', 'n.nid = tt.entity_id');
+      $query->fields('tt', ['field_toefl_total_value']);
+    }
     if (isset($conditions['toefl_total_min'])) {
       $query->condition('tt.field_toefl_total_value', (int) $conditions['toefl_total_min'], '>=');
     }
