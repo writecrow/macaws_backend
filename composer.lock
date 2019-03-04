@@ -6489,12 +6489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/highlighter.git",
-                "reference": "69b5c8e6f5725b9862c40457d7c0a40c2317414e"
+                "reference": "61d862c1600f2886751582d2d2620241b9f227ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/69b5c8e6f5725b9862c40457d7c0a40c2317414e",
-                "reference": "69b5c8e6f5725b9862c40457d7c0a40c2317414e",
+                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/61d862c1600f2886751582d2d2620241b9f227ea",
+                "reference": "61d862c1600f2886751582d2d2620241b9f227ea",
                 "shasum": ""
             },
             "type": "library",
@@ -6517,7 +6517,7 @@
                 }
             ],
             "description": "Highlights words/phrases per specified parameters",
-            "time": "2019-03-03T21:29:19+00:00"
+            "time": "2019-03-04T03:42:04+00:00"
         },
         {
             "name": "writecrow/lorem_gutenberg",
