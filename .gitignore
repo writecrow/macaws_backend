@@ -1,5 +1,7 @@
 # Production environment files
 php_errorlog
+private.key
+public.key
 
 # "Built" components
 composer.lock

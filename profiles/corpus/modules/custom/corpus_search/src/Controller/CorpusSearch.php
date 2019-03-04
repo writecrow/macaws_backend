@@ -132,7 +132,7 @@ class CorpusSearch extends ControllerBase {
         if ($method == 'lemma') {
           $lemma = CorpusLemmaFrequency::lemmatize($t);
           $variants = CorpusLemmaFrequency::getVariants($lemma);
-          $excerpt_tokens = $excerpt_tokens + $variants;
+          $excerpt_tokens = array_merge($excerpt_tokens, $variants);
           $t = implode('/', $variants);
         }
         $results['frequency']['tokens'][$t]['raw'] = $individual_data['instance_count'];
