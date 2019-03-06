@@ -47,7 +47,11 @@ class SearchService {
           }
           $result = $query->execute()->fetchAssoc();
           $insensitive = self::arrangeTextCountResults($result['ids']);
-          $word_matches = $word_matches + $insensitive;
+          $sums = [];
+          foreach (array_keys($word_matches + $insensitive) as $key) {
+              $sums[$key] = (isset($word_matches[$key]) ? $word_matches[$key] : 0) + (isset($insensitive[$key]) ? $insensitive[$key] : 0);
+          }
+          $word_matches = $sums;
         }
       }
       \Drupal::cache()->set($cache_id, $word_matches, REQUEST_TIME + (2500000));
