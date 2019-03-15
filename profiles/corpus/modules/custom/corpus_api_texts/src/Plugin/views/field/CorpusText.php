@@ -54,7 +54,7 @@ class CorpusText extends FieldPluginBase {
     $entity = $values->_entity;
     $text_object = $entity->get('field_body')->getValue();
     $user = User::load(\Drupal::currentUser()->id());
-    $text = strip_tags($text_object[0]['value']);
+    $text = htmlentities(strip_tags($text_object[0]['value'], "<name><date><place>"));
 
     if ($user->hasRole('full_text_access')) {
       return nl2br($text);
