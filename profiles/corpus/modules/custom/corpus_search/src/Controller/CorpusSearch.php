@@ -60,6 +60,7 @@ class CorpusSearch extends ControllerBase {
     $facet_map = TextMetadata::getFacetMap();
     // Get all facet/filter conditions.
     $conditions = self::getConditions($request->query->all(), $facet_map);
+    $offset = $request->query->get('offset') ?? 0;
     $all_texts_metadata = TextMetadata::getAll();
     $ratio = 1;
     $token_data = [];
@@ -147,7 +148,7 @@ class CorpusSearch extends ControllerBase {
     }
     // This runs after the frequency data to take advantage of the
     // updated $tokens, if any, from a lemma search.
-    $results['search_results'] = Excerpt::getExcerpts($matching_texts, $excerpt_tokens, $facet_map, 20);
+    $results['search_results'] = Excerpt::getExcerpts($matching_texts, $excerpt_tokens, $facet_map, 20, $offset);
     // Build the output for use in the search data and for CSV exporting.
     $search_results['output'] = $results;
     $search_results['matching_texts'] = $matching_texts;

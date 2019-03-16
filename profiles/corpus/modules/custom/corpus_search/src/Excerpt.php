@@ -19,7 +19,7 @@ class Excerpt {
    * @param string[] $tokens
    *   The words/phrases to be highlighted.
    */
-  public static function getExcerpts(array $matching_texts, array $tokens, $facet_map, $limit = 20) {
+  public static function getExcerpts(array $matching_texts, array $tokens, $facet_map, $limit = 20, $offset = 0) {
     if (empty($matching_texts)) {
       return [];
     }
@@ -27,7 +27,7 @@ class Excerpt {
     $query = $connection->select('node__field_body', 'n')
       ->fields('n', ['entity_id', 'field_body_value'])
       ->condition('n.entity_id', array_keys($matching_texts), 'IN');
-    $query->range(0, $limit);
+    $query->range($offset, $limit);
     $results = $query->execute()->fetchAllKeyed();
     $sliced_matches = array_intersect_key($matching_texts, $results);
     foreach ($sliced_matches as $id => $metadata) {
