@@ -49,7 +49,7 @@ class SearchService {
           $insensitive = self::arrangeTextCountResults($result['ids']);
           $sums = [];
           foreach (array_keys($word_matches + $insensitive) as $key) {
-              $sums[$key] = (isset($word_matches[$key]) ? $word_matches[$key] : 0) + (isset($insensitive[$key]) ? $insensitive[$key] : 0);
+            $sums[$key] = (isset($word_matches[$key]) ? $word_matches[$key] : 0) + (isset($insensitive[$key]) ? $insensitive[$key] : 0);
           }
           $word_matches = $sums;
         }
@@ -142,7 +142,7 @@ class SearchService {
     }
     $rstart = self::$regex{$first}['start'];
     $rend = self::$regex{$last}['end'];
-    preg_match_all($rstart . $phrase . $rend, $text, $matches);
+    preg_match_all($rstart . preg_quote($phrase) . $rend, $text, $matches);
     if (isset($matches[0])) {
       return count($matches[0]);
     }
