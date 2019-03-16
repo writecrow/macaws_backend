@@ -306,16 +306,16 @@
         },
         {
             "name": "consolidation/annotated-command",
-            "version": "2.11.2",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/annotated-command.git",
-                "reference": "004af26391cd7d1cd04b0ac736dc1324d1b4f572"
+                "reference": "512a2e54c98f3af377589de76c43b24652bcb789"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/004af26391cd7d1cd04b0ac736dc1324d1b4f572",
-                "reference": "004af26391cd7d1cd04b0ac736dc1324d1b4f572",
+                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/512a2e54c98f3af377589de76c43b24652bcb789",
+                "reference": "512a2e54c98f3af377589de76c43b24652bcb789",
                 "shasum": ""
             },
             "require": {
@@ -398,20 +398,20 @@
                 }
             ],
             "description": "Initialize Symfony Console commands from annotated command class methods.",
-            "time": "2019-02-02T02:29:53+00:00"
+            "time": "2019-03-08T16:55:03+00:00"
         },
         {
             "name": "consolidation/output-formatters",
-            "version": "3.4.0",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/output-formatters.git",
-                "reference": "a942680232094c4a5b21c0b7e54c20cce623ae19"
+                "reference": "0881112642ad9059071f13f397f571035b527cb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/output-formatters/zipball/a942680232094c4a5b21c0b7e54c20cce623ae19",
-                "reference": "a942680232094c4a5b21c0b7e54c20cce623ae19",
+                "url": "https://api.github.com/repos/consolidation/output-formatters/zipball/0881112642ad9059071f13f397f571035b527cb9",
+                "reference": "0881112642ad9059071f13f397f571035b527cb9",
                 "shasum": ""
             },
             "require": {
@@ -421,11 +421,10 @@
                 "symfony/finder": "^2.5|^3|^4"
             },
             "require-dev": {
-                "g1a/composer-test-scenarios": "^2",
+                "g1a/composer-test-scenarios": "^3",
+                "php-coveralls/php-coveralls": "^1",
                 "phpunit/phpunit": "^5.7.27",
-                "satooshi/php-coveralls": "^2",
                 "squizlabs/php_codesniffer": "^2.7",
-                "symfony/console": "3.2.3",
                 "symfony/var-dumper": "^2.8|^3|^4",
                 "victorjonsson/markdowndocs": "^1.3"
             },
@@ -434,6 +433,52 @@
             },
             "type": "library",
             "extra": {
+                "scenarios": {
+                    "symfony4": {
+                        "require": {
+                            "symfony/console": "^4.0"
+                        },
+                        "require-dev": {
+                            "phpunit/phpunit": "^6"
+                        },
+                        "config": {
+                            "platform": {
+                                "php": "7.1.3"
+                            }
+                        }
+                    },
+                    "symfony3": {
+                        "require": {
+                            "symfony/console": "^3.4",
+                            "symfony/finder": "^3.4",
+                            "symfony/var-dumper": "^3.4"
+                        },
+                        "config": {
+                            "platform": {
+                                "php": "5.6.32"
+                            }
+                        }
+                    },
+                    "symfony2": {
+                        "require": {
+                            "symfony/console": "^2.8"
+                        },
+                        "require-dev": {
+                            "phpunit/phpunit": "^4.8.36"
+                        },
+                        "remove": [
+                            "php-coveralls/php-coveralls"
+                        ],
+                        "config": {
+                            "platform": {
+                                "php": "5.4.8"
+                            }
+                        },
+                        "scenario-options": {
+                            "create-lockfile": "false"
+                        }
+                    }
+                },
                 "branch-alias": {
                     "dev-master": "3.x-dev"
                 }
@@ -454,7 +499,7 @@
                 }
             ],
             "description": "Format text by applying transformations provided by plug-in formatters.",
-            "time": "2018-10-19T22:35:38+00:00"
+            "time": "2019-03-14T03:45:44+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -1615,16 +1660,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "8.6.10",
+            "version": "8.6.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "59568ac02948cf075ee8543e6c6d4386ad8daec1"
+                "reference": "f81e50dd6145c1d35797eb522f841a96804e9869"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/59568ac02948cf075ee8543e6c6d4386ad8daec1",
-                "reference": "59568ac02948cf075ee8543e6c6d4386ad8daec1",
+                "url": "https://api.github.com/repos/drupal/core/zipball/f81e50dd6145c1d35797eb522f841a96804e9869",
+                "reference": "f81e50dd6145c1d35797eb522f841a96804e9869",
                 "shasum": ""
             },
             "require": {
@@ -1667,7 +1712,7 @@
                 "symfony/translation": "~3.4.0",
                 "symfony/validator": "~3.4.0",
                 "symfony/yaml": "~3.4.5",
-                "twig/twig": "^1.35.0",
+                "twig/twig": "^1.38.2",
                 "typo3/phar-stream-wrapper": "^2.0.1",
                 "zendframework/zend-diactoros": "^1.1",
                 "zendframework/zend-feed": "^2.4"
@@ -1850,7 +1895,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2019-02-20T18:35:01+00:00"
+            "time": "2019-03-14T22:08:21+00:00"
         },
         {
             "name": "drupal/csv_serialization",
@@ -2591,20 +2636,20 @@
         },
         {
             "name": "drush/drush",
-            "version": "8.1.18",
+            "version": "8.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "799e4135ad7161f1a4668164ff8a6e5bcd779fc7"
+                "reference": "76b4cf0e7ced91790b9c9a7053fa3e9f04fc69e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/799e4135ad7161f1a4668164ff8a6e5bcd779fc7",
-                "reference": "799e4135ad7161f1a4668164ff8a6e5bcd779fc7",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/76b4cf0e7ced91790b9c9a7053fa3e9f04fc69e3",
+                "reference": "76b4cf0e7ced91790b9c9a7053fa3e9f04fc69e3",
                 "shasum": ""
             },
             "require": {
-                "consolidation/annotated-command": "^2.9.1",
+                "consolidation/annotated-command": "^2.12.0",
                 "consolidation/output-formatters": "~3",
                 "pear/console_table": "~1.3.1",
                 "php": ">=5.4.5",
@@ -2615,6 +2660,7 @@
                 "symfony/finder": "~2.7|^3",
                 "symfony/var-dumper": "~2.7|^3",
                 "symfony/yaml": "~2.3|^3",
+                "webflo/drupal-finder": "^1.1.0",
                 "webmozart/path-util": "~2"
             },
             "require-dev": {
@@ -2696,7 +2742,7 @@
             ],
             "description": "Drush is a command line shell and scripting interface for Drupal, a veritable Swiss Army knife designed to make life easier for those of us who spend some of our working hours hacking away at the command prompt.",
             "homepage": "http://www.drush.org",
-            "time": "2018-11-21T22:57:06+00:00"
+            "time": "2019-03-14T03:57:03+00:00"
         },
         {
             "name": "easyrdf/easyrdf",
@@ -6006,31 +6052,31 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.35.4",
+            "version": "v1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "7e081e98378a1e78c29cc9eba4aefa5d78a05d2a"
+                "reference": "874adbd9222f928f6998732b25b01b41dff15b0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/7e081e98378a1e78c29cc9eba4aefa5d78a05d2a",
-                "reference": "7e081e98378a1e78c29cc9eba4aefa5d78a05d2a",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/874adbd9222f928f6998732b25b01b41dff15b0c",
+                "reference": "874adbd9222f928f6998732b25b01b41dff15b0c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
+                "php": ">=5.4.0",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "require-dev": {
                 "psr/container": "^1.0",
                 "symfony/debug": "^2.7",
-                "symfony/phpunit-bridge": "^3.3"
+                "symfony/phpunit-bridge": "^3.4.19|^4.1.8"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.35-dev"
+                    "dev-master": "1.38-dev"
                 }
             },
             "autoload": {
@@ -6068,7 +6114,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2018-07-13T07:12:17+00:00"
+            "time": "2019-03-12T18:45:24+00:00"
         },
         {
             "name": "typo3/phar-stream-wrapper",
@@ -6163,7 +6209,7 @@
         },
         {
             "name": "webflo/drupal-core-strict",
-            "version": "8.6.10",
+            "version": "8.6.12",
             "require": {
                 "asm89/stack-cors": "1.2.0",
                 "composer/installers": "v1.5.0",
@@ -6204,7 +6250,7 @@
                 "symfony/translation": "v3.4.15",
                 "symfony/validator": "v3.4.15",
                 "symfony/yaml": "v3.4.15",
-                "twig/twig": "v1.35.4",
+                "twig/twig": "v1.38.2",
                 "typo3/phar-stream-wrapper": "v2.0.1",
                 "wikimedia/composer-merge-plugin": "v1.4.1",
                 "zendframework/zend-diactoros": "1.4.1",
@@ -6253,7 +6299,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Locked core dependencies",
-            "time": "2019-02-20T20:00:51+00:00"
+            "time": "2019-03-14T22:30:44+00:00"
         },
         {
             "name": "webflo/drupal-finder",
@@ -6489,12 +6535,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/highlighter.git",
-                "reference": "61d862c1600f2886751582d2d2620241b9f227ea"
+                "reference": "00c9f429cd8149984712bbe031b8c04ee8b0ae4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/61d862c1600f2886751582d2d2620241b9f227ea",
-                "reference": "61d862c1600f2886751582d2d2620241b9f227ea",
+                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/00c9f429cd8149984712bbe031b8c04ee8b0ae4d",
+                "reference": "00c9f429cd8149984712bbe031b8c04ee8b0ae4d",
                 "shasum": ""
             },
             "type": "library",
@@ -6517,7 +6563,7 @@
                 }
             ],
             "description": "Highlights words/phrases per specified parameters",
-            "time": "2019-03-04T03:42:04+00:00"
+            "time": "2019-03-15T22:51:46+00:00"
         },
         {
             "name": "writecrow/lorem_gutenberg",
