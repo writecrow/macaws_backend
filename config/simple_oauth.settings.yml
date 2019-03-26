@@ -3,5 +3,5 @@ refresh_token_expiration: 1209600
 remember_clients: true
 _core:
   default_config_hash: iIf5HmjnxW8tLdod1EQ19q4RQ5mkg-r5wBn2QFmitr8
-public_key: public.key
-private_key: private.key
+public_key: /home/markfull/public.key
+private_key: /home/markfull/private.key
