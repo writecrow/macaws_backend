@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8cf17a34fcf4f39f09b8c1ff29da9695",
+    "content-hash": "5e4b773eac19e19b6a4bfc43ba1618e5",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -2285,6 +2285,61 @@
             "homepage": "https://www.drupal.org/project/restui",
             "support": {
                 "source": "http://cgit.drupalcode.org/restui"
+            }
+        },
+        {
+            "name": "drupal/role_delegation",
+            "version": "1.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/role_delegation",
+                "reference": "8.x-1.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/role_delegation-8.x-1.0-alpha1.zip",
+                "reference": "8.x-1.0-alpha1",
+                "shasum": "f49edc6cfe2270358f58e3a72519e501dd0423e2"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-alpha1",
+                    "datestamp": "1459597139",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Schulman",
+                    "homepage": "https://www.drupal.org/user/279446"
+                },
+                {
+                    "name": "David Lesieur",
+                    "homepage": "https://www.drupal.org/user/17157"
+                },
+                {
+                    "name": "benjy",
+                    "homepage": "https://www.drupal.org/user/1852732"
+                }
+            ],
+            "description": "Allows site administrators to grant some roles the authority to assign selected roles to users.",
+            "homepage": "https://www.drupal.org/project/role_delegation",
+            "support": {
+                "source": "http://cgit.drupalcode.org/role_delegation"
             }
         },
         {
@@ -6971,7 +7026,8 @@
         "drupal/views_data_export": 10,
         "drupal/xhprof": 20,
         "drupal/rabbit_hole": 10,
-        "writecrow/highlighter": 20
+        "writecrow/highlighter": 20,
+        "drupal/role_delegation": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,

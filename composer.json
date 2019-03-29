@@ -37,7 +37,8 @@
     "drupal/rabbit_hole": "^1.0@beta",
     "writecrow/highlighter": "dev-master",
     "drupal/adminimal_theme": "^1.4",
-    "drupal/userprotect": "^1.0"
+    "drupal/userprotect": "^1.0",
+    "drupal/role_delegation": "^1.0@alpha"
   },
   "conflict": {
     "drupal/drupal": "*"

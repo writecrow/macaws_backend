@@ -191,6 +191,19 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
+          action_title: Action
+          include_exclude: include
+          selected_actions:
+            - user_add_role_action.basic_search_access
+            - user_add_role_action.export_access
+            - user_add_role_action.full_text_access
+            - user_add_role_action.manager
+            - user_block_user_action
+            - user_remove_role_action.basic_search_access
+            - user_remove_role_action.export_access
+            - user_remove_role_action.full_text_access
+            - user_remove_role_action.manager
+            - user_unblock_user_action
           plugin_id: user_bulk_form
           entity_type: user
         name:
@@ -709,46 +722,6 @@ display:
             group_items: {  }
           reduce_duplicates: false
           plugin_id: user_roles
-        permission:
-          id: permission
-          table: user__roles
-          field: permission
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: permission_op
-            label: Permission
-            description: ''
-            use_operator: false
-            operator: permission_op
-            identifier: permission
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          plugin_id: user_permissions
         default_langcode:
           id: default_langcode
           table: users_field_data
@@ -827,6 +800,49 @@ display:
             group_items: {  }
           plugin_id: numeric
           entity_type: user
+        uid_raw_1:
+          id: uid_raw_1
+          table: users_field_data
+          field: uid_raw
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '!='
+          value:
+            min: ''
+            max: ''
+            value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: ''
+            min_placeholder: ''
+            max_placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: user
+          plugin_id: numeric
       sorts:
         created:
           id: created
@@ -900,7 +916,6 @@ display:
         type: normal
         title: People
         description: 'Manage user accounts, roles, and permissions.'
-        menu_name: admin
         weight: 0
       defaults:
         show_admin_links: false

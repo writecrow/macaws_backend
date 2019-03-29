@@ -1308,6 +1308,7 @@ display:
           quantity: 9
       cache:
         type: none
+        options: {  }
       auth:
         - oauth2
     cache_metadata:
