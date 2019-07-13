@@ -4,6 +4,8 @@ dependencies:
   config:
     - field.storage.node.body
     - node.type.page
+    - user.role.anonymous
+    - user.role.authenticated
   module:
     - node
     - rest
@@ -26,9 +28,11 @@ display:
     position: 0
     display_options:
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content'
+          role:
+            anonymous: anonymous
+            authenticated: authenticated
       cache:
         type: tag
         options: {  }
@@ -327,26 +331,7 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.permissions
-      tags:
-        - 'config:field.storage.node.body'
-  page_1:
-    display_plugin: page
-    id: page_1
-    display_title: Page
-    position: 1
-    display_options:
-      display_extenders: {  }
-      path: pages
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-        - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.body'
   rest_export_1:
@@ -382,6 +367,8 @@ display:
         options:
           items_per_page: 1
           offset: 0
+      auth:
+        - oauth2
     cache_metadata:
       max-age: -1
       contexts:
@@ -390,6 +377,6 @@ display:
         - request_format
         - url
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.body'

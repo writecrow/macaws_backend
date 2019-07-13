@@ -1,5 +1,5 @@
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - field.storage.node.field_body
@@ -12,6 +12,7 @@ dependencies:
     - field.storage.node.field_wordcount
     - search_api.index.text_index_by_word
     - user.role.authenticated
+    - user.role.basic_search_access
   module:
     - corpus_api_texts
     - csv_serialization
@@ -37,9 +38,10 @@ display:
     position: 0
     display_options:
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content'
+          role:
+            basic_search_access: basic_search_access
       cache:
         type: tag
         options: {  }
@@ -1754,7 +1756,7 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1812,6 +1814,8 @@ display:
         options:
           role:
             authenticated: authenticated
+      auth:
+        - oauth2
     cache_metadata:
       max-age: -1
       contexts:
@@ -1848,7 +1852,7 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1964,6 +1968,8 @@ display:
           quantity: 9
       cache:
         type: none
+      auth:
+        - oauth2
     cache_metadata:
       max-age: -1
       contexts:
@@ -1972,7 +1978,7 @@ display:
         - request_format
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'

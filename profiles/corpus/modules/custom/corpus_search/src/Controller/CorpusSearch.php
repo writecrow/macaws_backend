@@ -227,7 +227,7 @@ class CorpusSearch extends ControllerBase {
   /**
    * Determine which type of search to perform.
    */
-  protected static function getTokens($search_string) {
+  public static function getTokens($search_string) {
     $result = [];
     $tokens = preg_split("/\"[^\"]*\"(*SKIP)(*F)|[ \/]+/", $search_string);
     if (!empty($tokens)) {

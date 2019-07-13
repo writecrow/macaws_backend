@@ -25,4 +25,12 @@ function corpus_api_texts_views_data_alter(array &$data) {
       'id' => 'corpus_text',
     ),
   );
+  $data['node']['highlighted_repository_text'] = array(
+    'title' => t('Highlighted text based on query parameters'),
+    'field' => array(
+      'title' => t('Highlighted Repository Text'),
+      'help' => t('Returns highlighted repository text'),
+      'id' => 'repository_highlighted',
+    ),
+  );
 }

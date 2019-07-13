@@ -6,6 +6,8 @@ dependencies:
     - field.storage.node.field_filename
     - field.storage.node.field_raw_text
     - search_api.index.resource_index
+    - user.role.basic_search_access
+    - user.role.full_text_access
   module:
     - corpus_api_texts
     - file
@@ -30,9 +32,11 @@ display:
     position: 0
     display_options:
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content'
+          role:
+            full_text_access: full_text_access
+            basic_search_access: basic_search_access
       cache:
         type: search_api_tag
         options: {  }
@@ -1186,7 +1190,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_file'
         - 'config:field.storage.node.field_filename'
@@ -1210,7 +1214,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_file'
         - 'config:field.storage.node.field_filename'
@@ -1303,6 +1307,9 @@ display:
           quantity: 9
       cache:
         type: none
+        options: {  }
+      auth:
+        - oauth2
     cache_metadata:
       max-age: -1
       contexts:
@@ -1311,7 +1318,7 @@ display:
         - request_format
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_file'
         - 'config:field.storage.node.field_filename'

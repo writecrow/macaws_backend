@@ -1,5 +1,5 @@
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - field.storage.node.field_body
@@ -11,6 +11,7 @@ dependencies:
     - field.storage.node.field_toefl_writing
     - field.storage.node.field_wordcount
     - search_api.index.text_index_by_lemma
+    - user.role.basic_search_access
   module:
     - corpus_api_texts
     - csv_serialization
@@ -36,9 +37,10 @@ display:
     position: 0
     display_options:
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content'
+          role:
+            basic_search_access: basic_search_access
       cache:
         type: search_api_tag
         options: {  }
@@ -1753,7 +1755,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1803,7 +1805,7 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1828,7 +1830,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
@@ -1945,6 +1947,8 @@ display:
       cache:
         type: search_api_tag
         options: {  }
+      auth:
+        - oauth2
     cache_metadata:
       max-age: -1
       contexts:
@@ -1953,7 +1957,7 @@ display:
         - request_format
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_body'
         - 'config:field.storage.node.field_id'
