@@ -25,12 +25,14 @@ dependencies:
     - taxonomy.vocabulary.assignment
     - taxonomy.vocabulary.course
     - taxonomy.vocabulary.institution
+    - taxonomy.vocabulary.instructor
     - taxonomy.vocabulary.semester
     - taxonomy.vocabulary.year
     - user.role.basic_search_access
     - user.role.full_text_access
   module:
     - corpus_api_texts
+    - csv_serialization
     - node
     - rest
     - serialization
@@ -1787,19 +1789,56 @@ display:
           hierarchy: false
           error_message: true
           plugin_id: taxonomy_index_tid
-      sorts:
-        random:
-          id: random
-          table: views
-          field: random
+        field_instructor_target_id:
+          id: field_instructor_target_id
+          table: node__field_instructor
+          field: field_instructor_target_id
           relationship: none
           group_type: group
           admin_label: ''
-          order: ASC
-          exposed: false
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
           expose:
+            operator_id: field_instructor_target_id_op
+            label: 'Instructor (field_instructor)'
+            description: ''
+            use_operator: false
+            operator: field_instructor_target_id_op
+            identifier: field_instructor_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              full_text_access: '0'
+              basic_search_access: '0'
+              export_access: '0'
+              manager: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
             label: ''
-          plugin_id: random
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: select
+          limit: true
+          vid: instructor
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
+      sorts: {  }
       title: 'Corpus by Metadata'
       header: {  }
       footer: {  }
@@ -1808,7 +1847,7 @@ display:
       arguments: {  }
       display_extenders: {  }
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -1858,7 +1897,7 @@ display:
           separator: ''
           hide_empty: false
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -1896,6 +1935,11 @@ display:
       path: corpus/metadata
       style:
         type: serializer
+        options:
+          formats:
+            csv: csv
+            json: json
+            xml: xml
       defaults:
         style: false
         row: false
@@ -1977,7 +2021,7 @@ display:
       auth:
         - oauth2
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'

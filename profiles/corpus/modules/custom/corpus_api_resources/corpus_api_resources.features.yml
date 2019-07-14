@@ -1,3 +1,1 @@
-excluded:
-  - views.view.resources_by_attribute
 required: true

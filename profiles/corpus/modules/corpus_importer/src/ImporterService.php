@@ -6,7 +6,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
-use markfullmer\TagConverter\TagConverter;
+use writecrow\TagConverter\TagConverter;
 use writecrow\LoremGutenberg\LoremGutenberg;
 use writecrow\CountryCodeConverter\CountryCodeConverter;
 
@@ -18,45 +18,48 @@ use writecrow\CountryCodeConverter\CountryCodeConverter;
 class ImporterService {
 
   public static $assignments = [
-    "IR" => "Interview Report",
-    "LN" => "Literacy Narrative/Autobiography",
-    "RP" => "Research Proposal",
-    "SY" => "Literature Review",
-    "DE" => "Description and Explanation",
-    "RR" => "Register Rewrite",
-    "PA" => "Public Argument",
-    "PS" => "Position Argument",
-    "PO" => "Portfolio",
-    "RA" => "Rhetorical Analysis",
-    "CA" => "Controversy Analysis",
-    "VA" => "Variation Analysis",
-    "RF" => "Reflection",
-    "NR" => "Narrative",
-    "GA" => "Genre Analysis",
-    "PR" => "Profile",
     "AB" => "Annotated Bibliography",
-    "RP" => "Research Proposal",
-    "LR" => "Literature Review",
-    "OL" => "Open Letter",
-    "SR" => "Summary and Response",
-    "FA" => "Film Analysis",
-    "TA" => "Text Analysis",
     "AR" => "Argumentative Paper",
+    "CA" => "Controversy Analysis",
+    "CS" => "Case Study",
+    "DE" => "Description and Explanation",
+    "FA" => "Film Analysis",
+    "GA" => "Genre Analysis",
+    "GR" => "Genre Redesign",
+    "IR" => "Interview Report",
+    "LN" => "Literacy Narrative",
+    "LR" => "Literature Review",
+    "ME" => "Memo",
+    "NR" => "Narrative",
+    "OL" => "Open Letter",
+    "PA" => "Public Argument",
+    "PO" => "Portfolio",
+    "PR" => "Profile",
+    "PS" => "Position Argument",
     "RA" => "Rhetorical Analysis",
-    "AB" => "Annotated Bibliography",
+    "RE" => "Response",
+    "RF" => "Reflection/Portfolio",
+    "RR" => "Register Rewrite",
+    "RP" => "Research Proposal",
+    "SR" => "Summary and Response",
+    "SY" => "Synthesis",
+    "TA" => "Text Analysis",
+    "VA" => "Variation Analysis",
   ];
 
   public static $docTypes = [
+    "AC" => "Activity",
     "SL" => "Syllabus",
     "LP" => "Lesson Plan",
-    "AS" => "Assignment Sheet",
+    "AS" => "Assignment Sheet/Prompt",
     "RU" => "Rubric",
     "PF" => "Peer Review Form",
     "QZ" => "Quiz",
     "HO" => "Handout",
-    "AC" => "Activity Worksheet",
-    "SP" => "Sample Work",
-    "HD" => "Handout"
+    "SM" => "Supporting Material",
+    "SP" => "Sample Paper",
+    "HD" => "Handout",
+    "NA" => "Not specific to any major assignment",
   ];
 
   public static $countryFixes = [
@@ -66,6 +69,20 @@ class ImporterService {
     'TKY' => 'TUR',
     'BRZ' => 'BRA',
     'SDA' => 'SAU',
+  ];
+
+  public static $draftFixes = [
+    'D1' => '1',
+    'D2' => '2',
+    'D3' => '3',
+    'D4' => '4',
+    'DF' => 'F',
+  ];
+
+  public static $courseFixes = [
+    '106' => 'ENGL 106',
+    '107' => 'ENGL 107',
+    '108' => 'ENGL 108',
   ];
 
   public static $collegeSpecific = [
@@ -115,13 +132,21 @@ class ImporterService {
     if (PHP_SAPI == 'cli' && function_exists('drush_main')) {
       ini_set("memory_limit", "4096M");
       $paths = array_slice(scandir($files), 2);
+      $absolute_paths = [];
+      $repository_candidates = [];
       $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($files));
-      foreach ($objects as $name => $object) {
-        if (stripos($name, '.txt') !== FALSE) {
-          $absolute_paths[]['tmppath'] = $name;
+      foreach ($objects as $filepath => $object) {
+        if (stripos($filepath, '.txt') !== FALSE) {
+          $absolute_paths[]['tmppath'] = $filepath;
+        }
+        if (stripos($filepath, '.txt') === FALSE) {
+          $path_parts = pathinfo($filepath);
+          // Get a filelist of repository materials eligible for upload.
+          $repository_candidates[$path_parts['filename']] = $filepath;
         }
       }
       $texts = self::convert($absolute_paths);
+
       foreach ($texts as $text) {
         // Fix failures in corpus headers:
         if (empty($text['Institution'])) {
@@ -131,12 +156,11 @@ class ImporterService {
           $result = self::saveCorpusNode($text, $options);
         }
         if ($text['type'] == 'repository') {
-          $result = self::saveRepositoryNode($text, $options);
+          $result = self::saveRepositoryNode($text, $repository_candidates, $options);
         }
         if (isset($result['created'])) {
           echo $result['created'] . PHP_EOL;
         }
-
       }
     }
     else {
@@ -254,6 +278,8 @@ class ImporterService {
       'Course Semester' => 'semester',
       'Course Year' => 'year',
       'Year in School' => 'year_in_school',
+      'Year writing' => 'year',
+      'Semester writing' => 'semester',
     ];
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
@@ -265,11 +291,14 @@ class ImporterService {
           $save = FALSE;
         }
         if (in_array($machine_name, ['program', 'college'])) {
-          $multiples = preg_split("/\s?;\s?/", $text[$name]);
-          if (isset($multiples[1])) {
-            array_push($multiples, $text[$name]);
+          if (is_string($text[$name])) {
+            $multiples = preg_split("/\s?;\s?/", $text[$name]);
+            if (isset($multiples[1])) {
+              array_push($multiples, $text[$name]);
+              $text[$name] = $multiples;
+            }
+
           }
-          $text[$name] = $multiples;
         }
         if (in_array($machine_name, ['institution']) && empty($text['Institution'])) {
           $text['Institution'] = 'Purdue University';
@@ -281,6 +310,20 @@ class ImporterService {
           $assignment_code = $text['Assignment'];
           $text['Assignment'] = self::$assignments[$assignment_code];
         }
+        // Standardize draft names.
+        if ($machine_name == 'draft') {
+          if (in_array($text[$name], array_keys(self::$draftFixes))) {
+            $code = $text[$name];
+            $text[$name] = self::$draftFixes[$code];
+          }
+        }
+        // Standardize course names.
+        if ($machine_name == 'course') {
+          if (in_array($text[$name], array_keys(self::$courseFixes))) {
+            $code = $text[$name];
+            $text[$name] = self::$courseFixes[$code];
+          }
+        }  
         // Convert country IDs to readable names.
         if ($machine_name == 'country') {
           if (in_array($text[$name], array_keys(self::$countryFixes))) {
@@ -384,9 +427,9 @@ class ImporterService {
   /**
    * Helper function to save repository data.
    */
-  public static function saveRepositoryNode($text, $options = []) {
+  public static function saveRepositoryNode($text, $repository_candidates, $options = []) {
     // First check if we can find the file.
-    $file = self::uploadRepositoryResource($text['full_path']);
+    $file = self::uploadRepositoryResource($text['full_path'], $repository_candidates);
     if (!$file) {
       return ['file not found' => 'Corresponding file not found for' . $text['filename']];
     }
@@ -406,6 +449,7 @@ class ImporterService {
       'Course Semester' => 'semester',
       'Course Year' => 'year',
       'File Type' => 'file_type',
+      'Topic' => 'topic',
     ];
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
@@ -423,6 +467,15 @@ class ImporterService {
         if ($machine_name == 'assignment') {
           $assignment_code = $text['Assignment'];
           $text['Assignment'] = self::$assignments[$assignment_code];
+        }
+        if (in_array($machine_name, ['topic'])) {
+          if (is_string($text[$name])) {
+            $multiples = preg_split("/\s?;\s?/", $text[$name]);
+            if (isset($multiples[1])) {
+              array_push($multiples, $text[$name]);
+            }
+            $text[$name] = $multiples;
+          }
         }
         $tid = self::getTidByName($text[$name], $machine_name);
         if ($tid == 0) {
@@ -472,13 +525,20 @@ class ImporterService {
   /**
    * Utility: save file to backend.
    */
-  public static function uploadRepositoryResource($full_path) {
+  public static function uploadRepositoryResource($full_path, $repository_candidates) {
     $path_parts = pathinfo($full_path);
-    $path_parts['dirname'] = str_replace('/Text/', '/Original/', $path_parts['dirname']);
-    $original_wildcard = $path_parts['dirname'] . '/' . $path_parts['filename'] . '.*';
-    $original_file = glob($original_wildcard);
-    if (!empty($original_file[0])) {
-      $original_parts = pathinfo($original_file[0]);
+    if (in_array($path_parts['filename'], array_keys($repository_candidates))) {
+      $glob = glob($repository_candidates[$path_parts['filename']]);
+    }
+    else {
+      $path_parts['dirname'] = str_replace('/Text/', '/Original/', $path_parts['dirname']);
+      $original_wildcard = $path_parts['dirname'] . '/' . $path_parts['filename'] . '.*';
+      $glob = glob($original_wildcard);
+    }
+    if (!empty($glob[0])) {
+      $original_file = $glob[0];
+      print_r("Importing original file " . $original_file . PHP_EOL);
+      $original_parts = pathinfo($original_file);
       $file = File::create([
         'uid' => 1,
         'filename' => $original_parts['basename'],
@@ -486,10 +546,10 @@ class ImporterService {
         'status' => 1,
       ]);
       $file->save();
-      $file_content = file_get_contents($original_file[0]);
+      $file_content = file_get_contents($original_file);
       $directory = 'public://resources/';
       file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-      $file_image = file_save_data($file_content, $directory . basename($original_file[0]), FILE_EXISTS_REPLACE);
+      $file_saved = file_save_data($file_content, $directory . basename($original_file), FILE_EXISTS_REPLACE);
       return $file;
     }
     else {
