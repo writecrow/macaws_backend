@@ -1088,7 +1088,7 @@ display:
             description: ''
             use_operator: false
             operator: field_assignment_target_id_op
-            identifier: field_assignment_target_id
+            identifier: assignment
             required: false
             remember: false
             multiple: false
@@ -1114,7 +1114,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          type: select
+          type: textfield
           limit: true
           vid: assignment
           hierarchy: false
@@ -1137,7 +1137,7 @@ display:
             description: ''
             use_operator: false
             operator: field_course_target_id_op
-            identifier: field_course_target_id
+            identifier: course
             required: false
             remember: false
             multiple: false
@@ -1163,7 +1163,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          type: select
+          type: textfield
           limit: true
           vid: course
           hierarchy: false
@@ -1186,7 +1186,7 @@ display:
             description: ''
             use_operator: false
             operator: field_institution_target_id_op
-            identifier: field_institution_target_id
+            identifier: institution
             required: false
             remember: false
             multiple: false
@@ -1212,7 +1212,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          type: select
+          type: textfield
           limit: true
           vid: institution
           hierarchy: false
@@ -1235,7 +1235,7 @@ display:
             description: ''
             use_operator: false
             operator: field_semester_target_id_op
-            identifier: field_semester_target_id
+            identifier: semester
             required: false
             remember: false
             multiple: false
@@ -1261,7 +1261,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          type: select
+          type: textfield
           limit: true
           vid: semester
           hierarchy: false
@@ -1329,7 +1329,7 @@ display:
             description: ''
             use_operator: false
             operator: field_year_target_id_op
-            identifier: field_year_target_id
+            identifier: year
             required: false
             remember: false
             multiple: false
@@ -1355,7 +1355,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          type: select
+          type: textfield
           limit: true
           vid: year
           hierarchy: false
@@ -1378,7 +1378,7 @@ display:
             description: ''
             use_operator: false
             operator: field_instructor_target_id_op
-            identifier: field_instructor_target_id
+            identifier: instructor
             required: false
             remember: false
             multiple: false
@@ -1404,7 +1404,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          type: select
+          type: textfield
           limit: true
           vid: instructor
           hierarchy: false

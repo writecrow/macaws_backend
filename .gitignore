@@ -53,6 +53,7 @@ sites/simpletest
 
 # Ignore test data
 corpus_data
+2019_data
 
 # Packages #
 ############

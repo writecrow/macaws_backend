@@ -3,17 +3,18 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_assignment
-    - field.storage.node.field_course
     - field.storage.node.field_course_length
+    - field.storage.node.field_course
     - field.storage.node.field_document_type
     - field.storage.node.field_file
-    - field.storage.node.field_file_type
     - field.storage.node.field_filename
+    - field.storage.node.field_file_type
     - field.storage.node.field_institution
     - field.storage.node.field_instructor
     - field.storage.node.field_mode
     - field.storage.node.field_raw_text
     - field.storage.node.field_semester
+    - field.storage.node.field_topic
     - field.storage.node.field_year
     - search_api.server.corpus_database_server
   module:
@@ -154,6 +155,17 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_semester
+      module:
+        - taxonomy
+        - taxonomy
+  topic:
+    label: 'Topic » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_topic:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_topic
       module:
         - taxonomy
         - taxonomy
