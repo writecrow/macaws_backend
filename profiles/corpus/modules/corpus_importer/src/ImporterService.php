@@ -483,6 +483,9 @@ class ImporterService {
           $tid = self::getTidByName($text[$name], $machine_name);
         }
       }
+      else {
+        $save = FALSE;
+      }
       if ($save) {
         $fields[$machine_name] = $tid;
       }
