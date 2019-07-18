@@ -3,12 +3,12 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_assignment
-    - field.storage.node.field_course_length
     - field.storage.node.field_course
+    - field.storage.node.field_course_length
     - field.storage.node.field_document_type
     - field.storage.node.field_file
-    - field.storage.node.field_filename
     - field.storage.node.field_file_type
+    - field.storage.node.field_filename
     - field.storage.node.field_institution
     - field.storage.node.field_instructor
     - field.storage.node.field_mode

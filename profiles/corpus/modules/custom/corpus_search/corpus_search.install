@@ -45,7 +45,7 @@ function corpus_search_schema() {
       'ids' => [
         'type' => 'text',
         'not null' => FALSE,
-        'size' => 'normal',
+        'size' => 'big',
         'description' => 'Key-value of text ids & instance counts.',
       ],
     ],
