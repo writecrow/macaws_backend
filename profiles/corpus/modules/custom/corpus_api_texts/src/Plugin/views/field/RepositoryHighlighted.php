@@ -5,7 +5,7 @@ namespace Drupal\corpus_api_texts\Plugin\views\field;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
-use Drupal\corpus_search\Controller\CorpusSearch;
+use Drupal\corpus_search\CorpusWordFrequency as Frequency;
 use writecrow\Highlighter\HighlightExcerpt;
 
 /**
