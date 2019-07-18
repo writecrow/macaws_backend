@@ -58,10 +58,43 @@ class RepositoryHighlighted extends FieldPluginBase {
     $text = htmlentities(strip_tags($text_object[0]['value'], "<name><date><place>"));
     $param = \Drupal::request()->query->all();
     if (isset($param['search'])) {
-      $tokens = CorpusSearch::getTokens($param['search']);
+      $tokens = self::getTokens($param['search']);
       $text = HighlightExcerpt::highlight($text, array_keys($tokens), FALSE);
     }
     return nl2br($text);
+  }
+
+  /**
+   * Determine which type of search to perform.
+   */
+  public static function getTokens($search_string) {
+    $result = [];
+    $tokens = preg_split("/\"[^\"]*\"(*SKIP)(*F)|[ \/]+/", $search_string);
+    if (!empty($tokens)) {
+      // Determine whether to do a phrase or word search & case-sensitivity.
+      foreach ($tokens as $token) {
+        $length = strlen($token);
+        if ((substr($token, 0, 1) == '"') && (substr($token, $length - 1, 1) == '"')) {
+          $cleaned = substr($token, 1, $length - 2);
+          if (preg_match("/[^a-zA-Z]/", $cleaned)) {
+            // This is a quoted string. Do a phrasal search.
+            $result[$cleaned] = 'phrase';
+          }
+          else {
+            // This is a case-sensitive word search.
+            $result[$cleaned] = 'quoted-word';
+          }
+
+        }
+        else {
+          // This is a word. Remove punctuation.
+          $tokenized = Frequency::tokenize($token);
+          $token = $tokenized[0];
+          $result[strtolower($token)] = 'word';
+        }
+      }
+    }
+    return $result;
   }
 
 }
