@@ -1,4 +1,4 @@
-name: api
+name: macaws
 recipe: drupal8
 services:
   # Add in phpmyadmin

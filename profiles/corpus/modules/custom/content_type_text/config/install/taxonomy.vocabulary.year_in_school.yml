@@ -1,8 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: 'Year in School'
-vid: year_in_school
-description: ''
-hierarchy: 0
-weight: 0
