@@ -20,8 +20,6 @@ module:
   dynamic_page_cache: 0
   editor: 0
   entity_reference: 0
-  facets: 0
-  facets_rest: 0
   features: 0
   features_ui: 0
   field: 0
@@ -40,10 +38,6 @@ module:
   restui: 0
   rh_node: 0
   role_delegation: 0
-  search_api: 0
-  search_api_db: 0
-  search_api_lemma: 0
-  search_api_solr: 0
   serialization: 0
   simple_oauth: 0
   simple_oauth_extras: 0
