@@ -1,0 +1,20 @@
+uuid: f6e4b2d5-e89f-461a-8c8d-9c9bf11e1d67
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_experience_abroad
+field_name: field_experience_abroad
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

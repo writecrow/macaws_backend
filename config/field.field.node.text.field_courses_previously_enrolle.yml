@@ -1,0 +1,29 @@
+uuid: 1199f958-42c2-4072-81cf-92711123bb35
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_courses_previously_enrolle
+    - node.type.text
+    - taxonomy.vocabulary.courses_previously_enrolled
+id: node.text.field_courses_previously_enrolle
+field_name: field_courses_previously_enrolle
+entity_type: node
+bundle: text
+label: 'Courses Previously Enrolled'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      courses_previously_enrolled: courses_previously_enrolled
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

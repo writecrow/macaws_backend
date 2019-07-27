@@ -1,0 +1,8 @@
+uuid: b0d33862-6be7-495d-ac26-1807966bbc02
+langcode: en
+status: true
+dependencies: {  }
+name: Section
+vid: section
+description: ''
+weight: 0

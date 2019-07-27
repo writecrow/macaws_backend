@@ -1,0 +1,11 @@
+uuid: 4a2cdb39-f08f-4af1-88a9-c9d369e4b139
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.length_of_course
+id: taxonomy_term.length_of_course
+target_entity_type_id: taxonomy_term
+target_bundle: length_of_course
+default_langcode: site_default
+language_alterable: false

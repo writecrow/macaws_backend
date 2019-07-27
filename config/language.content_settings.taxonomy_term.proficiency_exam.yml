@@ -1,0 +1,11 @@
+uuid: 6cb917eb-6e8f-4471-b2c3-9858f2f18f9a
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.proficiency_exam
+id: taxonomy_term.proficiency_exam
+target_entity_type_id: taxonomy_term
+target_bundle: proficiency_exam
+default_langcode: site_default
+language_alterable: false

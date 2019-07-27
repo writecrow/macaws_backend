@@ -1,0 +1,11 @@
+uuid: 95d8646d-de92-455f-99b3-70664215c133
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.courses_previously_enrolled
+id: taxonomy_term.courses_previously_enrolled
+target_entity_type_id: taxonomy_term
+target_bundle: courses_previously_enrolled
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,29 @@
+uuid: c47632d9-e70e-4a7c-bfc8-21e03547ed62
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_heritage_of_target_languag
+    - node.type.text
+    - taxonomy.vocabulary.heritage_of_target_language
+id: node.text.field_heritage_of_target_languag
+field_name: field_heritage_of_target_languag
+entity_type: node
+bundle: text
+label: 'Heritage of Target Language'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      heritage_of_target_language: heritage_of_target_language
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

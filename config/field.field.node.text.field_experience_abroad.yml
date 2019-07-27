@@ -1,0 +1,29 @@
+uuid: 416bd50a-633d-4fa0-aecd-e53156f660ed
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_experience_abroad
+    - node.type.text
+    - taxonomy.vocabulary.experience_abroad
+id: node.text.field_experience_abroad
+field_name: field_experience_abroad
+entity_type: node
+bundle: text
+label: 'Experience Abroad'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      experience_abroad: experience_abroad
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

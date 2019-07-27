@@ -1,0 +1,11 @@
+uuid: b03ec076-3099-40d1-be65-af3c7288ab29
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.course_year
+id: taxonomy_term.course_year
+target_entity_type_id: taxonomy_term
+target_bundle: course_year
+default_langcode: site_default
+language_alterable: false

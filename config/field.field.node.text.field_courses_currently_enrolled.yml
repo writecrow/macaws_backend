@@ -1,0 +1,29 @@
+uuid: 6b76ddf1-9660-45dd-b161-0ea060a6559e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_courses_currently_enrolled
+    - node.type.text
+    - taxonomy.vocabulary.courses_currently_enrolled
+id: node.text.field_courses_currently_enrolled
+field_name: field_courses_currently_enrolled
+entity_type: node
+bundle: text
+label: 'Courses Currently Enrolled'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      courses_currently_enrolled: courses_currently_enrolled
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

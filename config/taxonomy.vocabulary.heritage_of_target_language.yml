@@ -1,0 +1,8 @@
+uuid: 7c0d1bb6-8f5d-4533-8bdd-ce5858a7f6d2
+langcode: en
+status: true
+dependencies: {  }
+name: 'Heritage of Target Language'
+vid: heritage_of_target_language
+description: ''
+weight: 0

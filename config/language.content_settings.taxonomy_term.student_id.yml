@@ -1,0 +1,11 @@
+uuid: 33f199b0-88c8-4b71-955b-a4dec42967cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.student_id
+id: taxonomy_term.student_id
+target_entity_type_id: taxonomy_term
+target_bundle: student_id
+default_langcode: site_default
+language_alterable: false

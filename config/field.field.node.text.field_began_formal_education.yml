@@ -1,0 +1,29 @@
+uuid: ecc4dabc-d6bd-48fe-85b8-1d895bd1a9f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_began_formal_education
+    - node.type.text
+    - taxonomy.vocabulary.began_formal_education
+id: node.text.field_began_formal_education
+field_name: field_began_formal_education
+entity_type: node
+bundle: text
+label: 'Began Formal Education in the Target Language'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      began_formal_education: began_formal_education
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,11 @@
+uuid: c67bd102-47d8-453b-8b81-128fc4246afa
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.minor
+id: taxonomy_term.minor
+target_entity_type_id: taxonomy_term
+target_bundle: minor
+default_langcode: site_default
+language_alterable: false

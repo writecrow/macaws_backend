@@ -1,0 +1,8 @@
+uuid: 72fe9809-11ba-45b8-99fd-d72baa1a5468
+langcode: en
+status: true
+dependencies: {  }
+name: 'Assignment Code'
+vid: assignment_code
+description: ''
+weight: 0

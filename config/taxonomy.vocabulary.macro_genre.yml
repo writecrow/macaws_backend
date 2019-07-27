@@ -1,0 +1,8 @@
+uuid: 0a820513-56b9-4342-8980-6f7f23545418
+langcode: en
+status: true
+dependencies: {  }
+name: 'Macro Genre'
+vid: macro_genre
+description: ''
+weight: 0

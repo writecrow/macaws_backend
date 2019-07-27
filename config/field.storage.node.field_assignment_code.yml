@@ -1,0 +1,20 @@
+uuid: cab095b5-98bf-4318-9d7a-e603b5eedb0a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_assignment_code
+field_name: field_assignment_code
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

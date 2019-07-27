@@ -1,0 +1,20 @@
+uuid: 51722775-23ba-42f0-bd6d-0f339ffab18d
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_assignment_topic
+field_name: field_assignment_topic
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

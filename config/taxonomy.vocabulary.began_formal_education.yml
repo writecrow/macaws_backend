@@ -1,0 +1,8 @@
+uuid: 9ac02643-9837-4ed1-9420-65ded93a6a0b
+langcode: en
+status: true
+dependencies: {  }
+name: 'Began Formal Education in the Target Language'
+vid: began_formal_education
+description: ''
+weight: 0

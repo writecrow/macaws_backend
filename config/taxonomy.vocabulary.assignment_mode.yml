@@ -1,0 +1,8 @@
+uuid: b5fbd698-ae13-4b8a-9e5b-3f128467fcdb
+langcode: en
+status: true
+dependencies: {  }
+name: 'Assignment Mode'
+vid: assignment_mode
+description: ''
+weight: 0

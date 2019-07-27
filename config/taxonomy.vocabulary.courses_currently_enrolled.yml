@@ -1,0 +1,8 @@
+uuid: 0bf68010-e505-4fcd-8e6a-a28fa8539153
+langcode: en
+status: true
+dependencies: {  }
+name: 'Courses Currently Enrolled'
+vid: courses_currently_enrolled
+description: ''
+weight: 0

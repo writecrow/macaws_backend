@@ -1,0 +1,11 @@
+uuid: 4de6302b-8485-49b3-8e47-afb50e60ba79
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.mode_of_course
+id: taxonomy_term.mode_of_course
+target_entity_type_id: taxonomy_term
+target_bundle: mode_of_course
+default_langcode: site_default
+language_alterable: false

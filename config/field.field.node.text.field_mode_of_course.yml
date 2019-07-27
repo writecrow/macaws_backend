@@ -1,0 +1,29 @@
+uuid: 90ba1c8a-4750-4d87-856d-4ad132549e7f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mode_of_course
+    - node.type.text
+    - taxonomy.vocabulary.mode_of_course
+id: node.text.field_mode_of_course
+field_name: field_mode_of_course
+entity_type: node
+bundle: text
+label: 'Mode of Course'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      mode_of_course: mode_of_course
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

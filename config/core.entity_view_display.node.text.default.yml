@@ -3,29 +3,41 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.text.field_age
     - field.field.node.text.field_assignment
-    - field.field.node.text.field_body
-    - field.field.node.text.field_college
-    - field.field.node.text.field_country
+    - field.field.node.text.field_assignment_code
+    - field.field.node.text.field_assignment_mode
+    - field.field.node.text.field_assignment_name
+    - field.field.node.text.field_assignment_topic
+    - field.field.node.text.field_began_formal_education
     - field.field.node.text.field_course
+    - field.field.node.text.field_course_semester
+    - field.field.node.text.field_course_year
+    - field.field.node.text.field_courses_currently_enrolled
+    - field.field.node.text.field_courses_previously_enrolle
+    - field.field.node.text.field_credit_hours
     - field.field.node.text.field_draft
-    - field.field.node.text.field_gender
-    - field.field.node.text.field_id
+    - field.field.node.text.field_experience_abroad
+    - field.field.node.text.field_heritage_of_target_languag
     - field.field.node.text.field_institution
     - field.field.node.text.field_instructor
-    - field.field.node.text.field_program
-    - field.field.node.text.field_semester
-    - field.field.node.text.field_toefl_listening
-    - field.field.node.text.field_toefl_reading
-    - field.field.node.text.field_toefl_speaking
-    - field.field.node.text.field_toefl_total
-    - field.field.node.text.field_toefl_writing
+    - field.field.node.text.field_l1
+    - field.field.node.text.field_length_of_course
+    - field.field.node.text.field_macro_genre
+    - field.field.node.text.field_major
+    - field.field.node.text.field_minor
+    - field.field.node.text.field_mode_of_course
+    - field.field.node.text.field_other_languages
+    - field.field.node.text.field_proficiency_exam
+    - field.field.node.text.field_proficiency_exam_score
+    - field.field.node.text.field_section
+    - field.field.node.text.field_target_language
+    - field.field.node.text.field_target_language_practice
+    - field.field.node.text.field_text
     - field.field.node.text.field_wordcount
-    - field.field.node.text.field_year
     - field.field.node.text.field_year_in_school
     - node.type.text
   module:
-    - text
     - user
 _core:
   default_config_hash: cgoOi6lcrNcWUtC6cnjV-Pte0am8NEEHNAqxg34VU1I
@@ -34,6 +46,14 @@ targetEntityType: node
 bundle: text
 mode: default
 content:
+  field_age:
+    weight: 145
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
   field_assignment:
     weight: 111
     label: above
@@ -42,23 +62,40 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_body:
-    weight: 108
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: text_default
-    region: content
-  field_college:
-    weight: 120
+  field_assignment_code:
+    weight: 129
     label: above
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_country:
-    weight: 109
+  field_assignment_mode:
+    weight: 126
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_assignment_name:
+    weight: 127
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_assignment_topic:
+    weight: 128
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_began_formal_education:
+    weight: 142
     label: above
     settings:
       link: true
@@ -73,6 +110,46 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
+  field_course_semester:
+    weight: 135
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_course_year:
+    weight: 134
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_courses_currently_enrolled:
+    weight: 143
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_courses_previously_enrolle:
+    weight: 144
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_credit_hours:
+    weight: 133
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
   field_draft:
     weight: 118
     label: above
@@ -81,21 +158,21 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_gender:
-    weight: 110
+  field_experience_abroad:
+    weight: 140
     label: above
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_id:
-    weight: 102
+  field_heritage_of_target_languag:
+    weight: 137
     label: above
     settings:
-      link_to_entity: false
+      link: true
     third_party_settings: {  }
-    type: string
+    type: entity_reference_label
     region: content
   field_institution:
     weight: 116
@@ -113,66 +190,108 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_program:
-    weight: 114
+  field_l1:
+    weight: 123
     label: above
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_semester:
-    weight: 112
+  field_length_of_course:
+    weight: 132
     label: above
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
     region: content
-  field_toefl_listening:
-    weight: 103
+  field_macro_genre:
+    weight: 125
     label: above
     settings:
-      thousand_separator: ''
-      prefix_suffix: true
+      link: true
     third_party_settings: {  }
-    type: number_integer
+    type: entity_reference_label
     region: content
-  field_toefl_reading:
-    weight: 104
+  field_major:
+    weight: 146
     label: above
     settings:
-      thousand_separator: ''
-      prefix_suffix: true
+      link: true
     third_party_settings: {  }
-    type: number_integer
+    type: entity_reference_label
     region: content
-  field_toefl_speaking:
-    weight: 106
+  field_minor:
+    weight: 147
     label: above
     settings:
-      thousand_separator: ''
-      prefix_suffix: true
+      link: true
     third_party_settings: {  }
-    type: number_integer
+    type: entity_reference_label
     region: content
-  field_toefl_total:
-    weight: 107
+  field_mode_of_course:
+    weight: 131
     label: above
     settings:
-      thousand_separator: ''
-      prefix_suffix: true
+      link: true
     third_party_settings: {  }
-    type: number_integer
+    type: entity_reference_label
     region: content
-  field_toefl_writing:
-    weight: 105
+  field_other_languages:
+    weight: 124
     label: above
     settings:
-      thousand_separator: ''
-      prefix_suffix: true
+      link: true
     third_party_settings: {  }
-    type: number_integer
+    type: entity_reference_label
+    region: content
+  field_proficiency_exam:
+    weight: 138
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_proficiency_exam_score:
+    weight: 139
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_section:
+    weight: 136
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_target_language:
+    weight: 122
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_target_language_practice:
+    weight: 141
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_text:
+    weight: 130
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
     region: content
   field_wordcount:
     weight: 121
@@ -182,14 +301,6 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
-    region: content
-  field_year:
-    weight: 113
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    type: entity_reference_label
     region: content
   field_year_in_school:
     weight: 115

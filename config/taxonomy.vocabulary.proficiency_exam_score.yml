@@ -1,0 +1,8 @@
+uuid: a70c91ba-f4f9-469b-918c-b2e9d0b8461d
+langcode: en
+status: true
+dependencies: {  }
+name: 'Proficiency Exam Score'
+vid: proficiency_exam_score
+description: ''
+weight: 0

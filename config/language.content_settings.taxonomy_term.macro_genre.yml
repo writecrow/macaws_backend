@@ -1,0 +1,11 @@
+uuid: 738bd36d-5629-4395-b3cf-400fa4d8eced
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.macro_genre
+id: taxonomy_term.macro_genre
+target_entity_type_id: taxonomy_term
+target_bundle: macro_genre
+default_langcode: site_default
+language_alterable: false

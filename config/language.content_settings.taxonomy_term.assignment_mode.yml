@@ -1,0 +1,11 @@
+uuid: f2e69178-986d-4df0-a3ec-83688f0fa49f
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.assignment_mode
+id: taxonomy_term.assignment_mode
+target_entity_type_id: taxonomy_term
+target_bundle: assignment_mode
+default_langcode: site_default
+language_alterable: false

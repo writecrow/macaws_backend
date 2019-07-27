@@ -1,0 +1,8 @@
+uuid: 86a85408-ac40-4209-a0e5-03f8b42a3179
+langcode: en
+status: true
+dependencies: {  }
+name: 'Mode of Course'
+vid: mode_of_course
+description: ''
+weight: 0

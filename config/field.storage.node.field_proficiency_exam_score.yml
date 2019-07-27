@@ -1,0 +1,20 @@
+uuid: c98a86fa-63e8-4197-bfb4-025b115ab4ca
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_proficiency_exam_score
+field_name: field_proficiency_exam_score
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

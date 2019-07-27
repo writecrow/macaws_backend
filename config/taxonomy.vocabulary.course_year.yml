@@ -1,0 +1,8 @@
+uuid: 2b708a80-5ad0-42cb-adda-e585a74b95cd
+langcode: en
+status: true
+dependencies: {  }
+name: 'Course Year'
+vid: course_year
+description: ''
+weight: 0

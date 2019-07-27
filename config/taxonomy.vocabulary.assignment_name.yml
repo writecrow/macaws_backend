@@ -1,0 +1,8 @@
+uuid: 6e306d13-bd06-436c-ab52-65512ec4170f
+langcode: en
+status: true
+dependencies: {  }
+name: 'Assignment Name'
+vid: assignment_name
+description: ''
+weight: 0

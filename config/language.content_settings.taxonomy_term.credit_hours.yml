@@ -1,0 +1,11 @@
+uuid: 3cf443f6-21db-427a-abb8-5d42c452b3e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.credit_hours
+id: taxonomy_term.credit_hours
+target_entity_type_id: taxonomy_term
+target_bundle: credit_hours
+default_langcode: site_default
+language_alterable: false

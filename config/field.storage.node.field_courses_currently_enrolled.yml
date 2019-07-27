@@ -1,0 +1,20 @@
+uuid: 4035407d-47d1-400d-b488-481f96303eeb
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_courses_currently_enrolled
+field_name: field_courses_currently_enrolled
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

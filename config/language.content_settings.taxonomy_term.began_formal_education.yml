@@ -1,0 +1,11 @@
+uuid: e57e70ba-814b-409d-8461-7190faa1531c
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.began_formal_education
+id: taxonomy_term.began_formal_education
+target_entity_type_id: taxonomy_term
+target_bundle: began_formal_education
+default_langcode: site_default
+language_alterable: false

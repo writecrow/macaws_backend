@@ -1,0 +1,11 @@
+uuid: c1b5326f-a721-48ad-be4c-837777119aac
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.target_language_practice
+id: taxonomy_term.target_language_practice
+target_entity_type_id: taxonomy_term
+target_bundle: target_language_practice
+default_langcode: site_default
+language_alterable: false

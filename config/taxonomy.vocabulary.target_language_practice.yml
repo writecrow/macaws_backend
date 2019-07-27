@@ -1,0 +1,8 @@
+uuid: d71ce094-5be9-4d2d-8864-c73c725fb05b
+langcode: en
+status: true
+dependencies: {  }
+name: 'Out-of-class Target Language Practice'
+vid: target_language_practice
+description: ''
+weight: 0

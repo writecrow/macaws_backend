@@ -1,0 +1,8 @@
+uuid: bbcde4dc-ba16-44cd-84a0-6d6fe0e5c1a0
+langcode: en
+status: true
+dependencies: {  }
+name: 'Credit Hours'
+vid: credit_hours
+description: ''
+weight: 0
