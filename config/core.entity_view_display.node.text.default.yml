@@ -31,6 +31,7 @@ dependencies:
     - field.field.node.text.field_proficiency_exam
     - field.field.node.text.field_proficiency_exam_score
     - field.field.node.text.field_section
+    - field.field.node.text.field_student_id
     - field.field.node.text.field_target_language
     - field.field.node.text.field_target_language_practice
     - field.field.node.text.field_text
@@ -264,6 +265,14 @@ content:
     region: content
   field_section:
     weight: 136
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_student_id:
+    weight: 148
     label: above
     settings:
       link: true

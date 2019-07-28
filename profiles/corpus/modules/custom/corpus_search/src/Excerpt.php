@@ -12,80 +12,57 @@ use writecrow\Highlighter\HighlightExcerpt;
 class Excerpt {
 
   /**
-   * Main function.
+   * Helper function.
    *
    * @param string[] $matching_texts
    *   An array of entity data, including metadata.
    * @param string[] $tokens
    *   The words/phrases to be highlighted.
    */
-  public static function getExcerpts(array $matching_texts, array $tokens, $facet_map, $limit = 20, $offset = 0) {
+  public static function getExcerptOrFullText(array $matching_texts, array $tokens, $facet_map, $limit = 20, $offset = 0, $do_excerpt = TRUE) {
     if (empty($matching_texts)) {
       return [];
     }
     $connection = \Drupal::database();
-    $query = $connection->select('node__field_body', 'n')
-      ->fields('n', ['entity_id', 'field_body_value'])
+    $query = $connection->select('node__field_text', 'n')
+      ->fields('n', ['entity_id', 'field_text_value'])
       ->condition('n.entity_id', array_keys($matching_texts), 'IN');
     $query->range($offset, $limit);
     $results = $query->execute()->fetchAllKeyed();
     $sliced_matches = array_intersect_key($matching_texts, $results);
+    $metadata_names = [
+      'assignment_topic',
+      'course',
+      'draft',
+      'course_semester',
+      'course_year',
+    ];
     foreach ($sliced_matches as $id => $metadata) {
-      $excerpts[] = [
-        'excerpt' => HighlightExcerpt::highlight($results[$id], $tokens),
-        'filename' => $metadata['filename'],
-        'assignment' => self::getFacetName($metadata['assignment'], 'assignment', $facet_map),
-        'course' => self::getFacetName($metadata['course'], 'course', $facet_map),
-        'draft' => self::getFacetName($metadata['draft'], 'draft', $facet_map),
-        'gender' => self::getFacetName($metadata['gender'], 'gender', $facet_map),
-        'semester' => self::getFacetName($metadata['semester'], 'semester', $facet_map),
-        'toefl_total' => $metadata['toefl_total'],
-        'year' => self::getFacetName($metadata['year'], 'year', $facet_map),
-      ];
+      $excerpts[$id]['filename'] = $metadata['filename'];
+      foreach ($metadata_names as $name) {
+        $excerpts[$id][$name] = self::getFacetName($metadata[$name], $name, $facet_map);
+      }
+      if ($do_excerpt) {
+        $excerpts[$id]['text'] = 'foo';
+      }
+      else {
+        $excerpts[$id]['text'] = $results[$id];
+      }
     }
-
-    return $excerpts;
-  }
-
-  /**
-   * Return text with metadata (used for CSV export).
-   */
-  public static function getFullText(array $matching_texts, array $tokens, $facet_map, $limit = 20) {
-    $texts = [];
-    if (empty($matching_texts)) {
-      return [];
-    }
-    $connection = \Drupal::database();
-    $query = $connection->select('node__field_body', 'n')
-      ->fields('n', ['entity_id', 'field_body_value'])
-      ->condition('n.entity_id', array_keys($matching_texts), 'IN');
-    $query->range(0, $limit);
-    $results = $query->execute()->fetchAllKeyed();
-    $sliced_matches = array_intersect_key($matching_texts, $results);
-    foreach ($sliced_matches as $id => $metadata) {
-      $texts[] = [
-        'filename' => $metadata['filename'],
-        'assignment' => self::getFacetName($metadata['assignment'], 'assignment', $facet_map),
-        'course' => self::getFacetName($metadata['course'], 'course', $facet_map),
-        'draft' => self::getFacetName($metadata['draft'], 'draft', $facet_map),
-        'gender' => self::getFacetName($metadata['gender'], 'gender', $facet_map),
-        'semester' => self::getFacetName($metadata['semester'], 'semester', $facet_map),
-        'toefl_total' => $metadata['toefl_total'],
-        'year' => self::getFacetName($metadata['year'], 'year', $facet_map),
-        'text' => $results[$id],
-      ];
-    }
-    return $texts;
+    return array_values($excerpts);
   }
 
   /**
    * Simple facet name array lookup.
    */
-  public static function getFacetName($id, $facet_group, $facet_map) {
-    if (!empty($facet_map['by_id'][$facet_group][$id])) {
-      return $facet_map['by_id'][$facet_group][$id];
+  public static function getFacetName($ids, $facet_group, $facet_map) {
+    $labels = [];
+    foreach (array_keys($ids) as $id) {
+      if (!empty($facet_map['by_id'][$facet_group][$id])) {
+        $labels[] = $facet_map['by_id'][$facet_group][$id];
+      }
     }
-    return $id;
+    return implode(', ', $labels);
   }
 
 }

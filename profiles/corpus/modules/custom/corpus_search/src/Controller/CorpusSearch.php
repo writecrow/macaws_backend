@@ -44,8 +44,10 @@ class CorpusSearch extends ControllerBase {
   public static function getSearchResults(Request $request) {
     // Check for presence of cached data.
     $cache_id = self::getCacheString($request);
-    if ($cache = \Drupal::cache()->get($cache_id) && $cache->expire > time()) {
-      return $cache->data;
+    if ($cache = \Drupal::cache()->get($cache_id)) {
+      if ($cache->expire > time()) {
+        return $cache->data;
+      }
     }
     $search_data = self::search($request);
     \Drupal::cache()->set($cache_id, $search_data['output'], REQUEST_TIME + (2500000));
@@ -86,7 +88,7 @@ class CorpusSearch extends ControllerBase {
       foreach ($tokens as $token => $type) {
         $individual_search = self::getIndividualSearchResults($token, $type, $conditions, $method);
         $token_data[$token] = $individual_search;
-        $global = self::updateGlobalData($global, $individual_search, $all_texts_metadata, $op);
+        $global = self::updateGlobalData($global, $individual_search, $op);
       }
       $matching_texts = array_intersect_key($all_texts_metadata, $global['text_ids']);
     }
@@ -121,7 +123,7 @@ class CorpusSearch extends ControllerBase {
     if (!isset($matching_texts)) {
       $matching_texts = [];
     }
-    $results['pager']['total_items'] = count($global['text_ids']);
+    $results['pager']['total_items'] = count($matching_texts);
     $results['pager']['subcorpus_wordcount'] = $global['subcorpus_wordcount'];
     $results['facets'] = TextMetadata::countFacets($matching_texts, $facet_map, $conditions);
 
@@ -148,7 +150,7 @@ class CorpusSearch extends ControllerBase {
     }
     // This runs after the frequency data to take advantage of the
     // updated $tokens, if any, from a lemma search.
-    $results['search_results'] = Excerpt::getExcerpts($matching_texts, $excerpt_tokens, $facet_map, 20, $offset);
+    $results['search_results'] = Excerpt::getExcerptOrFullText($matching_texts, $excerpt_tokens, $facet_map, 20, $offset, TRUE);
     // Build the output for use in the search data and for CSV exporting.
     $search_results['output'] = $results;
     $search_results['matching_texts'] = $matching_texts;
@@ -160,7 +162,7 @@ class CorpusSearch extends ControllerBase {
   /**
    * Calculate unique texts && subcorpus wordcount.
    */
-  private static function updateGlobalData($global, $individual_search, $all_texts_metadata, $op = "or") {
+  private static function updateGlobalData($global, $individual_search, $op = "or") {
     switch ($op) {
       case "and":
         if (!isset($global['text_ids'])) {

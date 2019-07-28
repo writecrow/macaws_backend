@@ -77,16 +77,16 @@ class FrequencyService {
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
     // $connection = \Drupal::database();
-    // $query = $connection->select('node__field_body', 'f')->fields('f', ['field_body_value']);
+    // $query = $connection->select('node__field_text', 'f')->fields('f', ['field_text_value']);
     // $query->condition('bundle', 'text', '=');
     // // Improve query matching by guessing likely start & end values.
     // $and_condition_1 = $query->orConditionGroup();
     // foreach ($words as $word => $type) {
     //   if ($type == 'quoted') {
-    //     $and_condition_1->condition('field_body_value', "%" . $connection->escapeLike(' ' . $word . ' ') . "%", 'LIKE BINARY');
+    //     $and_condition_1->condition('field_text_value', "%" . $connection->escapeLike(' ' . $word . ' ') . "%", 'LIKE BINARY');
     //   }
     //   else {
-    //     $and_condition_1->condition('field_body_value', "%" . $connection->escapeLike(' ' . $word . ' ') . "%", 'LIKE');
+    //     $and_condition_1->condition('field_text_value', "%" . $connection->escapeLike(' ' . $word . ' ') . "%", 'LIKE');
     //   }
     // }
     // $texts_count = $query->condition($and_condition_1)->countQuery()->execute()->fetchField();
@@ -129,11 +129,11 @@ class FrequencyService {
     // Create an object of type Select and directly
     // add extra detail to this query object: a condition, fields and a range.
     $connection = \Drupal::database();
-    $query = $connection->select('node__field_body', 'f');
+    $query = $connection->select('node__field_text', 'f');
     $query->leftJoin('node_field_data', 'n', 'f.entity_id = n.nid');
     $query->leftJoin('node__field_course', 'c', 'f.entity_id = c.entity_id');
     $query->fields('n', ['title', 'type']);
-    $query->fields('f', ['entity_id', 'field_body_value']);
+    $query->fields('f', ['entity_id', 'field_text_value']);
     $query->fields('c', ['field_course_target_id']);
     $query->condition('n.type', 'text', '=');
 
@@ -144,7 +144,7 @@ class FrequencyService {
 
     // Apply text conditions.
     $and_condition_1 = $query->orConditionGroup()
-      ->condition('field_body_value', "%" . $connection->escapeLike($phrase) . "%", 'LIKE BINARY');
+      ->condition('field_text_value', "%" . $connection->escapeLike($phrase) . "%", 'LIKE BINARY');
     $result = $query->condition($and_condition_1)->execute();
 
     $raw_texts = $result->fetchAll();
@@ -158,7 +158,7 @@ class FrequencyService {
       $total = FrequencyService::totalWords();
       $ratio = 10000 / $total;
       foreach ($raw_texts as $result) {
-        $body = $result->field_body_value;
+        $body = $result->field_text_value;
         if ($inc < 20) {
           $excerpts[$result->title]['excerpt'] = self::getExcerpt($body, $phrase);
           $excerpts[$result->title]['course'] = $terms[$result->field_course_target_id];
@@ -266,7 +266,7 @@ class FrequencyService {
   public static function count($node_id) {
     $result = FALSE;
     $node = Node::load($node_id);
-    if ($body = $node->field_body->getValue()) {
+    if ($body = $node->field_text->getValue()) {
       $tokens = self::tokenize($body[0]['value']);
       foreach ($tokens as $word) {
         if (isset($frequency[$word])) {

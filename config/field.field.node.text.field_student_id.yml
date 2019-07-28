@@ -1,16 +1,16 @@
-uuid: 4bd8aa41-8566-4580-b6ab-22063f1652b7
+uuid: 2a9516bb-505d-4dcf-8812-5ec615881317
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_assignment_topic
+    - field.storage.node.field_student_id
     - node.type.text
-    - taxonomy.vocabulary.assignment_topic
-id: node.text.field_assignment_topic
-field_name: field_assignment_topic
+    - taxonomy.vocabulary.student_id
+id: node.text.field_student_id
+field_name: field_student_id
 entity_type: node
 bundle: text
-label: 'Assignment Topic'
+label: 'Student ID'
 description: ''
 required: false
 translatable: false
@@ -20,7 +20,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      assignment_topic: assignment_topic
+      student_id: student_id
     sort:
       field: name
       direction: asc

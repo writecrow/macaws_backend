@@ -1,8 +1,8 @@
-uuid: 04925881-7a9e-421d-8b40-7dc4a0ff4430
+uuid: 397ec677-b2ed-44b1-bc7e-73f98dfdfe61
 langcode: en
 status: true
 dependencies: {  }
 name: 'Assignment Topic'
-vid: topic
+vid: assignment_topic
 description: ''
 weight: 0

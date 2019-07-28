@@ -10,17 +10,24 @@ namespace Drupal\corpus_search;
 class TextMetadata {
 
   public static $facetIDs = [
-    'assignment' => 'at',
-    'college' => 'co',
-    'country' => 'cy',
+    'target_language' => 'tl',
     'course' => 'ce',
+    'l1' => 'lo',
+    'other_languages' => 'ol',
+    'macro_genre' => 'mg',
+    'assignment_topic' => 'ao',
     'draft' => 'dr',
-    'gender' => 'ge',
-    'institution' => 'it',
-    'program' => 'pr',
-    'semester' => 'se',
-    'year' => 'yr',
+    'assignment_mode' => 'am',
+    'mode_of_course' => 'mc',
+    'length_of_course' => 'lc',
+    'credit_hours' => 'ch',
+    'course_year' => 'cy',
+    'course_semester' => 'cs',
+    'heritage_of_target_language' => 'ht',
+    'experience_abroad' => 'ea',
+    'age' => 'ag',
     'year_in_school' => 'ys',
+    'began_formal_education' => 'bf',
   ];
 
   /**
@@ -33,34 +40,17 @@ class TextMetadata {
     }
     $connection = \Drupal::database();
     $query = $connection->select('node_field_data', 'n');
-    $query->leftJoin('node__field_assignment', 'at', 'n.nid = at.entity_id');
-    $query->leftJoin('node__field_college', 'co', 'n.nid = co.entity_id');
-    $query->leftJoin('node__field_country', 'cy', 'n.nid = cy.entity_id');
-    $query->leftJoin('node__field_course', 'ce', 'n.nid = ce.entity_id');
-    $query->leftJoin('node__field_draft', 'dr', 'n.nid = dr.entity_id');
-    $query->leftJoin('node__field_gender', 'ge', 'n.nid = ge.entity_id');
-    $query->leftJoin('node__field_id', 'id', 'n.nid = id.entity_id');
-    $query->leftJoin('node__field_institution', 'it', 'n.nid = it.entity_id');
-    $query->leftJoin('node__field_program', 'pr', 'n.nid = pr.entity_id');
-    $query->leftJoin('node__field_semester', 'se', 'n.nid = se.entity_id');
-    $query->leftJoin('node__field_toefl_total', 'tt', 'n.nid = tt.entity_id');
-    $query->leftJoin('node__field_year_in_school', 'ys', 'n.nid = ys.entity_id');
-    $query->leftJoin('node__field_year', 'yr', 'n.nid = yr.entity_id');
+    foreach (self::$facetIDs as $field => $alias) {
+      $field_name = substr('field_' . $field, 0, 32);
+      $query->leftJoin('node__' . $field_name, $alias, 'n.nid = ' . $alias . '.entity_id');
+    }
     $query->leftJoin('node__field_wordcount', 'wc', 'n.nid = wc.entity_id');
+
     $query->fields('n', ['title', 'type', 'nid']);
-    $query->fields('at', ['field_assignment_target_id']);
-    $query->fields('co', ['field_college_target_id']);
-    $query->fields('cy', ['field_country_target_id']);
-    $query->fields('ce', ['field_course_target_id']);
-    $query->fields('dr', ['field_draft_target_id']);
-    $query->fields('ge', ['field_gender_target_id']);
-    $query->fields('id', ['field_id_value']);
-    $query->fields('it', ['field_institution_target_id']);
-    $query->fields('pr', ['field_program_target_id']);
-    $query->fields('se', ['field_semester_target_id']);
-    $query->fields('tt', ['field_toefl_total_value']);
-    $query->fields('ys', ['field_year_in_school_target_id']);
-    $query->fields('yr', ['field_year_target_id']);
+    foreach (self::$facetIDs as $field => $alias) {
+      $field_name = substr('field_' . $field, 0, 32);
+      $query->fields($alias, [$field_name . '_target_id']);
+    }
     $query->fields('wc', ['field_wordcount_value']);
     $query->condition('n.type', 'text', '=');
     $result = $query->execute();
@@ -68,7 +58,7 @@ class TextMetadata {
     $texts = [];
     if (!empty($matching_texts)) {
       foreach ($matching_texts as $result) {
-        $texts[$result->nid] = self::populateTextMetadata($result);
+        $texts = self::populateTextMetadata($result, $texts);;
       }
     }
     \Drupal::cache()->set($cache_id, $texts, REQUEST_TIME + (2500000));
@@ -97,13 +87,16 @@ class TextMetadata {
   public static function countFacets($matching_texts, $facet_map, $conditions) {
     foreach ($matching_texts as $id => $elements) {
       foreach (array_keys(self::$facetIDs) as $f) {
-        if (isset($facet_map['by_id'][$f]{$elements[$f]})) {
-          $name = $facet_map['by_id'][$f]{$elements[$f]};
-          if (!isset($facet_results[$f][$name]['count'])) {
-            $facet_results[$f][$name]['count'] = 1;
-          }
-          else {
-            $facet_results[$f][$name]['count']++;
+        $ids = array_keys($elements[$f]);
+        foreach ($ids as $id) {
+          if (isset($facet_map['by_id'][$f][$id])) {
+            $name = $facet_map['by_id'][$f][$id];
+            if (!isset($facet_results[$f][$name]['count'])) {
+              $facet_results[$f][$name]['count'] = 1;
+            }
+            else {
+              $facet_results[$f][$name]['count']++;
+            }
           }
         }
       }
@@ -112,19 +105,21 @@ class TextMetadata {
     // Loop through facet groups (e.g., course, assignment).
     foreach (array_keys(self::$facetIDs) as $f) {
       // Loop through facet names (e.g., ENGL 106, ENGL 107).
-      foreach ($facet_map['by_id'][$f] as $n) {
-        if (!isset($facet_results[$f][$n])) {
-          $facet_results[$f][$n]['count'] = 0;
-        }
-        $facet_id = $facet_map['by_name'][$f][$n];
-        if (isset($conditions[$f])) {
-          if (in_array($facet_id, $conditions[$f])) {
-            $facet_results[$f][$n]['active'] = TRUE;
+      if (isset($facet_map['by_id'][$f])) {
+        foreach ($facet_map['by_id'][$f] as $n) {
+          if (!isset($facet_results[$f][$n])) {
+            $facet_results[$f][$n]['count'] = 0;
+          }
+          $facet_id = $facet_map['by_name'][$f][$n];
+          if (isset($conditions[$f])) {
+            if (in_array($facet_id, $conditions[$f])) {
+              $facet_results[$f][$n]['active'] = TRUE;
+            }
           }
         }
+        // Ensure facets are listed alphanumerically.
+        ksort($facet_results[$f]);
       }
-      // Ensure facets are listed alphanumerically.
-      ksort($facet_results[$f]);
     }
     return $facet_results;
   }
@@ -132,23 +127,30 @@ class TextMetadata {
   /**
    * Helper function to put a single text's result data into a structured array.
    */
-  private static function populateTextMetadata($result) {
-    return [
-      'filename' => $result->title,
-      'assignment' => $result->field_assignment_target_id,
-      'college' => $result->field_college_target_id,
-      'country' => $result->field_country_target_id,
-      'course' => $result->field_course_target_id,
-      'draft' => $result->field_draft_target_id,
-      'gender' => $result->field_gender_target_id,
-      'institution' => $result->field_institution_target_id,
-      'program' => $result->field_program_target_id,
-      'semester' => $result->field_semester_target_id,
-      'toefl_total' => $result->field_toefl_total_value,
-      'year' => $result->field_year_target_id,
-      'year_in_school' => $result->field_year_in_school_target_id,
-      'wordcount' => $result->field_wordcount_value,
-    ];
+  private static function populateTextMetadata($result, $texts) {
+    if (!isset($texts[$result->nid])) {
+      $texts[$result->nid] = ['filename' => $result->title];
+      $texts[$result->nid]['wordcount'] = $result->field_wordcount_value;
+    }
+    $texts[$result->nid]['began_formal_education'][$result->field_began_formal_education_target_id] = 1;
+    $texts[$result->nid]['macro_genre'][$result->field_macro_genre_target_id] = 1;
+    $texts[$result->nid]['draft'][$result->field_draft_target_id] = 1;
+    $texts[$result->nid]['course_semester'][$result->field_course_semester_target_id] = 1;
+    $texts[$result->nid]['course_year'][$result->field_course_year_target_id] = 1;
+    $texts[$result->nid]['year_in_school'][$result->field_year_in_school_target_id] = 1;
+    $texts[$result->nid]['target_language'][$result->field_target_language_target_id] = 1;
+    $texts[$result->nid]['course'][$result->field_course_target_id] = 1;
+    $texts[$result->nid]['l1'][$result->field_l1_target_id] = 1;
+    $texts[$result->nid]['other_languages'][$result->field_other_languages_target_id] = 1;
+    $texts[$result->nid]['assignment_topic'][$result->field_assignment_topic_target_id] = 1;
+    $texts[$result->nid]['assignment_mode'][$result->field_assignment_mode_target_id] = 1;
+    $texts[$result->nid]['mode_of_course'][$result->field_mode_of_course_target_id] = 1;
+    $texts[$result->nid]['length_of_course'][$result->field_length_of_course_target_id] = 1;
+    $texts[$result->nid]['credit_hours'][$result->field_credit_hours_target_id] = 1;
+    $texts[$result->nid]['heritage_of_target_language'][$result->field_heritage_of_target_languag_target_id] = 1;
+    $texts[$result->nid]['experience_abroad'][$result->field_experience_abroad_target_id] = 1;
+    $texts[$result->nid]['age'][$result->field_age_target_id] = 1;
+    return $texts;
   }
 
 }
