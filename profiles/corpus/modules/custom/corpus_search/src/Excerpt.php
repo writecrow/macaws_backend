@@ -43,7 +43,7 @@ class Excerpt {
         $excerpts[$id][$name] = self::getFacetName($metadata[$name], $name, $facet_map);
       }
       if ($do_excerpt) {
-        $excerpts[$id]['text'] = 'foo';
+        $excerpts[$id]['text'] = HighlightExcerpt::highlight($results[$id], $tokens);
       }
       else {
         $excerpts[$id]['text'] = $results[$id];
