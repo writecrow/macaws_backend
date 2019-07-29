@@ -99,16 +99,16 @@ class CorpusWordFrequency {
    */
   public static function tokenize($string) {
     // Remove URLs.
-    $regex = "@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@";
+    $regex = "@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@ui";
     $string = preg_replace($regex, ' ', $string);
 
     // This regex is similar to any non-word character (\W),
     // but retains the following symbols: @'#$%
-    $tokens = preg_split("/\s|[,.!?:*&;\"()\[\]_+=”]/", $string);
+    $tokens = preg_split("/\s|[,.!?:*&;\"()\[\]_+=”]/u", $string);
     $result = [];
     $strip_chars = ":,.!&\?;-\”'()^*";
     foreach ($tokens as $token) {
-      if (strlen($token) == 1) {
+      if (mb_strlen($token) == 1) {
         if (!in_array($token, ["a", "i", "I", "A"])) {
           continue;
         }

@@ -40,6 +40,9 @@ class CorpusImporter extends ImporterService {
           $assignment_code = $text['Assignment'];
           $text['Assignment'] = self::$assignments[$assignment_code];
         }
+        if ($machine_name = 'assignment_name') {
+          $text[$name] = trim(preg_replace("/\([^)]+\)/","", $text[$name]));
+        }
         // Standardize draft names.
         if ($machine_name == 'draft') {
           if (in_array($text[$name], array_keys(self::$draftFixes))) {
@@ -143,11 +146,19 @@ class CorpusImporter extends ImporterService {
     $node->set('field_text', ['value' => $body, 'format' => 'plain_text']);
 
     $clean = Html::escape(strip_tags($body));
-    $node->set('field_wordcount', ['value' => str_word_count($clean)]);
+    $node->set('field_wordcount', ['value' => self::wordCountUtf8($clean)]);
 
     $node->save();
     // Send back metadata on what happened.
     return [$return => $text['filename']];
+  }
+
+  /**
+   * Perform word counting for UTF8.
+   */
+  public static function wordCountUtf8($str) {
+    // https://php.net/str_word_count#107363.
+    return count(preg_split('~[^\p{L}\p{N}\']+~u', $str));
   }
 
 }

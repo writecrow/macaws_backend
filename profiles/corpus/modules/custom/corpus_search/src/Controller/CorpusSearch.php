@@ -138,6 +138,7 @@ class CorpusSearch extends ControllerBase {
           $excerpt_tokens = array_merge($excerpt_tokens, $variants);
           $t = implode('/', $variants);
         }
+        $t = mb_convert_encoding($t, 'UTF-8', 'UTF-8');
         $results['frequency']['tokens'][$t]['raw'] = $individual_data['instance_count'];
         $results['frequency']['tokens'][$t]['normed'] = $ratio * $individual_data['instance_count'];
         $results['frequency']['tokens'][$t]['texts'] = count($individual_data['text_ids']);
