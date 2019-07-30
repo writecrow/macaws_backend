@@ -3,6 +3,9 @@ php_errorlog
 private.key
 public.key
 
+# Corpus data
+files_with_headers
+
 # "Built" components
 composer.lock
 .csslintrc
