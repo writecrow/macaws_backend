@@ -40,7 +40,7 @@ class CorpusImporter extends ImporterService {
           $assignment_code = $text['Assignment'];
           $text['Assignment'] = self::$assignments[$assignment_code];
         }
-        if ($machine_name == 'assignment_name') {
+        if (in_array($machine_name, ['assignment_name', 'experience_abroad'])) {
           $r = preg_replace("/\([^)]+\)/", "", $text[$name]);
           $text[$name] = trim($r);
         }
