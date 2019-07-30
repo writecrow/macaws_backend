@@ -40,8 +40,9 @@ class CorpusImporter extends ImporterService {
           $assignment_code = $text['Assignment'];
           $text['Assignment'] = self::$assignments[$assignment_code];
         }
-        if ($machine_name = 'assignment_name') {
-          $text[$name] = trim(preg_replace("/\([^)]+\)/","", $text[$name]));
+        if ($machine_name == 'assignment_name') {
+          $r = preg_replace("/\([^)]+\)/", "", $text[$name]);
+          $text[$name] = trim($r);
         }
         // Standardize draft names.
         if ($machine_name == 'draft') {
