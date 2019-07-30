@@ -18,6 +18,7 @@ dependencies:
     - field.field.node.text.field_credit_hours
     - field.field.node.text.field_draft
     - field.field.node.text.field_experience_abroad
+    - field.field.node.text.field_grouped_l1
     - field.field.node.text.field_heritage_of_target_languag
     - field.field.node.text.field_institution
     - field.field.node.text.field_instructor
@@ -181,6 +182,15 @@ content:
     region: content
   field_experience_abroad:
     weight: 160
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_grouped_l1:
+    weight: 169
     settings:
       match_operator: CONTAINS
       size: 60

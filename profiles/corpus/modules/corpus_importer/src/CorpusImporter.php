@@ -25,10 +25,13 @@ class CorpusImporter extends ImporterService {
     foreach ($taxonomies as $name => $machine_name) {
       $tid = '';
       $save = TRUE;
-      if (in_array($name, array_keys($text))) {
+      if (in_array($name, array_keys($text)) || $name == "Grouped L1") {
         // Skip N/A values.
         if (in_array($text[$name], ['NA', 'N/A', 'No', 'Na', 'Nan', 'NaN'])) {
           $save = FALSE;
+        }
+        if ($name == 'Grouped L1') {
+          $text['Grouped L1'] = $text['L1'];
         }
         if (in_array($machine_name, ['institution']) && empty($text['Institution'])) {
           $text['Institution'] = 'Purdue University';
