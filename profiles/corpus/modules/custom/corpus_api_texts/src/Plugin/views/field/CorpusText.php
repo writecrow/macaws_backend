@@ -60,11 +60,12 @@ class CorpusText extends FieldPluginBase {
     $param = \Drupal::request()->query->all();
 
     if ($user->hasRole('full_text_access')) {
+      $output = '<h3>Full text</h3>';
       if (isset($param['search'])) {
         $tokens = self::getTokens($param['search']);
         $text = HighlightExcerpt::highlight($text, array_keys($tokens), FALSE);
       }
-      return nl2br($text);
+      return nl2br($output . $text);
     }
     // Default to returning a truncated version of the text.
     if (strlen($text) > 600) {
