@@ -31,7 +31,21 @@ class CorpusImporter extends ImporterService {
           $save = FALSE;
         }
         if ($name == 'Grouped L1') {
-          $text['Grouped L1'] = $text['L1'];
+          $top_level_l1s = ["English", "Spanish", "Portuguese", "Russian"];
+          if (!is_array($text['L1'])) {
+            $grouped_l1s = [$text['L1']];
+          }
+          else {
+            $grouped_l1s = $text['L1'];
+          }
+          foreach ($grouped_l1s as $lang) {
+            if (!in_array($lang, $top_level_l1s)) {
+              $text['Grouped L1'][] = 'Other';
+            }
+            else {
+              $text['Grouped L1'][] = $lang;
+            }
+          }
         }
         if (in_array($machine_name, ['institution']) && empty($text['Institution'])) {
           $text['Institution'] = 'Purdue University';

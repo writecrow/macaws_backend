@@ -79,6 +79,14 @@ class CorpusSearch extends ControllerBase {
       'subcorpus_wordcount' => 0,
       'facet_counts' => [],
     ];
+    // First, always run a conditions (facets) only search.
+    // This is used both in the text search for narrowing and to calculate
+    // the subcorpus wordcount.
+    $condition_match_ids = Search::nonTextSearch($conditions);
+    $condition_matches = array_intersect_key($all_texts_metadata, array_flip($condition_match_ids));
+    foreach ($condition_matches as $t) {
+      $global['subcorpus_wordcount'] += $t['wordcount'];
+    }
     if ($search_string = strip_tags(urldecode($request->query->get('search')))) {
       $tokens = self::getTokens($search_string);
       // Is this and "and" or "or" text search?
@@ -86,7 +94,7 @@ class CorpusSearch extends ControllerBase {
       // Retrieve whether a 'lemma' search has been specified.
       $method = Xss::filter($request->query->get('method'));
       foreach ($tokens as $token => $type) {
-        $individual_search = self::getIndividualSearchResults($token, $type, $conditions, $method);
+        $individual_search = self::getIndividualSearchResults($token, $type, $condition_matches, $method);
         $token_data[$token] = $individual_search;
         $global = self::updateGlobalData($global, $individual_search, $op);
       }
@@ -94,8 +102,8 @@ class CorpusSearch extends ControllerBase {
     }
     else {
       // Perform a non-text string search.
-      $global['text_ids'] = Search::nonTextSearch($conditions);
-      $matching_texts = array_intersect_key($all_texts_metadata, array_flip($global['text_ids']));
+      $global['text_ids'] = $condition_match_ids;
+      $matching_texts = $condition_matches;
     }
     if ($op == 'and' && !empty($token_data)) {
       $updated_token_data = [];
@@ -111,9 +119,6 @@ class CorpusSearch extends ControllerBase {
         }
       }
       $token_data = $updated_token_data;
-    }
-    foreach ($matching_texts as $t) {
-      $global['subcorpus_wordcount'] += $t['wordcount'];
     }
 
     // Get the subcorpus normalization ratio (per 1 million words).
@@ -271,24 +276,24 @@ class CorpusSearch extends ControllerBase {
   /**
    * Helper method to direct the type of search to the search method.
    */
-  protected static function getIndividualSearchResults($token, $type, $conditions, $method) {
+  protected static function getIndividualSearchResults($token, $type, $condition_matches, $method) {
     $data = [];
     switch ($type) {
       case 'phrase':
         $length = strlen($token);
         // Remove quotation marks.
         $cleaned = substr($token, 1, $length - 2);
-        $data = Search::phraseSearch($cleaned, $conditions);
+        $data = Search::phraseSearch($cleaned, $condition_matches);
         break;
 
       case 'quoted-word':
         $length = strlen($token);
         $cleaned = substr($token, 1, $length - 2);
-        $data = Search::wordSearch($cleaned, $conditions, 'sensitive');
+        $data = Search::wordSearch($cleaned, $condition_matches, 'sensitive');
         break;
 
       case 'word':
-        $data = Search::wordSearch($token, $conditions, 'insensitive', $method);
+        $data = Search::wordSearch($token, $condition_matches, 'insensitive', $method);
         break;
     }
     return $data;

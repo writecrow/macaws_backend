@@ -32,6 +32,7 @@ class Excerpt {
     $sliced_matches = array_intersect_key($matching_texts, $results);
     $metadata_names = [
       'assignment_topic',
+      'assignment_mode',
       'course',
       'draft',
       'course_semester',
@@ -39,6 +40,7 @@ class Excerpt {
     ];
     foreach ($sliced_matches as $id => $metadata) {
       $excerpts[$id]['filename'] = $metadata['filename'];
+      $excerpts[$id]['wordcount'] = $metadata['wordcount'];
       foreach ($metadata_names as $name) {
         $excerpts[$id][$name] = self::getFacetName($metadata[$name], $name, $facet_map);
       }

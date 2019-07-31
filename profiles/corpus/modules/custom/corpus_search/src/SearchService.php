@@ -12,7 +12,7 @@ class SearchService {
   /**
    * Retrieve matching results from word_frequency table.
    */
-  public static function wordSearch($word, $conditions, $case = 'insensitive', $method = 'word') {
+  public static function wordSearch($word, $condition_matches, $case = 'insensitive', $method = 'word') {
     $cache_id = md5('corpus_search_word_' . $word . $case . $method);
     if ($cache = \Drupal::cache()->get($cache_id)) {
       $word_matches = $cache->data;
@@ -56,12 +56,8 @@ class SearchService {
       }
       \Drupal::cache()->set($cache_id, $word_matches, REQUEST_TIME + (2500000));
     }
-
-    // Get the IDs of texts that match the search conditions,
-    // irrespective of text search criterion.
-    $condition_matches = self::nonTextSearch($conditions);
     // Limit list to intersected NIDs from condition search & token search.
-    $intersected_text_ids = array_intersect(array_unique(array_keys($word_matches)), array_values($condition_matches));
+    $intersected_text_ids = array_intersect(array_unique(array_keys($word_matches)), array_keys($condition_matches));
     // Get text data for intersected ids.
     $instance_count = 0;
     $text_data = [];
@@ -84,9 +80,7 @@ class SearchService {
   /**
    * Query the node__field_text table for exact matches.
    */
-  public static function phraseSearch($phrase, $conditions) {
-    $condition_matches = self::nonTextSearch($conditions);
-
+  public static function phraseSearch($phrase, $condition_matches) {
     $connection = \Drupal::database();
     $query = $connection->select('node__field_text', 'f');
     $query->fields('f', ['entity_id', 'field_text_value', 'bundle']);
@@ -98,7 +92,7 @@ class SearchService {
     $result = $query->condition($and_condition_1)->execute();
 
     $phrase_matches = $result->fetchAllKeyed(0, 1);
-    $intersected_text_ids = array_intersect(array_keys($phrase_matches), array_values($condition_matches));
+    $intersected_text_ids = array_intersect(array_keys($phrase_matches), array_keys($condition_matches));
 
     $instance_count = 0;
     $text_data = [];

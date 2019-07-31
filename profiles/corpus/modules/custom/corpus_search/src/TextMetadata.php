@@ -12,22 +12,13 @@ class TextMetadata {
   public static $facetIDs = [
     'target_language' => 'tl',
     'course' => 'ce',
-    'l1' => 'lo',
-    'other_languages' => 'ol',
     'macro_genre' => 'mg',
+    'course_year' => 'cy',
+    'course_semester' => 'cs',
     'assignment_topic' => 'ao',
     'draft' => 'dr',
     'assignment_mode' => 'am',
-    'mode_of_course' => 'mc',
-    'length_of_course' => 'lc',
-    'credit_hours' => 'ch',
-    'course_year' => 'cy',
-    'course_semester' => 'cs',
-    'heritage_of_target_language' => 'ht',
-    'experience_abroad' => 'ea',
-    'age' => 'ag',
-    'year_in_school' => 'ys',
-    'began_formal_education' => 'bf',
+    'grouped_l1' => 'lo',
   ];
 
   /**
@@ -119,6 +110,12 @@ class TextMetadata {
         }
         // Ensure facets are listed alphanumerically.
         ksort($facet_results[$f]);
+        // Move "Other" to end of results.
+        if (isset($facet_results[$f]['Other'])) {
+          $temp = $facet_results[$f]['Other'];
+          unset($facet_results[$f]['Other']);
+          $facet_results[$f]['Other'] = $temp;
+        }
       }
     }
     return $facet_results;
@@ -132,24 +129,15 @@ class TextMetadata {
       $texts[$result->nid] = ['filename' => $result->title];
       $texts[$result->nid]['wordcount'] = $result->field_wordcount_value;
     }
-    $texts[$result->nid]['began_formal_education'][$result->field_began_formal_education_target_id] = 1;
     $texts[$result->nid]['macro_genre'][$result->field_macro_genre_target_id] = 1;
     $texts[$result->nid]['draft'][$result->field_draft_target_id] = 1;
-    $texts[$result->nid]['course_semester'][$result->field_course_semester_target_id] = 1;
-    $texts[$result->nid]['course_year'][$result->field_course_year_target_id] = 1;
-    $texts[$result->nid]['year_in_school'][$result->field_year_in_school_target_id] = 1;
     $texts[$result->nid]['target_language'][$result->field_target_language_target_id] = 1;
+    $texts[$result->nid]['course_year'][$result->field_course_year_target_id] = 1;
+    $texts[$result->nid]['course_semester'][$result->field_course_semester_target_id] = 1;
     $texts[$result->nid]['course'][$result->field_course_target_id] = 1;
-    $texts[$result->nid]['l1'][$result->field_l1_target_id] = 1;
-    $texts[$result->nid]['other_languages'][$result->field_other_languages_target_id] = 1;
+    $texts[$result->nid]['grouped_l1'][$result->field_grouped_l1_target_id] = 1;
     $texts[$result->nid]['assignment_topic'][$result->field_assignment_topic_target_id] = 1;
     $texts[$result->nid]['assignment_mode'][$result->field_assignment_mode_target_id] = 1;
-    $texts[$result->nid]['mode_of_course'][$result->field_mode_of_course_target_id] = 1;
-    $texts[$result->nid]['length_of_course'][$result->field_length_of_course_target_id] = 1;
-    $texts[$result->nid]['credit_hours'][$result->field_credit_hours_target_id] = 1;
-    $texts[$result->nid]['heritage_of_target_language'][$result->field_heritage_of_target_languag_target_id] = 1;
-    $texts[$result->nid]['experience_abroad'][$result->field_experience_abroad_target_id] = 1;
-    $texts[$result->nid]['age'][$result->field_age_target_id] = 1;
     return $texts;
   }
 
