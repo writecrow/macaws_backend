@@ -39,11 +39,12 @@ class SearchService {
         $word_matches = self::arrangeTextCountResults($result['ids']);
         if ($case == 'insensitive') {
           $query = $connection->select('corpus_word_frequency', 'f')->fields('f', ['ids']);
-          if (ctype_lower($word[0])) {
-            $query->condition('word', db_like(ucfirst($word)), 'LIKE BINARY');
+          $uppercased = preg_match('~^\p{Lu}~u', $word);
+          if (!$uppercased) {
+            $query->condition('word', db_like(mb_ucfirst($word)), 'LIKE BINARY');
           }
           else {
-            $query->condition('word', db_like(strtolower($word)), 'LIKE BINARY');
+            $query->condition('word', db_like(mb_strtolower($word)), 'LIKE BINARY');
           }
           $result = $query->execute()->fetchAssoc();
           $insensitive = self::arrangeTextCountResults($result['ids']);
@@ -126,11 +127,11 @@ class SearchService {
   private static function countPhraseMatches($text, $phrase) {
     $first = 'alpha';
     $last = 'alpha';
-    preg_match('/[^a-zA-Z]/', substr($phrase, 0, 1), $non_alpha);
+    preg_match('/[^a-zA-Z]/u', substr($phrase, 0, 1), $non_alpha);
     if (isset($non_alpha[0])) {
       $first = 'non_alpha';
     }
-    preg_match('/[^a-zA-Z]/', substr($phrase, -1), $non_alpha);
+    preg_match('/[^a-zA-Z]/u', substr($phrase, -1), $non_alpha);
     if (isset($non_alpha[0])) {
       $last = 'non_alpha';
     }
@@ -146,11 +147,11 @@ class SearchService {
   private static $regex = [
     'alpha' => [
       'start' => '/[^a-zA-Z>]',
-      'end' => '[^a-zA-Z<]/',
+      'end' => '[^a-zA-Z<]/u',
     ],
     'non_alpha' => [
       'start' => '/',
-      'end' => '/',
+      'end' => '/u',
     ],
   ];
 

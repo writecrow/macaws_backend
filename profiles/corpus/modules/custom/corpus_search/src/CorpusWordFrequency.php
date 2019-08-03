@@ -69,13 +69,12 @@ class CorpusWordFrequency {
       if (!empty($frequency)) {
         foreach ($frequency as $word => $count) {
           $word = preg_replace('/[\x00-\x1F\x7F]/u', '', $word);
-          if (strlen($word) > 250) {
+          if (mb_strlen($word) > 190) {
             continue;
           }
           if (empty($word)) {
             continue;
           }
-          $connection = \Drupal::database();
           $connection->merge('corpus_word_frequency')
             ->key(['word' => $word])
             ->fields([
@@ -108,11 +107,6 @@ class CorpusWordFrequency {
     $result = [];
     $strip_chars = ":,.!&\?;-\”'()^*";
     foreach ($tokens as $token) {
-      if (mb_strlen($token) == 1) {
-        if (!in_array($token, ["a", "i", "I", "A"])) {
-          continue;
-        }
-      }
       $token = trim($token, $strip_chars);
       if ($token) {
         $result[] = $token;

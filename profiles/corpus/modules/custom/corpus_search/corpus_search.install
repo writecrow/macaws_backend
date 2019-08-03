@@ -23,6 +23,7 @@ function corpus_search_schema() {
         'length' => 255,
         'not null' => TRUE,
         'default' => '',
+        'collation' => 'utf8mb4_bin',
         'binary' => TRUE,
         'description' => 'Unique word',
       ],
