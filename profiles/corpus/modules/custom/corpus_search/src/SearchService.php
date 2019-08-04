@@ -146,12 +146,12 @@ class SearchService {
 
   private static $regex = [
     'alpha' => [
-      'start' => '/[^a-zA-Z>]',
-      'end' => '[^a-zA-Z<]/u',
+      'start' => '/[\s\p{P}]',
+      'end' => '[\s\p{P}]/',
     ],
     'non_alpha' => [
-      'start' => '/',
-      'end' => '/u',
+      'start' => '/(.)',
+      'end' => '(.)/',
     ],
   ];
 
