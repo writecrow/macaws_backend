@@ -37,7 +37,8 @@
     "writecrow/highlighter": "dev-master",
     "writecrow/lorem_gutenberg": "dev-master",
     "writecrow/tag_converter": "dev-master",
-    "writecrow/country_code_converter": "dev-master"
+    "writecrow/country_code_converter": "dev-master",
+    "drupal/allow_iframed_site": "^2.0"
   },
   "conflict": {
     "drupal/drupal": "*"

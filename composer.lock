@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "666c808cb4b16c7ab2eea5338a83d885",
+    "content-hash": "588c12a3728b35c215ff08343f299814",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -1241,28 +1241,30 @@
         },
         {
             "name": "doctrine/lexer",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "1febd6c3ef84253d7c815bed85fc622ad207a9f8"
+                "reference": "e17f069ede36f7534b95adec71910ed1b49c74ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/1febd6c3ef84253d7c815bed85fc622ad207a9f8",
-                "reference": "1febd6c3ef84253d7c815bed85fc622ad207a9f8",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/e17f069ede36f7534b95adec71910ed1b49c74ea",
+                "reference": "e17f069ede36f7534b95adec71910ed1b49c74ea",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": "^7.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.5"
+                "doctrine/coding-standard": "^6.0",
+                "phpstan/phpstan": "^0.11.8",
+                "phpunit/phpunit": "^8.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -1276,12 +1278,12 @@
             ],
             "authors": [
                 {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
                     "name": "Guilherme Blanco",
                     "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
                 },
                 {
                     "name": "Johannes Schmitt",
@@ -1297,7 +1299,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2019-06-08T11:03:04+00:00"
+            "time": "2019-07-30T19:33:28+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1554,6 +1556,57 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/adminimal_theme",
                 "issues": "https://www.drupal.org/project/issues/adminimal_theme"
+            }
+        },
+        {
+            "name": "drupal/allow_iframed_site",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/allow_iframed_site.git",
+                "reference": "8.x-2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/allow_iframed_site-8.x-2.0.zip",
+                "reference": "8.x-2.0",
+                "shasum": "50aec9fa57f62690c71bf9e09a7786ef9a00b3f3"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-2.0",
+                    "datestamp": "1558066384",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "AndyD328",
+                    "homepage": "https://www.drupal.org/user/2261214"
+                },
+                {
+                    "name": "SKAUGHT",
+                    "homepage": "https://www.drupal.org/user/297907"
+                }
+            ],
+            "description": "Watch out for clickjacking...",
+            "homepage": "https://www.drupal.org/project/allow_iframed_site",
+            "support": {
+                "source": "https://git.drupalcode.org/project/allow_iframed_site"
             }
         },
         {
@@ -2981,76 +3034,6 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_data_export"
             }
-        },
-        {
-            "name": "drupal/xhprof",
-            "version": "dev-1.x",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/XHProf.git",
-                "reference": "03636cb96b111fe62a63be7709cdca5870688279"
-            },
-            "require": {
-                "drupal/core": "~8.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.0-beta1+50-dev",
-                    "datestamp": "1521629284",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Steven Merrill",
-                    "homepage": "https://www.drupal.org/user/218671"
-                },
-                {
-                    "name": "amateescu",
-                    "homepage": "https://www.drupal.org/user/729614"
-                },
-                {
-                    "name": "andypost",
-                    "homepage": "https://www.drupal.org/user/118908"
-                },
-                {
-                    "name": "beejeebus",
-                    "homepage": "https://www.drupal.org/user/38580"
-                },
-                {
-                    "name": "lussoluca",
-                    "homepage": "https://www.drupal.org/user/138068"
-                },
-                {
-                    "name": "moshe weitzman",
-                    "homepage": "https://www.drupal.org/user/23"
-                },
-                {
-                    "name": "msonnabaum",
-                    "homepage": "https://www.drupal.org/user/75278"
-                },
-                {
-                    "name": "pifantastic",
-                    "homepage": "https://www.drupal.org/user/737486"
-                }
-            ],
-            "description": "Provides code profiling with XHProf integration.",
-            "homepage": "https://www.drupal.org/project/xhprof",
-            "support": {
-                "source": "http://cgit.drupalcode.org/xhprof"
-            },
-            "time": "2018-10-12T12:04:52+00:00"
         },
         {
             "name": "drush/drush",
@@ -6915,17 +6898,20 @@
         },
         {
             "name": "webflo/drupal-finder",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webflo/drupal-finder.git",
-                "reference": "8a7886c575d6eaa67a425dceccc84e735c0b9637"
+                "reference": "123e248e14ee8dd3fbe89fb5a733a6cf91f5820e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webflo/drupal-finder/zipball/8a7886c575d6eaa67a425dceccc84e735c0b9637",
-                "reference": "8a7886c575d6eaa67a425dceccc84e735c0b9637",
+                "url": "https://api.github.com/repos/webflo/drupal-finder/zipball/123e248e14ee8dd3fbe89fb5a733a6cf91f5820e",
+                "reference": "123e248e14ee8dd3fbe89fb5a733a6cf91f5820e",
                 "shasum": ""
+            },
+            "require": {
+                "ext-json": "*"
             },
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
@@ -6948,7 +6934,7 @@
                 }
             ],
             "description": "Helper class to locate a Drupal installation from a given path.",
-            "time": "2017-10-24T08:12:11+00:00"
+            "time": "2019-08-02T08:06:18+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -7147,12 +7133,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/highlighter.git",
-                "reference": "4c073447f15debd38aff17301e8dd5a42e42107d"
+                "reference": "df4b901b7ff67200024c53b626eec4de335cd265"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/4c073447f15debd38aff17301e8dd5a42e42107d",
-                "reference": "4c073447f15debd38aff17301e8dd5a42e42107d",
+                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/df4b901b7ff67200024c53b626eec4de335cd265",
+                "reference": "df4b901b7ff67200024c53b626eec4de335cd265",
                 "shasum": ""
             },
             "type": "library",
@@ -7175,11 +7161,11 @@
                 }
             ],
             "description": "Highlights words/phrases per specified parameters",
-            "time": "2019-07-18T16:12:47+00:00"
+            "time": "2019-08-03T22:26:38+00:00"
         },
         {
             "name": "writecrow/lorem_gutenberg",
-            "version": "1.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/lorem_gutenberg.git",
@@ -7224,16 +7210,16 @@
         },
         {
             "name": "writecrow/tag_converter",
-            "version": "1.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/tag_converter.git",
-                "reference": "ba15c814fec6b3e95d32898edba7159d8b511bcf"
+                "reference": "1ed4fcf859646b70e4e3acb099fd8839c3c8054f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/tag_converter/zipball/ba15c814fec6b3e95d32898edba7159d8b511bcf",
-                "reference": "ba15c814fec6b3e95d32898edba7159d8b511bcf",
+                "url": "https://api.github.com/repos/writecrow/tag_converter/zipball/1ed4fcf859646b70e4e3acb099fd8839c3c8054f",
+                "reference": "1ed4fcf859646b70e4e3acb099fd8839c3c8054f",
                 "shasum": ""
             },
             "require-dev": {
@@ -7259,9 +7245,9 @@
             "authors": [
                 {
                     "name": "Mark Fullmer",
+                    "role": "Developer",
                     "email": "mark.writecrow@gmail.com",
-                    "homepage": "https://markfullmer.com",
-                    "role": "Developer"
+                    "homepage": "https://markfullmer.com"
                 }
             ],
             "description": "Converts tagged textfiles to JSON, PHP or XML",
@@ -7270,7 +7256,7 @@
                 "conversion",
                 "corpus"
             ],
-            "time": "2018-12-02T17:11:58+00:00"
+            "time": "2019-01-01T17:03:38+00:00"
         },
         {
             "name": "zaporylie/composer-drupal-optimizations",
@@ -7539,12 +7525,13 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal-composer/drupal-scaffold": 20,
-        "writecrow/country_code_converter": 20,
         "drupal/views_data_export": 10,
-        "drupal/xhprof": 20,
         "drupal/rabbit_hole": 10,
+        "drupal/role_delegation": 15,
         "writecrow/highlighter": 20,
-        "drupal/role_delegation": 15
+        "writecrow/lorem_gutenberg": 20,
+        "writecrow/tag_converter": 20,
+        "writecrow/country_code_converter": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
