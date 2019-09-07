@@ -23,10 +23,14 @@ class ExcerptEmbed extends CorpusSearch {
     $results = self::getSearchResults($request);
     $response = new CacheableResponse('', 200);
     if (!empty($results['search_results'])) {
-      $output ="<style>
+      $output = "<style>
+        body {
+          font-size: 14px;
+          font-family: 'Lucida Console', Monaco, monospace;
+        }
         table {
-            border-collapse: collapse;
-          }
+          border-collapse: collapse;
+        }
         td, th {
           border: 1px solid #dddddd;
           text-align: left;
@@ -52,4 +56,5 @@ class ExcerptEmbed extends CorpusSearch {
     $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
   }
+
 }
