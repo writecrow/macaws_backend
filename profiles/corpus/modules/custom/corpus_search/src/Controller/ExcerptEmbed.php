@@ -31,6 +31,7 @@ class ExcerptEmbed extends CorpusSearch {
         table {
           white-space: pre;
           border-collapse: collapse;
+          width: 100%;
         }
         td, th {
           border: 1px solid #dddddd;
