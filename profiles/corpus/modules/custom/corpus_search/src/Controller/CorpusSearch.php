@@ -41,7 +41,7 @@ class CorpusSearch extends ControllerBase {
    *
    * Provides an array of data for search results output & for CSV exporting.
    */
-  public static function getSearchResults(Request $request) {
+  public static function getSearchResults(Request $request, $excerpt_type = "concat") {
     // Check for presence of cached data.
     $cache_id = self::getCacheString($request);
     if ($cache = \Drupal::cache()->get($cache_id)) {
@@ -49,7 +49,7 @@ class CorpusSearch extends ControllerBase {
         return $cache->data;
       }
     }
-    $search_data = self::search($request);
+    $search_data = self::search($request, $excerpt_type);
     \Drupal::cache()->set($cache_id, $search_data['output'], REQUEST_TIME + (2500000));
     return $search_data['output'];
   }
@@ -57,7 +57,7 @@ class CorpusSearch extends ControllerBase {
   /**
    * Given a search string in query parameters, return full results.
    */
-  public static function search(Request $request) {
+  public static function search(Request $request, $excerpt_type = "concat") {
     // @todo: limit facet map to just Text matches (& cache?).
     $facet_map = TextMetadata::getFacetMap();
     // Get all facet/filter conditions.
@@ -156,7 +156,7 @@ class CorpusSearch extends ControllerBase {
     }
     // This runs after the frequency data to take advantage of the
     // updated $tokens, if any, from a lemma search.
-    $results['search_results'] = Excerpt::getExcerptOrFullText($matching_texts, $excerpt_tokens, $facet_map, 20, $offset, TRUE);
+    $results['search_results'] = Excerpt::getExcerptOrFullText($matching_texts, $excerpt_tokens, $facet_map, 20, $offset, TRUE, $excerpt_type);
     // Build the output for use in the search data and for CSV exporting.
     $search_results['output'] = $results;
     $search_results['matching_texts'] = $matching_texts;

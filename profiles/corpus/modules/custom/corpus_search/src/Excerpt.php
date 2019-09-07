@@ -19,7 +19,7 @@ class Excerpt {
    * @param string[] $tokens
    *   The words/phrases to be highlighted.
    */
-  public static function getExcerptOrFullText(array $matching_texts, array $tokens, $facet_map, $limit = 20, $offset = 0, $do_excerpt = TRUE) {
+  public static function getExcerptOrFullText(array $matching_texts, array $tokens, $facet_map, $limit = 20, $offset = 0, $do_excerpt = TRUE, $excerpt_type = "concat") {
     if (empty($matching_texts)) {
       return [];
     }
@@ -45,7 +45,7 @@ class Excerpt {
         $excerpts[$id][$name] = self::getFacetName($metadata[$name], $name, $facet_map);
       }
       if ($do_excerpt) {
-        $excerpts[$id]['text'] = HighlightExcerpt::highlight($results[$id], $tokens);
+        $excerpts[$id]['text'] = HighlightExcerpt::highlight($results[$id], $tokens, $length = "300", $excerpt_type);
       }
       else {
         $excerpts[$id]['text'] = $results[$id];

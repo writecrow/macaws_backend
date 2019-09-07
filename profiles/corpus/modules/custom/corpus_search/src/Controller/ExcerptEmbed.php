@@ -20,7 +20,7 @@ class ExcerptEmbed extends CorpusSearch {
    */
   public static function endpoint(Request $request) {
     // Response.
-    $results = self::getSearchResults($request);
+    $results = self::getSearchResults($request, $excerpt_type = "fixed");
     $response = new CacheableResponse('', 200);
     if (!empty($results['search_results'])) {
       $output = "<style>
@@ -29,11 +29,12 @@ class ExcerptEmbed extends CorpusSearch {
           font-family: 'Lucida Console', Monaco, monospace;
         }
         table {
+          white-space: pre;
           border-collapse: collapse;
         }
         td, th {
           border: 1px solid #dddddd;
-          text-align: left;
+          text-align: center;
           padding: 8px;
         }
 
