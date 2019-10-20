@@ -31,15 +31,23 @@ class ExcerptEmbed extends CorpusSearch {
           break;
         }
         $inc++;
-        preg_match('/<mark>([^<]*)<\/mark>(.[^a-zA-Z]*)/', $result['text'], $three);
-        $bookends = preg_split('/<mark>([^<]*)<\/mark>(.[^a-zA-Z]*)/', $result['text'], 2);
+        preg_match('/<mark>([^<]*)<\/mark>(.[^\w]*)/u', $result['text'], $three);
+        $bookends = preg_split('/<mark>([^<]*)<\/mark>(.[^\w]*)/u', $result['text'], 2);
         $start = $bookends[0];
         $end = $bookends[1];
         preg_match('/[^ ]*$/', trim($bookends[0]), $two);
-        $one = preg_split('/[^ ]*$/', trim($bookends[0]));
+        $one = preg_split('/[^ ]*$/', trim($start));
         preg_match('/(\s*)([^\s]*)(.*)/', $end, $trailing);
-        $before = empty($two[0]) ? str_repeat("&nbsp;", 59) : $two[0];
-        $lines[] = [$one[0], $before, $three[0], $trailing[2], $trailing[3] . '<br>'];
+        $before_length = mb_strlen($one[0] . $two[0]);
+        if ($before_length < 60) {
+          $makeup = 60 - $before_length;
+          $first = str_repeat("&nbsp;", $makeup) . $one[0];
+        }
+        else {
+          $first = $one[0];
+        }
+        $second = empty($two[0]) ? ' ' : $two[0];
+        $lines[] = [$first, $second, $three[0], $trailing[2], $trailing[3] . '<br>'];
       }
       $json_lines = json_encode($lines);
       $output .= "<style>
