@@ -54,6 +54,7 @@ class ExcerptEmbed extends CorpusSearch {
         body {
           font-size: 14px;
           font-family: 'Lucida Console', Monaco, monospace;
+          width: 1200px;
         }
         table {
           white-space: pre;
