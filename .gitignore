@@ -5,6 +5,7 @@ public.key
 
 # Corpus data
 files_with_headers
+deidentified*
 
 # "Built" components
 composer.lock
