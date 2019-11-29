@@ -110,6 +110,13 @@ class CorpusSearch extends ControllerBase {
       // Do additional counting operation for AND instance counts.
       foreach ($matching_texts as $id => $placeholder) {
         foreach ($token_data as $token => $data) {
+          if (!isset($updated_token_data[$token])) {
+            $updated_token_data[$token] = [
+              'instance_count' => 0,
+              'text_count' => 0,
+              'text_ids' => [],
+            ];
+          }
           if (isset($data['text_ids'][$id])) {
             $updated_token_data[$token]['instance_count'] += $data['text_ids'][$id];
             $updated_token_data[$token]['text_count']++;
