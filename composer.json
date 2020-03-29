@@ -10,35 +10,48 @@
       "homepage": "https://markfullmer.com",
       "role": "Developer"
     }
-  ],   
+  ],
   "require": {
-    "composer/installers": "1.5.0",
-    "drupal-composer/drupal-scaffold": "dev-master",
-    "drupal/console": "1.2.0",
-    "drupal/core": "~8",
-    "drupal/facets": "1.0-beta2",
-    "drupal/features": "~3",
-    "drupal/plupload": "1.0-beta2",
-    "drupal/search_api": "1.7",
+    "composer/installers": "1.7.0",
     "drupal/adminimal_theme": "^1.4",
-    "drupal/userprotect": "^1.0",
-    "drupal/search_api_solr": "^2.0",
-    "drupal/views_data_export": "^1.0@beta",
-    "drupal/simple_oauth": "^3",
+    "drupal/allow_iframed_site": "^2.0",
+    "drupal/better_exposed_filters": "4.0-alpha1",
+    "drupal/captcha": "1.0-beta4",
+    "drupal/core-composer-scaffold": "8.8.4",
+    "drupal/core-recommended": "8.8.4",
+    "drupal/facets": "^1.0@beta",
+    "drupal/features": "3.8",
+    "drupal/honeypot": "1.30",
+    "drupal/login_emailusername": "^1.1",
+    "drupal/plupload": "^1.0@beta",
     "drupal/rabbit_hole": "^1.0@beta",
+    "drupal/redirect_after_login": "^2.5",
+    "drupal/reroute_email": "^1.1",
     "drupal/restui": "^1",
     "drupal/role_delegation": "^1.0@alpha",
+    "drupal/search_api": "1.7",
+    "drupal/search_api_solr": "^2.0",
+    "drupal/sendgrid_integration": "^1.2",
+    "drupal/simple_oauth": "^3",
+    "drupal/token": "^1.6",
+    "drupal/userprotect": "^1.0",
+    "drupal/views_data_export": "^1.0@beta",
     "drush/drush": "~8",
     "oomphinc/composer-installers-extender": "1.1.2",
     "rvtraveller/qs-composer-installer": "1.1",
-    "webflo/drupal-core-strict": "~8",
     "wikimedia/composer-merge-plugin": "~1.4",
-    "zaporylie/composer-drupal-optimizations": "^1.1",
-    "writecrow/highlighter": "dev-master",
-    "writecrow/lorem_gutenberg": "dev-master",
-    "writecrow/tag_converter": "dev-master",
     "writecrow/country_code_converter": "dev-master",
-    "drupal/allow_iframed_site": "^2.0"
+    "writecrow/highlighter": "dev-master",
+    "writecrow/lorem_gutenberg": "^1.1",
+    "writecrow/tag_converter": "~1.0",
+    "zaporylie/composer-drupal-optimizations": "^1.1"
+  },
+  "config": {
+    "platform": {
+      "php": "7.2.26"
+    },
+    "sort-packages": true,
+    "process-timeout": 0
   },
   "conflict": {
     "drupal/drupal": "*"
@@ -51,30 +64,49 @@
   },
   "extra": {
     "drupal-scaffold": {
-      "excludes": [
-        "robots.txt",
-        ".csslintrc",
-        ".eslintrc",
-        ".editorconfig",
-        ".eslintignore",
-        ".eslintrc.json",
-        "web.config",
-        ".htaccess"
+      "allowed-packages": [
+        "drupal/core"
       ],
-      "initial": {
-        "sites/default/default.services.yml": "sites/default/services.yml",
-        "sites/default/default.settings.php": "sites/default/settings.php"
-      },
-      "omit-defaults": false
+      "file-mapping": {
+        "[web-root]/web.config": false,
+        "[project-root]/.editorconfig": false,
+        "[project-root]/.gitattributes": false,
+        "[web-root]/.htaccess": false,
+        "[web-root]/robots.txt": false,
+        "[web-root]/.csslintrc": false,
+        "[web-root]/.editorconfig": false,
+        "[web-root]/.eslintignore": false,
+        "[web-root]/example.gitignore": false,
+        "[web-root]/.eslintrc.json": false,
+        "[web-root]/.ht.router.php": false,
+        "[web-root]/INSTALL.txt": false,
+        "[web-root]/README.txt": false,
+        "[web-root]/sites/README.txt": false,
+        "[web-root]/sites/development.services.yml": false
+      }
     },
     "installer-paths": {
-      "core": ["type:drupal-core"],
-      "modules/contrib/{$name}": ["type:drupal-module"],
-      "profiles/contrib/{$name}": ["type:drupal-profile"],
-      "themes/contrib/{$name}": ["type:drupal-theme"],
-      "drush/contrib/{$name}": ["type:drupal-drush"],
-      "modules/custom/{$name}": ["type:drupal-custom-module"],
-      "themes/custom/{$name}": ["type:drupal-custom-theme"]
+      "core": [
+        "type:drupal-core"
+      ],
+      "modules/contrib/{$name}": [
+        "type:drupal-module"
+      ],
+      "profiles/contrib/{$name}": [
+        "type:drupal-profile"
+      ],
+      "themes/contrib/{$name}": [
+        "type:drupal-theme"
+      ],
+      "drush/contrib/{$name}": [
+        "type:drupal-drush"
+      ],
+      "modules/custom/{$name}": [
+        "type:drupal-custom-module"
+      ],
+      "themes/custom/{$name}": [
+        "type:drupal-custom-theme"
+      ]
     }
   },
   "repositories": {
