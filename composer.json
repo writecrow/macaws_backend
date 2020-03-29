@@ -58,7 +58,8 @@
         ".editorconfig",
         ".eslintignore",
         ".eslintrc.json",
-        "web.config"
+        "web.config",
+        ".htaccess"
       ],
       "initial": {
         "sites/default/default.services.yml": "sites/default/services.yml",

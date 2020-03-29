@@ -15,7 +15,6 @@ composer.lock
 .eslintignore
 .eslintrc.json
 .gitattributes
-.htaccess
 README.txt
 autoload.php
 core/
