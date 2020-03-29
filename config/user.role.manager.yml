@@ -7,6 +7,8 @@ label: Manager
 weight: 6
 is_admin: null
 permissions:
+  - 'access administration pages'
+  - 'access content overview'
   - 'access toolbar'
   - 'access user profiles'
   - 'administer users'
@@ -14,7 +16,11 @@ permissions:
   - 'assign export_access role'
   - 'assign full_text_access role'
   - 'assign manager role'
+  - 'edit any page content'
+  - 'edit own page content'
+  - 'revert page revisions'
   - userprotect.account.edit
   - userprotect.mail.edit
   - userprotect.pass.edit
+  - 'view page revisions'
   - 'view the administration theme'
