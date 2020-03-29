@@ -19,6 +19,7 @@ permissions:
   - 'edit any page content'
   - 'edit own page content'
   - 'revert page revisions'
+  - 'use text format standard_html'
   - userprotect.account.edit
   - userprotect.mail.edit
   - userprotect.pass.edit
