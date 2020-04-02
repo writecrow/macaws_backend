@@ -11,4 +11,4 @@ corpus_search.excerpts:
     _controller: '\Drupal\corpus_search\Controller\ExcerptEmbed::endpoint'
     _title: 'MACAWS Search'
   requirements:  
-    _permission: 'administer content'
+    _permission: 'access content'
