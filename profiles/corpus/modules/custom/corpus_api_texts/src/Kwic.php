@@ -2,48 +2,25 @@
 
 namespace Drupal\corpus_api_texts;
 
+use writecrow\Highlighter\HighlightExcerpt;
+use Drupal\corpus_search\Controller\CorpusSearch;
+use Drupal\corpus_api_texts\Sentence;
+
 /**
  * PHP Implementation of a Keyword-in-Context search.
  */
 class Kwic {
 
   /**
-   * Main function to provide keyword-in-context.
+   * Given a text and a string of search terms, return highlighted sentences.
    *
-   * @return string
-   *   The highlighted keywords in context.
+   * @return array
+   *   The highlighted keywords in isolated sentences.
    */
   public static function excerpt($text, $search_string, $instances = '5') {
-    $sentences = self::getSentences($text);
-    $keywords = self::splitKeywords($search_string);
-    $instances = self::getInstances($sentences, $keywords, $instances);
-    $excerpt = $instances;
-    return $excerpt;
-  }
-
-  public static function splitKeywords($search_string) {
-    $keys = [];
-    preg_match_all("/\"([^\"]+)\"/u", $search_string, $phrases);
-    if (empty($phrases[1])) {
-      // There are no quoted strings. Just return each word separately.
-      return explode(' ', $search_string);
-    }
-    else {
-      foreach ($phrases[1] as $phrase) {
-        $keys[] = $phrase;
-      }
-      // There are quoted strings. Next check for additional, unquoted strings.
-      $unquoted = preg_split("/\"([^\"]+)\"/u", $search_string);
-      if (!empty($unquoted)) {
-        foreach ($unquoted as $string) {
-          $cleaned = trim($string);
-          if (strlen($cleaned) > 0) {
-          $keys[] = $cleaned;
-          }
-        }
-      }
-    }
-    return $keys;
+    $sentences = new Sentence();
+    $keywords = CorpusSearch::getTokens($search_string);
+    return self::getInstances($sentences->split($text), $keywords, $instances);
   }
 
   public static function getSentences($text) {
@@ -52,23 +29,14 @@ class Kwic {
     return $sentences;
   }
 
-  public static function getInstances($sentences, $phrases, $inc) {
+  public static function getInstances($sentences, $keywords, $inc) {
     $instances = [];
     foreach ($sentences as $sentence) {
-      $original_sentence = $sentence;
       if (count($instances) >= $inc) {
         break;
       }
-      foreach ($phrases as $phrase) {
-        preg_match("/[^\w\s]/", $phrase, $punctuation);
-        $boundary = '((?<![\w!@#$^%,+])(?=[\w!@#$^%,+])|(?<=[\w!@#$^%,+])(?![\w!@#$^%,+]))';
-        if (empty($punctuation)) {
-          $boundary = '\b';
-        }
-
-        $sentence = preg_replace('/' . $boundary . preg_quote($phrase, "/") . $boundary . '/i', "<mark>\$0</mark>", $sentence);
-      }
-      if ($sentence !== $original_sentence) {
+      $sentence = HighlightExcerpt::highlight($sentence, array_keys($keywords), FALSE, "fixed");
+      if (mb_strpos($sentence, '<mark>') !== FALSE) {
         $instances[] = $sentence;
       }
     }
