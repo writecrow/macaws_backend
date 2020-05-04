@@ -52,7 +52,7 @@ class CorpusText extends FieldPluginBase {
    */
   public function render(ResultRow $values) {
     $entity = $values->_entity;
-    $text_object = $entity->get('field_body')->getValue();
+    $text_object = $entity->get('field_text')->getValue();
     $user = User::load(\Drupal::currentUser()->id());
     $text = htmlentities(strip_tags($text_object[0]['value'], "<name><date><place>"));
 
