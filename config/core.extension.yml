@@ -33,6 +33,7 @@ module:
   options: 0
   page_cache: 0
   path: 0
+  path_alias: 0
   plupload: 0
   rabbit_hole: 0
   rest: 0
@@ -50,7 +51,6 @@ module:
   user: 0
   userprotect: 0
   views_data_export: 0
-  views_ui: 0
   word_frequency: 0
   views: 10
   corpus: 1000

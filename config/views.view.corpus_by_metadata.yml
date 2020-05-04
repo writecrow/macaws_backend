@@ -45,7 +45,6 @@ description: ''
 tag: ''
 base_table: node_field_data
 base_field: nid
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -58,7 +57,7 @@ display:
         options:
           perm: 'access content'
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
@@ -2049,6 +2048,56 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        concordance_views_field:
+          id: concordance_views_field
+          table: node
+          field: concordance_views_field
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+          entity_type: node
+          plugin_id: concordance_views_field
       filters:
         status:
           value: '1'
@@ -2060,6 +2109,8 @@ display:
           id: status
           expose:
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
           group: 1
         title:
           id: title
@@ -2091,6 +2142,8 @@ display:
               export_access: '0'
               manager: '0'
             placeholder: ''
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -2199,6 +2252,93 @@ display:
               raw_output: false
             field_draft:
               alias: ''
+              raw_output: false
+            field_assignment_code:
+              alias: ''
+              raw_output: false
+            field_assignment_mode:
+              alias: ''
+              raw_output: false
+            field_assignment_name:
+              alias: ''
+              raw_output: false
+            field_assignment_topic:
+              alias: ''
+              raw_output: false
+            field_began_formal_education:
+              alias: ''
+              raw_output: false
+            field_course:
+              alias: ''
+              raw_output: false
+            field_course_semester:
+              alias: ''
+              raw_output: false
+            field_course_year:
+              alias: ''
+              raw_output: false
+            field_courses_currently_enrolled:
+              alias: ''
+              raw_output: false
+            field_courses_previously_enrolle:
+              alias: ''
+              raw_output: false
+            field_credit_hours:
+              alias: ''
+              raw_output: false
+            field_experience_abroad:
+              alias: ''
+              raw_output: false
+            field_heritage_of_target_languag:
+              alias: ''
+              raw_output: false
+            field_institution:
+              alias: ''
+              raw_output: false
+            field_l1:
+              alias: ''
+              raw_output: false
+            field_length_of_course:
+              alias: ''
+              raw_output: false
+            field_macro_genre:
+              alias: ''
+              raw_output: false
+            field_major:
+              alias: ''
+              raw_output: false
+            field_minor:
+              alias: ''
+              raw_output: false
+            field_mode_of_course:
+              alias: ''
+              raw_output: false
+            field_other_languages:
+              alias: ''
+              raw_output: false
+            field_target_language_practice:
+              alias: ''
+              raw_output: false
+            field_proficiency_exam:
+              alias: ''
+              raw_output: false
+            field_proficiency_exam_score:
+              alias: ''
+              raw_output: false
+            field_section:
+              alias: ''
+              raw_output: false
+            field_target_language:
+              alias: ''
+              raw_output: false
+            field_wordcount:
+              alias: ''
+              raw_output: false
+            field_year_in_school:
+              alias: ''
+              raw_output: false
+            concordance_views_field:
+              alias: concordance
               raw_output: false
     cache_metadata:
       max-age: -1
