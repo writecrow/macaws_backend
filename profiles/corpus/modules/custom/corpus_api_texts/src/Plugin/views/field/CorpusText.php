@@ -6,8 +6,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Drupal\user\Entity\User;
-use Drupal\corpus_search\CorpusWordFrequency as Frequency;
-use writecrow\Highlighter\HighlightExcerpt;
 
 /**
  * Return full or excerpted text, based on the user role.
@@ -54,69 +52,22 @@ class CorpusText extends FieldPluginBase {
    */
   public function render(ResultRow $values) {
     $entity = $values->_entity;
-    $text_object = $entity->get('field_text')->getValue();
+    $text_object = $entity->get('field_body')->getValue();
     $user = User::load(\Drupal::currentUser()->id());
-    $text = strip_tags($text_object[0]['value'], "<name><date><place>");
-    $param = \Drupal::request()->query->all();
+    $text = htmlentities(strip_tags($text_object[0]['value'], "<name><date><place>"));
 
     if ($user->hasRole('full_text_access')) {
-      $output = '<h3>Full text</h3>';
-      if (isset($param['search'])) {
-        $tokens = self::getTokens($param['search']);
-        $text = HighlightExcerpt::highlight($text, array_keys($tokens), FALSE);
-      }
-      return nl2br($output . $text);
+      return nl2br($text);
     }
     // Default to returning a truncated version of the text.
     if (strlen($text) > 600) {
-      $truncation = mb_substr($text, 0, 600);
+      $output = '<h3>(Excerpted)</h3><p>Displaying first 600 characters. For fulltext, apply for an account by emailing <a href="mailto:collaborate@writecrow.org">collaborate@writecrow.org</a></p><hr />';
+      $output .= nl2br(preg_replace('/\s+?(\S+)?$/', '', substr($text, 0, 600)) . '...');
     }
     else {
-      $truncation = $text;
-    }
-    $output = '<h3>(Excerpted)</h3><p>Displaying first 600 characters. For fulltext, apply for an account by emailing <a href="mailto:collaborate@writecrow.org">collaborate@writecrow.org</a></p><hr />';
-
-    if (isset($param['search'])) {
-      $tokens = self::getTokens($param['search']);
-      $output .= HighlightExcerpt::highlight($truncation, array_keys($tokens), FALSE);
-    }
-    else {
-      $output .= $truncation;
+      $output = nl2br($text);
     }
     return $output;
-  }
-
-  /**
-   * Determine which type of search to perform.
-   */
-  public static function getTokens($search_string) {
-    $result = [];
-    $tokens = preg_split("/\"[^\"]*\"(*SKIP)(*F)|[ \/]+/", $search_string);
-    if (!empty($tokens)) {
-      // Determine whether to do a phrase or word search & case-sensitivity.
-      foreach ($tokens as $token) {
-        $length = strlen($token);
-        if ((substr($token, 0, 1) == '"') && (substr($token, $length - 1, 1) == '"')) {
-          $cleaned = substr($token, 1, $length - 2);
-          if (preg_match("/[^a-zA-Z]/", $cleaned)) {
-            // This is a quoted string. Do a phrasal search.
-            $result[$cleaned] = 'phrase';
-          }
-          else {
-            // This is a case-sensitive word search.
-            $result[$cleaned] = 'quoted-word';
-          }
-
-        }
-        else {
-          // This is a word. Remove punctuation.
-          $tokenized = Frequency::tokenize($token);
-          $token = $tokenized[0];
-          $result[strtolower($token)] = 'word';
-        }
-      }
-    }
-    return $result;
   }
 
 }
