@@ -1,0 +1,22 @@
+uuid: 5aecc275-b3a6-4e71-a7b6-24f8cb403291
+langcode: en
+status: true
+dependencies:
+  theme:
+    - corpus_theme
+_core:
+  default_config_hash: CyX_aDKAka2_eihevNLscCHDYrzDgIqwWzFVEFRKIww
+id: corpus_theme_primary_local_tasks
+theme: corpus_theme
+region: header
+weight: 0
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary tabs'
+  provider: core
+  label_display: '0'
+  primary: true
+  secondary: false
+visibility: {  }

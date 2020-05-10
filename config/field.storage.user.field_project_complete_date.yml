@@ -1,0 +1,22 @@
+uuid: 00d1e18b-6b4d-4c58-b4a4-2008147a2c29
+langcode: en
+status: true
+dependencies:
+  module:
+    - datetime
+    - user
+_core:
+  default_config_hash: BX2D524ee5id4nE35OAs6qlbzVJADcYTH_Vg39k1Dao
+id: user.field_project_complete_date
+field_name: field_project_complete_date
+entity_type: user
+type: datetime
+settings:
+  datetime_type: date
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

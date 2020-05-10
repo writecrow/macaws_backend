@@ -1,0 +1,20 @@
+uuid: 2866ba6d-9b7e-428a-85a9-49b6335dbeb7
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+_core:
+  default_config_hash: 5eTSVZOnCCCmj8IubtQuhCkAW_-dOc_MpNN53VItHXc
+id: user.field_notifications
+field_name: field_notifications
+entity_type: user
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

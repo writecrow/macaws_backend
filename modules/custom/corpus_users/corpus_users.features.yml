@@ -1,0 +1,4 @@
+excluded:
+  - facets.facet_source.search_api__views_rest__repository_resources__rest_export_1
+  - facets.facet_source.search_api__views_rest__texts_by_word__rest_export_1
+required: true

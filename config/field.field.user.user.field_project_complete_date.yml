@@ -1,0 +1,23 @@
+uuid: db29b58d-84fe-406d-b02e-6f3aea191dae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_project_complete_date
+  module:
+    - datetime
+    - user
+_core:
+  default_config_hash: 5qUhYSvf7bqNo2kMp2tgyGjSyotjbwsDKa-RN_tZO8w
+id: user.user.field_project_complete_date
+field_name: field_project_complete_date
+entity_type: user
+bundle: user
+label: 'Expected date of project completion'
+description: "Access will expire on the date above unless you request an extension.\r\n"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

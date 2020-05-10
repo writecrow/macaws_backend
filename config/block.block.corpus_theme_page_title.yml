@@ -1,0 +1,20 @@
+uuid: 7e435202-0c8f-4d36-8ada-d6e531b14850
+langcode: en
+status: true
+dependencies:
+  theme:
+    - corpus_theme
+_core:
+  default_config_hash: Z3nlZUh2mSJP3apMrJWt-duS-aLyP79rcfu_0wpPmDs
+id: corpus_theme_page_title
+theme: corpus_theme
+region: header
+weight: -30
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  provider: core
+  label_display: '0'
+visibility: {  }

@@ -1,0 +1,22 @@
+name: Macaws Theme
+type: theme
+description: Administrative theme for Corpus
+core: 8.x
+# Defines the base theme
+base theme: corpus_theme
+
+libraries:
+  - macaws_theme/global-styling
+
+regions:
+  header: 'Header'
+  pre_content: 'Pre-content'
+  breadcrumb: Breadcrumb
+  highlighted: Highlighted
+  help: Help
+  content: Content
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  sidebar_first: 'First sidebar'
+regions_hidden:
+  - sidebar_first

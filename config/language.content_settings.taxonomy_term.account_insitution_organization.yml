@@ -1,0 +1,13 @@
+uuid: e8d84600-5f52-4398-b683-15273d2433df
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.account_insitution_organization
+_core:
+  default_config_hash: 42eYqAmNWQeSqq-0W4tGSuK8L0JAuiJs_xp4717ScQI
+id: taxonomy_term.account_insitution_organization
+target_entity_type_id: taxonomy_term
+target_bundle: account_insitution_organization
+default_langcode: site_default
+language_alterable: false

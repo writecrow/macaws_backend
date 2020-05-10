@@ -1,0 +1,20 @@
+uuid: e6cc17e8-3c65-4cac-b9f1-35b16da502ae
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+_core:
+  default_config_hash: B0R3NaCuQhmpDt5xvmUWRm8oGUD7brGlYkzcu_uWjY8
+id: user.field_email_updates
+field_name: field_email_updates
+entity_type: user
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

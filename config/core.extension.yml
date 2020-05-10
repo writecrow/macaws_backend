@@ -1,8 +1,10 @@
 module:
   allow_iframed_site: 0
+  better_exposed_filters: 0
   block: 0
   block_content: 0
   breakpoint: 0
+  captcha: 0
   ckeditor: 0
   config: 0
   config_update: 0
@@ -15,12 +17,14 @@ module:
   corpus_api_texts: 0
   corpus_importer: 0
   corpus_search: 0
+  corpus_users: 0
   csv_serialization: 0
   datetime: 0
   dblog: 0
   dynamic_page_cache: 0
   editor: 0
   entity_reference: 0
+  facets: 0
   features: 0
   features_ui: 0
   field: 0
@@ -29,6 +33,7 @@ module:
   filter: 0
   image: 0
   language: 0
+  mailsystem: 0
   node: 0
   options: 0
   page_cache: 0
@@ -36,16 +41,20 @@ module:
   path_alias: 0
   plupload: 0
   rabbit_hole: 0
+  recaptcha: 0
+  reroute_email: 0
   rest: 0
   restui: 0
   rh_node: 0
   role_delegation: 0
+  sendgrid_integration: 0
   serialization: 0
   simple_oauth: 0
   simple_oauth_extras: 0
   system: 0
   taxonomy: 0
   text: 0
+  token: 0
   toolbar: 0
   user: 0
   userprotect: 0
@@ -58,6 +67,8 @@ theme:
   classy: 0
   seven: 0
   adminimal_theme: 0
+  corpus_theme: 0
+  macaws_theme: 0
 profile: corpus
 _core:
   default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc

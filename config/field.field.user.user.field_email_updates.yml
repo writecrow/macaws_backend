@@ -1,0 +1,26 @@
+uuid: 278eb458-6e98-4e8d-be22-1f79923a066e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_email_updates
+  module:
+    - user
+_core:
+  default_config_hash: zWDFWyNqBMzLnO3I2HFutE8EC2Gg2_GOKegzXy3BZ84
+id: user.user.field_email_updates
+field_name: field_email_updates
+entity_type: user
+bundle: user
+label: 'Email me periodic updates'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

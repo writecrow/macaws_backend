@@ -1,0 +1,22 @@
+uuid: a680aee6-5bfc-4cce-8d93-c224839baf81
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_project_description
+  module:
+    - user
+_core:
+  default_config_hash: eQZjwDonKlgOV_WVuzesgfVM56T-Mgba6Pf-7KRr1j0
+id: user.user.field_project_description
+field_name: field_project_description
+entity_type: user
+bundle: user
+label: 'Project description'
+description: 'Please provide a description (minimum 100 characters) of the research or pedagogical project that you plan to use this for (e.g., examining hedges in Chinese argumentative essays; exploring assignments to create a new assignment sheet for my first year writing class). If you would like full text or export access, please provide justification for that level of access in your description.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

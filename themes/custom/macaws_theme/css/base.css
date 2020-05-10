@@ -1,0 +1,36 @@
+header h1.title {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-bottom: 2px solid #fff;
+  letter-spacing: 1rem;
+  font-family: Oswald,monospace;
+}
+header h1.title a {
+  color: #fff;
+}
+header .content-header {
+  padding-top: 0;
+}
+header h4.subheading {
+  font-size: 1.2rem;
+  padding-top: 0;
+}
+.header-wrapper, .logo-wrapper {
+  display: inline-block;
+}
+.logo-wrapper {
+  width: 300px;
+}
+
+header {
+    background-image: linear-gradient(#005,navy);
+    padding-bottom: .5rem;
+    padding-top: .5rem;
+    color: #fff;
+}
+.logo-wrapper .logo {
+    width: 140px;
+    border-radius: 50%;
+    background-color: #fff;
+}

@@ -1,0 +1,10 @@
+uuid: 2e685ca9-3c51-4d88-8b5e-ef86bbf5e509
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: yEpYImHHIpmNNCL3JZTj6j8dGzsN6oiE_9H4ylRqIw8
+name: 'Account Insitution/Organization'
+vid: account_insitution_organization
+description: ''
+weight: 0

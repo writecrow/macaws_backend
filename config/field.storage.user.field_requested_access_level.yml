@@ -1,0 +1,32 @@
+uuid: 5d85a32f-db01-4a5f-90fb-a2c5d95fa97b
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - user
+_core:
+  default_config_hash: YTPSAcQC2WmUyoGXgJ-zpvEuZESTNZUhDSWZWqLG0RU
+id: user.field_requested_access_level
+field_name: field_requested_access_level
+entity_type: user
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: standard
+      label: Standard
+    -
+      value: full_text
+      label: 'Full text'
+    -
+      value: export
+      label: 'Data export'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

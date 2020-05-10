@@ -1,0 +1,20 @@
+uuid: 17e70fdd-8858-4da9-bbe1-9e6979a53edc
+langcode: en
+status: true
+dependencies:
+  theme:
+    - corpus_theme
+_core:
+  default_config_hash: ik4PTMlBD0MWansnSMpSXq5SUlWRJ1IVVt6C7AIbQmc
+id: corpus_theme_local_actions
+theme: corpus_theme
+region: content
+weight: -10
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  provider: core
+  label_display: '0'
+visibility: {  }

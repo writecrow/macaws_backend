@@ -1,0 +1,29 @@
+uuid: c1a95d01-316e-4625-a5ee-454e55aa8ff3
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - user
+_core:
+  default_config_hash: O6w9ZP2CewfXIKqGiwhxd5RmZ_WMLJ_hcfx_wmUBOnk
+id: user.field_account_type
+field_name: field_account_type
+entity_type: user
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: institutional
+      label: Institutional
+    -
+      value: individual
+      label: Individual
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,22 @@
+uuid: 4eb4618e-49a9-4d8b-b89b-a3b6f915e2ab
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - corpus_theme
+_core:
+  default_config_hash: 8by5KRsb7ZpmjHj0ms1d7xAG_xH54AWsOX6spDLJ59U
+id: corpus_theme_breadcrumbs
+theme: corpus_theme
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  provider: system
+  label_display: '0'
+visibility: {  }

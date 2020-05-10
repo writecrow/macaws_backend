@@ -1,0 +1,22 @@
+uuid: ef09a922-ee32-49f2-a272-6b97bf1be40b
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - macaws_theme
+_core:
+  default_config_hash: 80N66GdzEvwqi1m-_GZ-ulkk8AJG9beoXcZ4-pMVKjI
+id: macaws_theme_content
+theme: macaws_theme
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  provider: system
+  label_display: '0'
+visibility: {  }

@@ -1,0 +1,21 @@
+uuid: 0225498c-42c4-4990-8f41-680a1a1090e0
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+_core:
+  default_config_hash: jksBrVhs569BWLFgMU2zvAU2dPV-Cg1ii2p7J5kHi_w
+id: user.field_project_description
+field_name: field_project_description
+entity_type: user
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
