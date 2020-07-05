@@ -10,22 +10,6 @@ use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_form_FORM_ID_alter().
- * 
- * Display modifications to the user registration form.
- */
-function corpus_users_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['account']['name']['#title'] = "Account login name";
-  $form['account']['name']['#description'] = 'This field will be used for signing in. ';
-  $form['field_requested_access_level']['#states'] = [
-    'visible' => [
-      ':input[name="field_account_type"]' => ['value' => 'individual'],
-    ],
-  ];
-}
-
-
-/**
- * Implements hook_form_FORM_ID_alter().
  *
  * Display modifications to the user profile form.
  */
@@ -39,8 +23,10 @@ function corpus_users_form_user_form_alter(&$form, FormStateInterface $form_stat
       'field_project_complete_date',
       'field_project_description',
       'field_read_terms',
+      'field_no_download',
     ];
     $basic_fields = [
+      'field_full_name',
       'mail',
       'name',
       'pass',
@@ -72,6 +58,10 @@ function corpus_users_form_user_form_alter(&$form, FormStateInterface $form_stat
         $form['basic'][$field] = $form['account'][$field];
         unset($form['account'][$field]);
       }
+      if (isset($form[$field])) {
+        $form['basic'][$field] = $form[$field];
+        unset($form[$field]);
+      }
     }
     $current_user = \Drupal::currentUser();
     $manager = $current_user->hasPermission('administer users');
@@ -93,11 +83,28 @@ function corpus_users_form_user_form_alter(&$form, FormStateInterface $form_stat
 /**
  * Implements hook_mail_alter().
  *
- * Sends a blind carbon copy to all outgoing emails.
+ * Control sender/reply-to of outgoing emails.
  */
 function corpus_users_mail_alter(&$message) {
-  $bcc_mail = Settings::get('corpus_bcc_email');
+  // All variables defined in sites/default/settings.local.php.
+  $return_path = Settings::get('corpus_users_return_path');
+  if ($return_path) {
+    $message['headers']['Return-Path'] = $return_path;
+  }
+  $sender = Settings::get('corpus_users_sender');
+  if ($sender) {
+    $message['headers']['Sender'] = $sender;
+  }
+  $reply_to = Settings::get('corpus_users_reply_to');
+  if ($reply_to) {
+    $message['headers']['Reply-To'] = $reply_to;
+  }
+  $from = Settings::get('corpus_users_from');
+  if ($from) {
+    $message['headers']['From'] = $from;
+  }
 
+  $bcc_mail = Settings::get('corpus_users_bcc_email');
   if (in_array($message['id'], [
     'user_register_admin_created',
     'user_status_activated',
