@@ -144,6 +144,9 @@ class CorpusImporter extends ImporterService {
     $node->set('title', $text['filename']);
     foreach ($taxonomies as $name => $machine_name) {
       $field_name = substr('field_' . $machine_name, 0, 32);
+      if (!$node->hasField($field_name)) {
+        continue;
+      }
       if (!empty($fields[$machine_name])) {
         if (is_array($fields[$machine_name])) {
           $elements = [];

@@ -3,7 +3,7 @@ test_defaults:
   to: jfullmer@austin.utexas.edu
   subject: 'Test Email from SendGrid Module'
   body:
-    value: 'Test Message for SendGrid.'
+    value: "Test Message for SendGrid.\r\n\r\nThis does not contain a website."
     format: plain_text
   from_name: ''
   to_name: ''
