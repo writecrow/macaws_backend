@@ -56,19 +56,8 @@ class ExcerptEmbed extends CorpusSearch {
           font-family: 'Lucida Console', Monaco, monospace;
           width: 1200px;
         }
-        table {
-          white-space: pre;
-          border-collapse: collapse;
-          width: 100%;
-        }
-        td, th {
-          border: 1px solid #dddddd;
+        #concordance_lines {
           text-align: center;
-          padding: 8px;
-        }
-
-        tr:nth-child(even) {
-          background-color: #f5f5f5;
         }
       </style>";
       $output .= '
@@ -89,6 +78,11 @@ class ExcerptEmbed extends CorpusSearch {
         function comparator_after(a, b) {
           first = a[3] === "" ? " " : a[3].toLowerCase();
           second = b[3] === "" ? " " : b[3].toLowerCase();
+          if (first < second) return -1;
+          if (first > second) return 1;
+          // The two strings are equal. Compare the final string...
+          first = a[4] === "" ? " " : a[4].trim().toLowerCase();
+          second = b[4] === "" ? " " : b[4].trim().toLowerCase();
           if (first < second) return -1;
           if (first > second) return 1;
           return 0;
@@ -126,13 +120,9 @@ class ExcerptEmbed extends CorpusSearch {
           for (const line of sorted_lines) {
             conc_line_div.innerHTML += line.join(" ");
           }
-
         }
-
         // start with lines sorted by the word before the kwic
         sort_before();
-
-
         </script>';
       $response->setContent($output);
     }
