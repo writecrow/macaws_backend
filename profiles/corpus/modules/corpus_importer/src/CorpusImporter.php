@@ -22,10 +22,6 @@ class CorpusImporter extends ImporterService {
     foreach ($vocabularies as $key => $vocabulary) {
       $taxonomies[$vocabulary->label()] = $vocabulary->id();
     }
-    $text['Target Language'] = 'Russian';
-    if ($text['Assignment Mode'] == 'Speech') {
-      $text['Assignment Mode'] = 'Speaking';
-    }
     foreach ($taxonomies as $name => $machine_name) {
       $tid = '';
       $save = TRUE;
