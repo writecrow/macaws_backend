@@ -1,0 +1,7 @@
+corpus_users.settings:
+  path: '/admin/config/corpus-users'
+  defaults:
+    _form: '\Drupal\corpus_users\Form\Settings'
+    _title: 'Corpus User Settings'
+  requirements:
+    _permission: 'administer basecamp api'

@@ -1,0 +1,24 @@
+uuid: a124f357-7691-42ff-a967-563b50224b28
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_no_download
+  module:
+    - user
+id: user.user.field_no_download
+field_name: field_no_download
+entity_type: user
+bundle: user
+label: 'I will not download full texts from the servers for research purposes.'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

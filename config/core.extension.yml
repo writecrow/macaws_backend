@@ -37,6 +37,7 @@ module:
   image: 0
   language: 0
   mailsystem: 0
+  nocurrent_pass: 0
   node: 0
   options: 0
   page_cache: 0
