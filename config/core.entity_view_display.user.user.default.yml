@@ -8,7 +8,6 @@ dependencies:
     - field.field.user.user.field_email_updates
     - field.field.user.user.field_full_name
     - field.field.user.user.field_institution
-    - field.field.user.user.field_no_download
     - field.field.user.user.field_notifications
     - field.field.user.user.field_project_complete_date
     - field.field.user.user.field_project_description
@@ -65,16 +64,6 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: content
-  field_no_download:
-    weight: 17
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    type: boolean
     region: content
   field_notifications:
     weight: 14

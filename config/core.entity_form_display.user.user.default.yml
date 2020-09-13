@@ -8,7 +8,6 @@ dependencies:
     - field.field.user.user.field_email_updates
     - field.field.user.user.field_full_name
     - field.field.user.user.field_institution
-    - field.field.user.user.field_no_download
     - field.field.user.user.field_notifications
     - field.field.user.user.field_project_complete_date
     - field.field.user.user.field_project_description
@@ -44,7 +43,7 @@ content:
     type: string_textfield
     region: content
   field_email_updates:
-    weight: 11
+    weight: 10
     settings:
       display_label: true
     third_party_settings: {  }
@@ -68,15 +67,8 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
-  field_no_download:
-    weight: 8
-    settings:
-      display_label: true
-    third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   field_notifications:
-    weight: 10
+    weight: 9
     settings:
       display_label: true
     third_party_settings: {  }
@@ -97,7 +89,7 @@ content:
     type: string_textarea
     region: content
   field_read_terms:
-    weight: 9
+    weight: 8
     settings:
       display_label: true
     third_party_settings: {  }
