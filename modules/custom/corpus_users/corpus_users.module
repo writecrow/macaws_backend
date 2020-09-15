@@ -158,6 +158,9 @@ function _corpus_users_registration_validate($form, &$form_state) {
 
 function _corpus_users_basecamp_todo(&$form, &$form_state) {
   $config = \Drupal::config('corpus_users.settings');
+  if (!$config->get('on')) {
+    return;
+  }
   $base_url = \Drupal::request()->getSchemeAndHttpHost();
   \Drupal::logger('corpus_users')->notice(serialize($form_state->getValues()));
   $values = $form_state->getValues();
@@ -170,8 +173,9 @@ function _corpus_users_basecamp_todo(&$form, &$form_state) {
   $data = [
     'content' => 'User access request: ' . $values['field_full_name'][0]['value'],
     'description' => $message,
-    'due_on' => date('Y-m-d', strtotime('+2 days')),
+    'due_on' => date('Y-m-d', strtotime('+7 days')),
     'starts_on' => date('Y-m-d', time()),
+    'notify' => TRUE,
   ];
   $assignee_ids = $config->get('assignee_ids');
   if (!empty($assignee_ids)) {
