@@ -49,6 +49,7 @@ module:
   recaptcha: 0
   reroute_email: 0
   rest: 0
+  rest_feedback_endpoint: 0
   restui: 0
   rh_node: 0
   role_delegation: 0
