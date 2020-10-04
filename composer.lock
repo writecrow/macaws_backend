@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae108aaa1783cb9820a8c795341264fc",
+    "content-hash": "5b299af20553f0bc4f3a540f08f2eccd",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7008,6 +7008,35 @@
             "time": "2017-04-25T02:31:25+00:00"
         },
         {
+            "name": "writecrow/basecamp_api",
+            "version": "1.0.0-alpha.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/writecrow/basecamp_api.git",
+                "reference": "5fa3996b265262cbb708585aa784ae54c4e2a9ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/writecrow/basecamp_api/zipball/5fa3996b265262cbb708585aa784ae54c4e2a9ed",
+                "reference": "5fa3996b265262cbb708585aa784ae54c4e2a9ed",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "drupal-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Drupal integration for Basecamp API v3",
+            "homepage": "https://github.com/writecrow/basecamp_api",
+            "keywords": [
+                "drupal"
+            ],
+            "time": "2020-10-04T17:35:39+00:00"
+        },
+        {
             "name": "writecrow/country_code_converter",
             "version": "dev-master",
             "source": {
@@ -7457,6 +7486,7 @@
         "drupal/role_delegation": 15,
         "drupal/smtp": 5,
         "drupal/views_data_export": 10,
+        "writecrow/basecamp_api": 15,
         "writecrow/country_code_converter": 20,
         "writecrow/highlighter": 20
     },
