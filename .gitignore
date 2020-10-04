@@ -56,6 +56,9 @@ repository_data
 files_with_headers
 deidentified*
 
+## Explicitly ignore configuration that we do not want to version
+config/smtp.settings.yml
+
 # Packages #
 ############
 *.7z

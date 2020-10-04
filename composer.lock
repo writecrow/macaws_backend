@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b299af20553f0bc4f3a540f08f2eccd",
+    "content-hash": "6e532cb6076746a6dac6599c3168f8cc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7163,6 +7163,35 @@
             "time": "2018-01-11T20:11:01+00:00"
         },
         {
+            "name": "writecrow/rest_feedback_endpoint",
+            "version": "1.0.0-alpha.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/writecrow/rest_feedback_endpoint.git",
+                "reference": "4b5be00030b4b3b152c3d4c90659aa91d79a9e07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/writecrow/rest_feedback_endpoint/zipball/4b5be00030b4b3b152c3d4c90659aa91d79a9e07",
+                "reference": "4b5be00030b4b3b152c3d4c90659aa91d79a9e07",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "drupal-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "REST endpoint for receiving a POST request",
+            "homepage": "https://github.com/writecrow/rest_feedback_endpoint",
+            "keywords": [
+                "drupal"
+            ],
+            "time": "2020-10-04T16:59:10+00:00"
+        },
+        {
             "name": "writecrow/tag_converter",
             "version": "1.4",
             "source": {
@@ -7488,7 +7517,8 @@
         "drupal/views_data_export": 10,
         "writecrow/basecamp_api": 15,
         "writecrow/country_code_converter": 20,
-        "writecrow/highlighter": 20
+        "writecrow/highlighter": 20,
+        "writecrow/rest_feedback_endpoint": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,

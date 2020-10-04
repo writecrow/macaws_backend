@@ -12,6 +12,7 @@ permissions:
   - 'access content'
   - 'access toolbar'
   - 'change own username'
+  - 'restful post rest_feedback_endpoint_submit_issue'
   - userprotect.account.edit
   - userprotect.mail.edit
   - userprotect.pass.edit
