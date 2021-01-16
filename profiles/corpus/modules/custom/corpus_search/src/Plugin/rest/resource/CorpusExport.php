@@ -90,7 +90,8 @@ class CorpusExport extends ResourceBase {
    */
   public function get($type = NULL) {
     $data = Corpus::search($this->currentRequest);
-    $output = Excerpt::getExcerptOrFullText($data['matching_texts'], $data['tokens'], $data['facet_map'], 50, FALSE);
+    $is_excerpt = TRUE;
+    $output = Excerpt::getExcerptOrFullText($data['matching_texts'], $data['tokens'], $data['facet_map'], 50, $is_excerpt);
     $response = new ResourceResponse($output);
     $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
     return $response;
