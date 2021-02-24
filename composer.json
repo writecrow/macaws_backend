@@ -13,10 +13,11 @@
   ],
   "require": {
     "composer/installers": "^1 || ^2",
+    "cweagans/composer-patches": "^1.7",
     "drupal/adminimal_theme": "^1.4",
     "drupal/allow_iframed_site": "^2.0",
     "drupal/better_exposed_filters": "4.0-alpha1",
-    "drupal/captcha": "1.0-beta4",
+    "drupal/captcha": "^1",
     "drupal/config_ignore": "^2.2",
     "drupal/core-composer-scaffold": "8.9.x-dev",
     "drupal/core-recommended": "^8.9",
@@ -67,6 +68,11 @@
     "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
   },
   "extra": {
+    "patches": {
+      "drupal/captcha": {
+        "Captcha Session ID broken with cacheable captcha backends": "https://git.drupalcode.org/project/captcha/-/merge_requests/1.diff"
+      }
+    },
     "drupal-scaffold": {
       "allowed-packages": [
         "drupal/core"
