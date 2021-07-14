@@ -148,14 +148,18 @@ class CorpusImporterCommands extends DrushCommands {
    * @command corpus:wipe
    * @aliases c-wipe,corpus-wipe
    */
-  public function corpusWipe(array $options = ['institution' => NULL, 'filename' => NULL]) {
+  public function corpusWipe(array $options = ['institution' => NULL, 'filename' => NULL, 'language' => NULL]) {
     $institution_id = $this->getOption($options, 'institution');
     $filename = $this->getOption($options, 'filename');
+    $language = $this->getOption($options, 'language');
     ini_set("memory_limit", "4096M");
     $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
     $query->condition('type', 'text');
     if ($institution_id !== NULL) {
       $query->condition('field_institution.target_id', (int) $institution_id, '=');
+    }
+    if ($language !== NULL) {
+      $query->condition('field_target_language.target_id', (int) $language, '=');
     }
     if ($filename !== NULL) {
       $query->condition('title', $filename);
@@ -170,7 +174,6 @@ class CorpusImporterCommands extends DrushCommands {
         ->loadMultiple($items);
       $storage_handler
         ->delete($entities);
-      $this->output()->writeln('Deleted!');
       $this->output()->writeln('Deleted!');
     }
     else {
