@@ -47,6 +47,12 @@ class CorpusImporter extends ImporterService {
             }
           }
         }
+        if (in_array($machine_name, ['assignment_mode']) && $text['Assignment Mode'] == 'Speaking') {
+          $text['Assignment Mode'] = 'Speech';
+        }
+        if (in_array($machine_name, ['assignment_mode']) && $text['Assignment Mode'] == 'Speech') {
+          $text['text'] = self::stripBracketedText($text['text']);
+        }
         if (in_array($machine_name, ['institution']) && empty($text['Institution'])) {
           $text['Institution'] = 'Purdue University';
         }
@@ -180,6 +186,13 @@ class CorpusImporter extends ImporterService {
   public static function wordCountUtf8($str) {
     // https://php.net/str_word_count#107363.
     return count(preg_split('~[^\p{L}\p{N}\']+~u', $str));
+  }
+
+  public static function stripBracketedText($text) {
+    $re = '/\s\[[^\]]+\]/m';
+    $subst = '';
+    $text = preg_replace($re, $subst, $text);
+    return $text;
   }
 
 }
