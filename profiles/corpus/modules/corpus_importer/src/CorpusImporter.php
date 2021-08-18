@@ -56,6 +56,12 @@ class CorpusImporter extends ImporterService {
         if (in_array($machine_name, ['institution']) && empty($text['Institution'])) {
           $text['Institution'] = 'Purdue University';
         }
+        if (in_array($machine_name, ['assignment_mode']) && $text['Assignment Mode'] == 'Speaking') {
+          $text['Assignment Mode'] = 'Speech';
+        }
+        if (in_array($machine_name, ['assignment_mode']) && $text['Assignment Mode'] == 'Speech') {
+          $text['text'] = self::stripBrackets($text['text']);
+        }
         if (in_array($machine_name, ['gender']) && $text['Gender'] == 'G') {
           $text['Gender'] = 'M';
         }
@@ -183,9 +189,18 @@ class CorpusImporter extends ImporterService {
   /**
    * Perform word counting for UTF8.
    */
-  public static function wordCountUtf8($str) {
+  public static function wordCountUtf8($text) {
     // https://php.net/str_word_count#107363.
-    return count(preg_split('~[^\p{L}\p{N}\']+~u', $str));
+    return count(preg_split('~[^\p{L}\p{N}\']+~u', $text));
+  }
+
+  /**
+   * Remove brackets from text.
+   */
+  public static function stripBrackets($text) {
+    $re = '/\s\[[^\]]+\]/m';
+    $subst = '';
+    return preg_replace($re, $subst, $text);
   }
 
   public static function stripBracketedText($text) {
