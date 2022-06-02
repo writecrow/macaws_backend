@@ -87,6 +87,13 @@ class CorpusImporter extends ImporterService {
             $text[$name] = self::$courseFixes[$code];
           }
         }
+        // Standardize macro genres.
+        if ($machine_name == 'macro_genre') {
+          if (in_array($text[$name], array_keys(self::$macroGenreFixes))) {
+            $code = $text[$name];
+            $text[$name] = self::$macroGenreFixes[$code];
+          }
+        }
         if ($machine_name == 'assignment_name') {
           $text[$name] = preg_replace('/(.*) - /', '$2', $text[$name]);
         }

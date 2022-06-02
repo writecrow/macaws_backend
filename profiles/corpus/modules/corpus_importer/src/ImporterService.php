@@ -57,6 +57,12 @@ class ImporterService {
     "NA" => "Not specific to any major assignment",
   ];
 
+  public static $macroGenreFixes = [
+    "Analysis" => "Critique",
+    "Evaluation" => "Exam",
+    "Exposition" => "Argumentative Paper",
+  ];
+
   public static $countryFixes = [
     'CHI' => 'CHN',
     'MLY' => 'MYS',
