@@ -49,289 +49,289 @@ bundle: text
 mode: default
 content:
   field_age:
-    weight: 145
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 145
     region: content
   field_assignment:
-    weight: 111
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 111
     region: content
   field_assignment_code:
-    weight: 129
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 129
     region: content
   field_assignment_mode:
-    weight: 126
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 126
     region: content
   field_assignment_name:
-    weight: 127
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 127
     region: content
   field_assignment_topic:
-    weight: 128
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 128
     region: content
   field_began_formal_education:
-    weight: 142
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 142
     region: content
   field_course:
-    weight: 119
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 119
     region: content
   field_course_semester:
-    weight: 135
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 135
     region: content
   field_course_year:
-    weight: 134
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 134
     region: content
   field_courses_currently_enrolled:
-    weight: 143
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 143
     region: content
   field_courses_previously_enrolle:
-    weight: 144
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 144
     region: content
   field_credit_hours:
-    weight: 133
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 133
     region: content
   field_draft:
-    weight: 118
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 118
     region: content
   field_experience_abroad:
-    weight: 140
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 140
     region: content
   field_grouped_l1:
-    weight: 149
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 149
     region: content
   field_heritage_of_target_languag:
-    weight: 137
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 137
     region: content
   field_institution:
-    weight: 116
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 116
     region: content
   field_instructor:
-    weight: 117
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 117
     region: content
   field_l1:
-    weight: 123
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 123
     region: content
   field_length_of_course:
-    weight: 132
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 132
     region: content
   field_macro_genre:
-    weight: 125
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 125
     region: content
   field_major:
-    weight: 146
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 146
     region: content
   field_minor:
-    weight: 147
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 147
     region: content
   field_mode_of_course:
-    weight: 131
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 131
     region: content
   field_other_languages:
-    weight: 124
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 124
     region: content
   field_proficiency_exam:
-    weight: 138
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 138
     region: content
   field_proficiency_exam_score:
-    weight: 139
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 139
     region: content
   field_section:
-    weight: 136
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 136
     region: content
   field_student_id:
-    weight: 148
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 148
     region: content
   field_target_language:
-    weight: 122
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 122
     region: content
   field_target_language_practice:
-    weight: 141
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 141
     region: content
   field_text:
-    weight: 130
+    type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: basic_string
+    weight: 130
     region: content
   field_wordcount:
-    weight: 121
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 121
     region: content
   field_year_in_school:
-    weight: 115
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 115
     region: content
   links:
-    weight: 100
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 100
+    region: content
 hidden:
   langcode: true

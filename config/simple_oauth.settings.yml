@@ -1,8 +1,11 @@
-access_token_expiration: 1800
-refresh_token_expiration: 1209600
-remember_clients: true
 _core:
   default_config_hash: iIf5HmjnxW8tLdod1EQ19q4RQ5mkg-r5wBn2QFmitr8
+access_token_expiration: 1800
+authorization_code_expiration: 300
+refresh_token_expiration: 1209600
+token_cron_batch_size: 0
 public_key: /home/markfull/public_html/consumers/macaws/public.key
 private_key: /home/markfull/public_html/consumers/macaws/private.key
-token_cron_batch_size: 0
+remember_clients: true
+use_implicit: true
+disable_openid_connect: false

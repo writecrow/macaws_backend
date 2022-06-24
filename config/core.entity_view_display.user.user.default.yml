@@ -26,103 +26,103 @@ bundle: user
 mode: default
 content:
   field_account_type:
-    weight: 6
+    type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 6
     region: content
   field_affiliation:
-    weight: 12
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 12
     region: content
   field_email_updates:
-    weight: 15
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 15
     region: content
   field_full_name:
-    weight: 16
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 16
     region: content
   field_institution:
-    weight: 13
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 13
     region: content
   field_no_download:
-    weight: 17
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 17
     region: content
   field_notifications:
-    weight: 14
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 14
     region: content
   field_project_complete_date:
-    weight: 8
+    type: datetime_default
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: medium
     third_party_settings: {  }
-    type: datetime_default
+    weight: 8
     region: content
   field_project_description:
-    weight: 9
+    type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: basic_string
+    weight: 9
     region: content
   field_read_terms:
-    weight: 10
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 10
     region: content
   field_requested_access_level:
-    weight: 7
+    type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 7
     region: content
   member_for:
-    weight: 5
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 5
+    region: content
 hidden:
   langcode: true

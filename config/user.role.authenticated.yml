@@ -1,7 +1,14 @@
 uuid: acf7d759-725e-47b8-b231-309885ce5369
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - rest.resource.rest_feedback_endpoint_submit_issue
+  module:
+    - rest
+    - system
+    - toolbar
+    - userprotect
 _core:
   default_config_hash: dJ0L2DNSj5q6XVZAGsuVDpJTh5UeYkIPwKrUOOpr8YI
 id: authenticated
