@@ -1,6 +1,6 @@
 {
   "name": "writecrow/corpus_backend",
-  "description": "Drupal is an open source content management platform powering millions of websites and applications.",
+  "description": "Corpus backend for MACAWS, the Multilingual Academic Corpus of Assignments : Writing & Speech",
   "type": "project",
   "license": "GPL-2.0+",
   "authors": [
@@ -9,6 +9,12 @@
       "email": "mfullmer@gmail.com",
       "homepage": "https://markfullmer.com",
       "role": "Developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
     }
   ],
   "require": {
@@ -41,6 +47,8 @@
     "drupal/token": "^1.6",
     "drupal/userprotect": "^1.0",
     "drupal/views_data_export": "^1.0@beta",
+    "drush/drush": "^10",
+    "lcobucci/jwt": "3.3.3",
     "writecrow/basecamp_api": "^1.0",
     "writecrow/country_code_converter": "dev-master",
     "writecrow/highlighter": "dev-master",
@@ -48,19 +56,32 @@
     "writecrow/rest_feedback_endpoint": "^1.0@alpha",
     "writecrow/tag_converter": "~1.0"
   },
-  "require-dev": {
-        "drush/drush": "~10"
+  "autoload": {
+      "classmap": [
+          "scripts/composer/ScriptHandler.php"
+      ]
+  },
+  "scripts": {
+      "pre-install-cmd": [
+          "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+      ],
+      "pre-update-cmd": [
+          "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+      ],
+      "post-install-cmd": [
+          "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+      ],
+      "post-update-cmd": [
+          "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+      ]
   },
   "config": {
-    "platform": {
-      "php": "7.2.26"
-    },
     "sort-packages": true,
     "process-timeout": 0,
     "allow-plugins": {
-      "composer/installers": true,
       "cweagans/composer-patches": true,
-      "drupal/core-composer-scaffold": true
+      "drupal/core-composer-scaffold": true,
+      "composer/installers": true
     }
   },
   "conflict": {
@@ -68,20 +89,21 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "scripts": {
-    "post-install-cmd": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
-    "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
-  },
   "extra": {
-    "patches": {
-      "drupal/captcha": {
-        "Captcha Session ID broken with cacheable captcha backends": "https://git.drupalcode.org/project/captcha/-/merge_requests/1.diff"
-      },
-      "drupal/redirect_after_login": {
-        "Headers have already been sent after upgrade to Drupal 9.2 (can't login)": "https://www.drupal.org/files/issues/2021-06-20/3214949.patch"
-      }
+    "installer-paths": {
+      "public_html/core": ["type:drupal-core"],
+      "public_html/modules/contrib/{$name}": ["type:drupal-module"],
+      "public_html/profiles/contrib/{$name}": ["type:drupal-profile"],
+      "public_html/themes/contrib/{$name}": ["type:drupal-theme"],
+      "public_html/drush/contrib/{$name}": ["type:drupal-drush"],
+      "public_html/modules/custom/{$name}": ["type:drupal-custom-module"],
+      "public_html/themes/custom/{$name}": ["type:drupal-custom-theme"],
+      "public_html/libraries/{$name}": ["type:drupal-library"]
     },
     "drupal-scaffold": {
+      "locations": {
+          "web-root": "public_html/"
+      },
       "allowed-packages": [
         "drupal/core"
       ],
@@ -89,8 +111,6 @@
         "[web-root]/web.config": false,
         "[project-root]/.editorconfig": false,
         "[project-root]/.gitattributes": false,
-        "[web-root]/.htaccess": false,
-        "[web-root]/robots.txt": false,
         "[web-root]/.csslintrc": false,
         "[web-root]/.editorconfig": false,
         "[web-root]/.eslintignore": false,
@@ -98,6 +118,8 @@
         "[web-root]/.eslintrc.json": false,
         "[web-root]/.ht.router.php": false,
         "[web-root]/INSTALL.txt": false,
+        "[web-root]/README.txt": false,
+        "[web-root]/modules/README.txt": false,
         "[web-root]/README.md": false,
         "[web-root]/sites/README.txt": false,
         "[web-root]/sites/development.services.yml": false,
@@ -105,35 +127,17 @@
         "[web-root]/sites/default/default.settings.php": false
       }
     },
-
-    "installer-paths": {
-      "core": [
-        "type:drupal-core"
-      ],
-      "modules/contrib/{$name}": [
-        "type:drupal-module"
-      ],
-      "profiles/contrib/{$name}": [
-        "type:drupal-profile"
-      ],
-      "themes/contrib/{$name}": [
-        "type:drupal-theme"
-      ],
-      "drush/contrib/{$name}": [
-        "type:drupal-drush"
-      ],
-      "modules/custom/{$name}": [
-        "type:drupal-custom-module"
-      ],
-      "themes/custom/{$name}": [
-        "type:drupal-custom-theme"
-      ]
-    }
-  },
-  "repositories": {
-    "drupal": {
-      "type": "composer",
-      "url": "https://packages.drupal.org/8"
+    "composer-exit-on-patch-failure": true,
+    "patchLevel": {
+        "drupal/core": "-p2"
+    },
+    "patches": {
+      "drupal/captcha": {
+        "Captcha Session ID broken with cacheable captcha backends": "https://git.drupalcode.org/project/captcha/-/merge_requests/1.diff"
+      },
+      "drupal/redirect_after_login": {
+        "Headers have already been sent after upgrade to Drupal 9.2 (can't login)": "https://www.drupal.org/files/issues/2021-06-20/3214949.patch"
+      }
     }
   }
 }
