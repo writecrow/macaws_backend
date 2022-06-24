@@ -3840,16 +3840,16 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "3.4.1",
+            "version": "3.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "958a9873a63b0244a72f6e354ccc86019ee674a5"
+                "reference": "3ef8657a78278dfeae7707d51747251db4176240"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/958a9873a63b0244a72f6e354ccc86019ee674a5",
-                "reference": "958a9873a63b0244a72f6e354ccc86019ee674a5",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/3ef8657a78278dfeae7707d51747251db4176240",
+                "reference": "3ef8657a78278dfeae7707d51747251db4176240",
                 "shasum": ""
             },
             "require": {
@@ -3874,14 +3874,14 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Lcobucci\\JWT\\": "src"
-                },
                 "files": [
                     "compat/class-aliases.php",
                     "compat/json-exception-polyfill.php",
                     "compat/lcobucci-clock-polyfill.php"
-                ]
+                ],
+                "psr-4": {
+                    "Lcobucci\\JWT\\": "src"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3901,7 +3901,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/3.4.1"
+                "source": "https://github.com/lcobucci/jwt/tree/3.4.6"
             },
             "funding": [
                 {
@@ -3913,7 +3913,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-11-27T01:17:14+00:00"
+            "time": "2021-09-28T19:18:28+00:00"
         },
         {
             "name": "league/csv",
