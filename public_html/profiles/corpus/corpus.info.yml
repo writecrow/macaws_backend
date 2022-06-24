@@ -1,5 +1,5 @@
 name: corpus
-# core: 8.x
+core_version_requirement: ^8.8 || ^9
 type: profile
 description: 'A minimal configuration for a corpus web application.'
 distribution:
@@ -15,7 +15,6 @@ dependencies:
   - contextual
   - datetime
   - dynamic_page_cache
-  - entity_reference
   - image
   - node
   - options
@@ -41,5 +40,4 @@ themes:
   - bartik
 
 version: '8.x-1.0'
-core: '8.x'
 project: 'corpus'

@@ -1,7 +1,7 @@
 name: Corpus theme base
 type: theme
 description: Administrative theme for Corpus
-core: 8.x
+core_version_requirement: ^8.8 || ^9
 # Defines the base theme
 base theme: adminimal_theme
 
