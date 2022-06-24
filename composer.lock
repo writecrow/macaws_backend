@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eaa792ce4d4e7e8a304c89b5ba41979b",
+    "content-hash": "d60206ed57bb325ecd7329f1b24f4edd",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -116,16 +116,16 @@
         },
         {
             "name": "composer/installers",
-            "version": "v1.11.0",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "ae03311f45dfe194412081526be2e003960df74b"
+                "reference": "d20a64ed3c94748397ff5973488761b22f6d3f19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/ae03311f45dfe194412081526be2e003960df74b",
-                "reference": "ae03311f45dfe194412081526be2e003960df74b",
+                "url": "https://api.github.com/repos/composer/installers/zipball/d20a64ed3c94748397ff5973488761b22f6d3f19",
+                "reference": "d20a64ed3c94748397ff5973488761b22f6d3f19",
                 "shasum": ""
             },
             "require": {
@@ -224,6 +224,7 @@
                 "modx",
                 "moodle",
                 "osclass",
+                "pantheon",
                 "phpbb",
                 "piwik",
                 "ppi",
@@ -246,7 +247,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/installers/issues",
-                "source": "https://github.com/composer/installers/tree/v1.11.0"
+                "source": "https://github.com/composer/installers/tree/v1.12.0"
             },
             "funding": [
                 {
@@ -262,7 +263,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-28T06:42:17+00:00"
+            "time": "2021-09-13T08:19:44+00:00"
         },
         {
             "name": "composer/semver",
@@ -8414,16 +8415,16 @@
         },
         {
             "name": "writecrow/country_code_converter",
-            "version": "dev-master",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/country_code_converter.git",
-                "reference": "dbd047fb2cd64eb2286a058b9d79127bd61503f5"
+                "reference": "02e4e444c3194dad7c76abf2df789d10b3ea0a25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/country_code_converter/zipball/dbd047fb2cd64eb2286a058b9d79127bd61503f5",
-                "reference": "dbd047fb2cd64eb2286a058b9d79127bd61503f5",
+                "url": "https://api.github.com/repos/writecrow/country_code_converter/zipball/02e4e444c3194dad7c76abf2df789d10b3ea0a25",
+                "reference": "02e4e444c3194dad7c76abf2df789d10b3ea0a25",
                 "shasum": ""
             },
             "require-dev": {
@@ -8461,20 +8462,20 @@
                 "issues": "https://github.com/writecrow/country_code_converter/issues",
                 "source": "https://github.com/writecrow/country_code_converter"
             },
-            "time": "2019-10-26T23:52:58+00:00"
+            "time": "2021-09-24T15:29:59+00:00"
         },
         {
             "name": "writecrow/highlighter",
-            "version": "dev-master",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/highlighter.git",
-                "reference": "4e8d08d0ef6ac85d1b231010a5f8414dc09280c9"
+                "reference": "033f7ddb18209402359d23acc238c1a595c69758"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/4e8d08d0ef6ac85d1b231010a5f8414dc09280c9",
-                "reference": "4e8d08d0ef6ac85d1b231010a5f8414dc09280c9",
+                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/033f7ddb18209402359d23acc238c1a595c69758",
+                "reference": "033f7ddb18209402359d23acc238c1a595c69758",
                 "shasum": ""
             },
             "default-branch": true,
@@ -8503,7 +8504,7 @@
                 "issues": "https://github.com/writecrow/highlighter/issues",
                 "source": "https://github.com/writecrow/highlighter"
             },
-            "time": "2019-09-07T18:05:41+00:00"
+            "time": "2022-06-02T16:44:14+00:00"
         },
         {
             "name": "writecrow/lorem_gutenberg",
@@ -8590,20 +8591,21 @@
         },
         {
             "name": "writecrow/tag_converter",
-            "version": "1.4",
+            "version": "1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/tag_converter.git",
-                "reference": "51bf182ebbb8b4d07d41e36ba4defa85cc2c6904"
+                "reference": "90afd3ccdbef17dd55713a3a351e50bff4c196f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/tag_converter/zipball/51bf182ebbb8b4d07d41e36ba4defa85cc2c6904",
-                "reference": "51bf182ebbb8b4d07d41e36ba4defa85cc2c6904",
+                "url": "https://api.github.com/repos/writecrow/tag_converter/zipball/90afd3ccdbef17dd55713a3a351e50bff4c196f7",
+                "reference": "90afd3ccdbef17dd55713a3a351e50bff4c196f7",
                 "shasum": ""
             },
             "require-dev": {
-                "phpunit/phpunit": "~4"
+                "brianium/paratest": "^3.0",
+                "phpunit/phpunit": "~7"
             },
             "suggest": {
                 "ext-mbstring": "For best performance",
@@ -8641,7 +8643,7 @@
                 "issues": "https://github.com/writecrow/tag_converter/issues",
                 "source": "https://github.com/writecrow/tag_converter"
             },
-            "time": "2019-10-11T02:15:07+00:00"
+            "time": "2021-08-01T18:27:48+00:00"
         }
     ],
     "packages-dev": [],
@@ -8663,5 +8665,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.0.0"
 }
