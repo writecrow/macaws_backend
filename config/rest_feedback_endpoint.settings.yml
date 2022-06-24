@@ -1,3 +1,6 @@
 'on': 1
-notification_email: collaborate@writecrow.org
+notification_email: writecroworg@gmail.com
 subject_line_prefix: 'Macaws user feedback: '
+basecamp_project: '7522557'
+basecamp_list: '4924092822'
+basecamp_assignee_ids: '9638776,605725'
