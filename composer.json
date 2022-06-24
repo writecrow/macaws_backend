@@ -1,143 +1,157 @@
 {
-  "name": "writecrow/corpus_backend",
-  "description": "Corpus backend for MACAWS, the Multilingual Academic Corpus of Assignments : Writing & Speech",
-  "type": "project",
-  "license": "GPL-2.0+",
-  "authors": [
-    {
-      "name": "Mark Fullmer",
-      "email": "mfullmer@gmail.com",
-      "homepage": "https://markfullmer.com",
-      "role": "Developer"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packages.drupal.org/8"
-    }
-  ],
-  "require": {
-    "composer/installers": "^1 || ^2",
-    "cweagans/composer-patches": "^1.7",
-    "drupal/adminimal_theme": "^1.4",
-    "drupal/allow_iframed_site": "^2.0",
-    "drupal/better_exposed_filters": "4.0-alpha1",
-    "drupal/captcha": "^1",
-    "drupal/config_ignore": "^2.2",
-    "drupal/core-composer-scaffold": "8.9.x-dev",
-    "drupal/core-recommended": "^8.9",
-    "drupal/facets": "^1.0@beta",
-    "drupal/features": "3.8",
-    "drupal/honeypot": "1.30",
-    "drupal/login_emailusername": "^1.1",
-    "drupal/nocurrent_pass": "^1.0",
-    "drupal/plupload": "^1.0@beta",
-    "drupal/rabbit_hole": "^1.0@beta",
-    "drupal/recaptcha": "^2.5",
-    "drupal/redirect_after_login": "^2.5",
-    "drupal/reroute_email": "^1.1",
-    "drupal/restui": "^1",
-    "drupal/role_delegation": "^1.0@alpha",
-    "drupal/search_api": "1.7",
-    "drupal/search_api_solr": "^2.0",
-    "drupal/sendgrid_integration": "^1.2",
-    "drupal/simple_oauth": "^3",
-    "drupal/smtp": "^1.0@RC",
-    "drupal/token": "^1.6",
-    "drupal/userprotect": "^1.0",
-    "drupal/views_data_export": "^1.0@beta",
-    "drush/drush": "^10",
-    "lcobucci/jwt": "3.3.3",
-    "writecrow/basecamp_api": "^1.0",
-    "writecrow/country_code_converter": "dev-master",
-    "writecrow/highlighter": "dev-master",
-    "writecrow/lorem_gutenberg": "^1.1",
-    "writecrow/rest_feedback_endpoint": "^1.0@alpha",
-    "writecrow/tag_converter": "~1.0"
-  },
-  "autoload": {
-      "classmap": [
-          "scripts/composer/ScriptHandler.php"
-      ]
-  },
-  "scripts": {
-      "pre-install-cmd": [
-          "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-      ],
-      "pre-update-cmd": [
-          "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
-      ],
-      "post-install-cmd": [
-          "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-      ],
-      "post-update-cmd": [
-          "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
-      ]
-  },
-  "config": {
-    "sort-packages": true,
-    "process-timeout": 0,
-    "allow-plugins": {
-      "cweagans/composer-patches": true,
-      "drupal/core-composer-scaffold": true,
-      "composer/installers": true
-    }
-  },
-  "conflict": {
-    "drupal/drupal": "*"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "extra": {
-    "installer-paths": {
-      "public_html/core": ["type:drupal-core"],
-      "public_html/modules/contrib/{$name}": ["type:drupal-module"],
-      "public_html/profiles/contrib/{$name}": ["type:drupal-profile"],
-      "public_html/themes/contrib/{$name}": ["type:drupal-theme"],
-      "public_html/drush/contrib/{$name}": ["type:drupal-drush"],
-      "public_html/modules/custom/{$name}": ["type:drupal-custom-module"],
-      "public_html/themes/custom/{$name}": ["type:drupal-custom-theme"],
-      "public_html/libraries/{$name}": ["type:drupal-library"]
+    "name": "writecrow/corpus_backend",
+    "description": "Corpus backend for MACAWS, the Multilingual Academic Corpus of Assignments : Writing & Speech",
+    "type": "project",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Mark Fullmer",
+            "email": "mfullmer@gmail.com",
+            "homepage": "https://markfullmer.com",
+            "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "composer/installers": "^1 || ^2",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/adminimal_theme": "^1.4",
+        "drupal/allow_iframed_site": "^2.0",
+        "drupal/better_exposed_filters": "4.0-alpha1",
+        "drupal/captcha": "^1",
+        "drupal/config_ignore": "^2.2",
+        "drupal/core-composer-scaffold": "8.9.x-dev",
+        "drupal/core-recommended": "^8.9",
+        "drupal/facets": "^1.0@beta",
+        "drupal/features": "3.8",
+        "drupal/honeypot": "1.30",
+        "drupal/login_emailusername": "^1.1",
+        "drupal/mailsystem": "^4.3",
+        "drupal/nocurrent_pass": "^1.0",
+        "drupal/plupload": "^1.0@beta",
+        "drupal/rabbit_hole": "^1.0@beta",
+        "drupal/recaptcha": "^2.5",
+        "drupal/redirect_after_login": "^2.5",
+        "drupal/reroute_email": "^1.1",
+        "drupal/restui": "^1",
+        "drupal/role_delegation": "^1.0@alpha",
+        "drupal/simple_oauth": "^3",
+        "drupal/smtp": "^1.0@RC",
+        "drupal/token": "^1.6",
+        "drupal/userprotect": "^1.0",
+        "drupal/views_data_export": "^1.0@beta",
+        "drush/drush": "^10",
+        "lcobucci/jwt": "3.3.3",
+        "writecrow/basecamp_api": "^1.0",
+        "writecrow/country_code_converter": "dev-master",
+        "writecrow/highlighter": "dev-master",
+        "writecrow/lorem_gutenberg": "^1.1",
+        "writecrow/rest_feedback_endpoint": "^1.0@alpha",
+        "writecrow/tag_converter": "~1.0"
     },
-    "drupal-scaffold": {
-      "locations": {
-          "web-root": "public_html/"
-      },
-      "allowed-packages": [
-        "drupal/core"
-      ],
-      "file-mapping": {
-        "[web-root]/web.config": false,
-        "[project-root]/.editorconfig": false,
-        "[project-root]/.gitattributes": false,
-        "[web-root]/.csslintrc": false,
-        "[web-root]/.editorconfig": false,
-        "[web-root]/.eslintignore": false,
-        "[web-root]/example.gitignore": false,
-        "[web-root]/.eslintrc.json": false,
-        "[web-root]/.ht.router.php": false,
-        "[web-root]/INSTALL.txt": false,
-        "[web-root]/README.txt": false,
-        "[web-root]/modules/README.txt": false,
-        "[web-root]/README.md": false,
-        "[web-root]/sites/README.txt": false,
-        "[web-root]/sites/development.services.yml": false,
-        "[web-root]/sites/default/default.services.yml": false,
-        "[web-root]/sites/default/default.settings.php": false
-      }
+    "autoload": {
+        "classmap": [
+            "scripts/composer/ScriptHandler.php"
+        ]
     },
-    "composer-exit-on-patch-failure": true,
-    "patchLevel": {
-        "drupal/core": "-p2"
+    "scripts": {
+        "pre-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "pre-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "post-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "post-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ]
     },
-    "patches": {
-      "drupal/captcha": {
-        "Captcha Session ID broken with cacheable captcha backends": "https://git.drupalcode.org/project/captcha/-/merge_requests/1.diff"
-      },
-      "drupal/redirect_after_login": {
-        "Headers have already been sent after upgrade to Drupal 9.2 (can't login)": "https://www.drupal.org/files/issues/2021-06-20/3214949.patch"
-      }
+    "config": {
+        "sort-packages": true,
+        "process-timeout": 0,
+        "allow-plugins": {
+            "cweagans/composer-patches": true,
+            "drupal/core-composer-scaffold": true,
+            "composer/installers": true
+        }
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "installer-paths": {
+            "public_html/core": [
+                "type:drupal-core"
+            ],
+            "public_html/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "public_html/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "public_html/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "public_html/drush/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "public_html/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "public_html/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ],
+            "public_html/libraries/{$name}": [
+                "type:drupal-library"
+            ]
+        },
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "public_html/"
+            },
+            "allowed-packages": [
+                "drupal/core"
+            ],
+            "file-mapping": {
+                "[web-root]/web.config": false,
+                "[project-root]/.editorconfig": false,
+                "[project-root]/.gitattributes": false,
+                "[web-root]/.csslintrc": false,
+                "[web-root]/.editorconfig": false,
+                "[web-root]/.eslintignore": false,
+                "[web-root]/example.gitignore": false,
+                "[web-root]/.eslintrc.json": false,
+                "[web-root]/.ht.router.php": false,
+                "[web-root]/INSTALL.txt": false,
+                "[web-root]/README.txt": false,
+                "[web-root]/modules/README.txt": false,
+                "[web-root]/README.md": false,
+                "[web-root]/sites/README.txt": false,
+                "[web-root]/sites/development.services.yml": false,
+                "[web-root]/sites/default/default.services.yml": false,
+                "[web-root]/sites/default/default.settings.php": false
+            }
+        },
+        "composer-exit-on-patch-failure": true,
+        "patchLevel": {
+            "drupal/core": "-p2"
+        },
+        "patches": {
+            "drupal/captcha": {
+                "Captcha Session ID broken with cacheable captcha backends": "https://git.drupalcode.org/project/captcha/-/merge_requests/1.diff"
+            },
+            "drupal/redirect_after_login": {
+                "Headers have already been sent after upgrade to Drupal 9.2 (can't login)": "https://www.drupal.org/files/issues/2021-06-20/3214949.patch"
+            }
+        }
     }
-  }
 }
