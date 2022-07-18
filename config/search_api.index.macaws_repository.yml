@@ -1,0 +1,287 @@
+uuid: e9219c3f-1ac5-428a-a398-239c2d8745b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_assignment_code
+    - field.storage.node.field_assignment_mode
+    - field.storage.node.field_assignment_topic
+    - field.storage.node.field_course
+    - field.storage.node.field_course_semester
+    - field.storage.node.field_course_year
+    - field.storage.node.field_document_type
+    - field.storage.node.field_file
+    - field.storage.node.field_filename
+    - field.storage.node.field_institution
+    - field.storage.node.field_instructor
+    - field.storage.node.field_macro_genre
+    - field.storage.node.field_raw_text
+    - field.storage.node.field_target_language
+    - search_api.server.corpus_database_server
+  module:
+    - taxonomy
+    - node
+    - search_api
+id: macaws_repository
+name: 'MACAWS Repository'
+description: ''
+read_only: false
+field_settings:
+  assignment_code:
+    label: 'Assignment Code » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_assignment_code:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_assignment_code
+      module:
+        - taxonomy
+  assignment_mode:
+    label: 'Assignment Mode » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_assignment_mode:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_assignment_mode
+      module:
+        - taxonomy
+  assignment_topic:
+    label: 'Assignment Topic » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_assignment_topic:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_assignment_topic
+      module:
+        - taxonomy
+  course:
+    label: 'Course » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_course:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_course
+      module:
+        - taxonomy
+  course_semester:
+    label: 'Course Semester » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_course_semester:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_course_semester
+      module:
+        - taxonomy
+  course_year:
+    label: 'Course Year » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_course_year:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_course_year
+      module:
+        - taxonomy
+  document_type:
+    label: 'Document Type » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_document_type:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_document_type
+      module:
+        - taxonomy
+  file:
+    label: File
+    datasource_id: 'entity:node'
+    property_path: field_file
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_file
+  filename:
+    label: Filename
+    datasource_id: 'entity:node'
+    property_path: field_filename
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_filename
+  institution:
+    label: 'Institution » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_institution:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_institution
+      module:
+        - taxonomy
+  instructor:
+    label: 'Instructor » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_instructor:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_instructor
+      module:
+        - taxonomy
+  macro_genre:
+    label: 'Macro Genre » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_macro_genre:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_macro_genre
+      module:
+        - taxonomy
+  raw_text:
+    label: Text
+    datasource_id: 'entity:node'
+    property_path: field_raw_text
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_raw_text
+  target_language:
+    label: 'Target Language » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_target_language:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_target_language
+      module:
+        - taxonomy
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - resource
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  entity_status: {  }
+  entity_type: {  }
+  highlight:
+    weights:
+      postprocess_query: 0
+    prefix: '<strong>'
+    suffix: '</strong>'
+    excerpt: true
+    excerpt_always: false
+    excerpt_length: 256
+    exclude_fields: {  }
+    highlight: always
+    highlight_partial: false
+  html_filter:
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+    all_fields: false
+    fields:
+      - assignment_code
+      - assignment_mode
+      - assignment_topic
+      - course
+      - course_semester
+      - course_year
+      - document_type
+      - filename
+      - institution
+      - instructor
+      - macro_genre
+      - raw_text
+      - target_language
+      - title
+    title: true
+    alt: true
+    tags:
+      b: 2
+      em: 1
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
+      u: 1
+  ignorecase:
+    weights:
+      preprocess_index: -20
+      preprocess_query: -20
+    all_fields: false
+    fields:
+      - assignment_code
+      - assignment_mode
+      - assignment_topic
+      - course
+      - course_semester
+      - course_year
+      - document_type
+      - filename
+      - institution
+      - instructor
+      - macro_genre
+      - raw_text
+      - target_language
+      - title
+  language_with_fallback: {  }
+  rendered_item: {  }
+  tokenizer:
+    weights:
+      preprocess_index: -6
+      preprocess_query: -6
+    all_fields: false
+    fields:
+      - raw_text
+    spaces: ''
+    ignored: ._-
+    overlap_cjk: 1
+    minimum_word_size: '3'
+  transliteration:
+    weights:
+      preprocess_index: -20
+      preprocess_query: -20
+    all_fields: false
+    fields:
+      - assignment_code
+      - assignment_mode
+      - assignment_topic
+      - course
+      - course_semester
+      - course_year
+      - document_type
+      - filename
+      - institution
+      - instructor
+      - macro_genre
+      - raw_text
+      - target_language
+      - title
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  index_directly: true
+  track_changes_in_references: true
+server: corpus_database_server
