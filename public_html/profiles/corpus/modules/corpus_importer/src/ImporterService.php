@@ -129,65 +129,37 @@ class ImporterService {
    *   User-supplied default flags.
    */
   public static function import($files, $options = []) {
-
-    if (PHP_SAPI == 'cli' && function_exists('drush_main')) {
-      ini_set("memory_limit", "4096M");
-      $paths = array_slice(scandir($files), 2);
-      $absolute_paths = [];
-      $repository_candidates = [];
-      $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($files));
-      foreach ($objects as $filepath => $object) {
-        if (stripos($filepath, '.txt') !== FALSE) {
-          $absolute_paths[]['tmppath'] = $filepath;
-        }
-        if (stripos($filepath, '.txt') === FALSE) {
-          $path_parts = pathinfo($filepath);
-          // Get a filelist of repository materials eligible for upload.
-          $repository_candidates[$path_parts['filename']] = $filepath;
-        }
+    ini_set("memory_limit", "4096M");
+    $paths = array_slice(scandir($files), 2);
+    $absolute_paths = [];
+    $repository_candidates = [];
+    $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($files));
+    foreach ($objects as $filepath => $object) {
+      if (stripos($filepath, '.txt') !== FALSE) {
+        $absolute_paths[]['tmppath'] = $filepath;
       }
-      $texts = self::convert($absolute_paths);
-
-      foreach ($texts as $text) {
-        // Fix failures in corpus headers:
-        if (empty($text['Institution'])) {
-          $text['Institution'] = 'Purdue University';
-        }
-        if ($text['type'] == 'corpus') {
-          $result = CorpusImporter::saveCorpusNode($text, $options);
-        }
-        if ($text['type'] == 'repository') {
-          $result = RepositoryImporter::saveRepositoryNode($text, $repository_candidates, $options);
-        }
-        if (isset($result['created'])) {
-          echo $result['created'] . PHP_EOL;
-        }
+      if (stripos($filepath, '.txt') === FALSE) {
+        $path_parts = pathinfo($filepath);
+        // Get a filelist of repository materials eligible for upload.
+        $repository_candidates[$path_parts['filename']] = $filepath;
       }
     }
-    else {
-      // Convert files into machine-readable array.
-      $texts = self::convert($files);
-      drupal_set_message(count($files) . ' files found.');
+    $texts = self::convert($absolute_paths);
 
-      // Perform validation logic on each row.
-      $texts = array_filter($texts, ['self', 'preSave']);
-
-      // Save valid texts.
-      foreach ($texts as $text) {
-        $operations[] = [
-          ['\Drupal\corpus_importer\ImporterService', 'save'],
-          [$text, $options],
-        ];
+    foreach ($texts as $text) {
+      // Fix failures in corpus headers:
+      if (empty($text['Institution'])) {
+        $text['Institution'] = 'Purdue University';
       }
-
-      $batch = [
-        'title' => t('Saving Texts'),
-        'operations' => $operations,
-        'finished' => ['\Drupal\corpus_importer\ImporterService', 'finish'],
-        'file' => drupal_get_path('module', 'corpus_importer') . '/corpus_importer.module',
-      ];
-
-      batch_set($batch);
+      if ($text['type'] == 'corpus') {
+        $result = CorpusImporter::saveCorpusNode($text, $options);
+      }
+      if ($text['type'] == 'repository') {
+        $result = RepositoryImporter::saveRepositoryNode($text, $repository_candidates, $options);
+      }
+      if (isset($result['created'])) {
+        echo $result['created'] . PHP_EOL;
+      }
     }
   }
 

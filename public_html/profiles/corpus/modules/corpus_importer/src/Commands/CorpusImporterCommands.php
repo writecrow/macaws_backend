@@ -33,7 +33,7 @@ class CorpusImporterCommands extends DrushCommands {
     $dryrun_value = $this->getOption($options, 'dryryn');
     $dryrun = $dryrun_value ? TRUE : FALSE;
     if (!file_exists($path)) {
-      $this->logger()->warning("Path $path doesn't exist", 'error');
+      $this->logger()->warning("Path $path doesn't exist");
       exit;
     }
     if ($dryrun === TRUE) {
