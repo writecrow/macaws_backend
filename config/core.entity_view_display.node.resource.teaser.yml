@@ -1,0 +1,49 @@
+uuid: a6a2ab50-632b-4b1b-96d1-ae548ea78c5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.resource.field_assignment_code
+    - field.field.node.resource.field_assignment_mode
+    - field.field.node.resource.field_assignment_topic
+    - field.field.node.resource.field_course
+    - field.field.node.resource.field_course_semester
+    - field.field.node.resource.field_course_year
+    - field.field.node.resource.field_document_type
+    - field.field.node.resource.field_file
+    - field.field.node.resource.field_filename
+    - field.field.node.resource.field_institution
+    - field.field.node.resource.field_instructor
+    - field.field.node.resource.field_macro_genre
+    - field.field.node.resource.field_raw_text
+    - field.field.node.resource.field_target_language
+    - node.type.resource
+  module:
+    - user
+id: node.resource.teaser
+targetEntityType: node
+bundle: resource
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_assignment_code: true
+  field_assignment_mode: true
+  field_assignment_topic: true
+  field_course: true
+  field_course_semester: true
+  field_course_year: true
+  field_document_type: true
+  field_file: true
+  field_filename: true
+  field_institution: true
+  field_instructor: true
+  field_macro_genre: true
+  field_raw_text: true
+  field_target_language: true
+  langcode: true

@@ -1,0 +1,29 @@
+uuid: b93b8669-3e0e-4765-b498-c50d2cff8a77
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_assignment_mode
+    - node.type.resource
+    - taxonomy.vocabulary.assignment_mode
+id: node.resource.field_assignment_mode
+field_name: field_assignment_mode
+entity_type: node
+bundle: resource
+label: 'Assignment Mode'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      assignment_mode: assignment_mode
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
