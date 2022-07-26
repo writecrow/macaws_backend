@@ -2,6 +2,7 @@
 
 namespace Drupal\corpus_search\Plugin\rest\resource;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\corpus_search\Controller\CorpusSearch as Corpus;
@@ -28,14 +29,14 @@ class CorpusSearch extends ResourceBase {
   /**
    * A curent user instance.
    *
-   * @var \Drupal\Core\Session\AccountProxyInterface
+   * @var AccountProxyInterface
    */
   protected $currentUser;
 
   /**
    * The request.
    *
-   * @var \Symfony\Component\HttpFoundation\Request
+   * @var Request
    */
   protected $currentRequest;
 
@@ -50,11 +51,11 @@ class CorpusSearch extends ResourceBase {
    *   The plugin implementation definition.
    * @param array $serializer_formats
    *   The available serialization formats.
-   * @param \Psr\Log\LoggerInterface $logger
+   * @param LoggerInterface $logger
    *   A logger instance.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   * @param AccountProxyInterface $current_user
    *   The current user instance.
-   * @param Symfony\Component\HttpFoundation\Request $current_request
+   * @param Request $current_request
    *   The current request.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user, Request $current_request) {
@@ -81,10 +82,10 @@ class CorpusSearch extends ResourceBase {
   /**
    * Responds to GET requests.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return ResourceResponse
    *   The HTTP response object.
    *
-   * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+   * @throws HttpException
    *   Throws exception expected.
    */
   public function get($type = NULL) {

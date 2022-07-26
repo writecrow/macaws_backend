@@ -52,7 +52,7 @@ class TextMetadata {
         $texts = self::populateTextMetadata($result, $texts);;
       }
     }
-    \Drupal::cache()->set($cache_id, $texts, REQUEST_TIME + (2500000));
+    \Drupal::cache()->set($cache_id, $texts, \Drupal::time()->getRequestTime() + (2500000));
     return $texts;
   }
 

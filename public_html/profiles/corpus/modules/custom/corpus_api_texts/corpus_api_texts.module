@@ -13,7 +13,7 @@ use Drupal\search_api\Query\ResultSetInterface;
  * The hook is invoked after all enabled processors have postprocessed the
  * results.
  *
- * @param \Drupal\search_api\Query\ResultSetInterface $results
+ * @param ResultSetInterface $results
  *   The search results to alter.
  */
 function corpus_api_texts_search_api_results_alter(ResultSetInterface &$results) {
