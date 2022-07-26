@@ -39,6 +39,7 @@ class RepositoryImporter extends ImporterService {
       'Assignment Code' => 'assignment_code',
       'Document Type' => 'document_type',
       'Instructor' => 'instructor',
+      'Target Language' => 'target_language',
     ];
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
