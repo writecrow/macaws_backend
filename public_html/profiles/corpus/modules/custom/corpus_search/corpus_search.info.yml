@@ -1,5 +1,0 @@
-name: Corpus Search
-type: module
-description: Search API for a Corpus Dataset
-core_version_requirement: ^8.8 || ^9
-package: Custom

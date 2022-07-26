@@ -15,11 +15,7 @@ module:
   config_ignore: 0
   config_update: 0
   consumers: 0
-  content_type_page: 0
-  content_type_resource: 0
-  content_type_text: 0
   contextual: 0
-  corpus_api_resources: 0
   corpus_api_texts: 0
   corpus_importer: 0
   corpus_search: 0
