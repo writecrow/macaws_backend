@@ -3,6 +3,7 @@
 namespace Drupal\corpus_importer;
 
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\file\FileRepositoryInterface;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 
@@ -16,7 +17,7 @@ class RepositoryImporter extends ImporterService {
   /**
    * Helper function to save repository data.
    */
-  public static function saveRepositoryNode($text, $repository_candidates, $options = []) {
+  public static function saveRepositoryNode($text, $repository_candidates) {
     // First check if we can find the file.
     $file = self::uploadRepositoryResource($text['full_path'], $repository_candidates);
     if (!$file) {
@@ -41,6 +42,7 @@ class RepositoryImporter extends ImporterService {
     ];
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
+      $tid = 0;
       $save = TRUE;
       if (in_array($name, array_keys($text))) {
         // Skip N/A values.
@@ -101,13 +103,14 @@ class RepositoryImporter extends ImporterService {
    */
   public static function uploadRepositoryResource($full_path, $repository_candidates) {
     $path_parts = pathinfo($full_path);
+    $original_path = '';
     if (in_array($path_parts['filename'], array_keys($repository_candidates))) {
       $glob = glob($repository_candidates[$path_parts['filename']]);
     }
     else {
       $path_parts['dirname'] = str_replace('/Text/', '/Original/', $path_parts['dirname']);
-      $original_wildcard = $path_parts['dirname'] . '/' . $path_parts['filename'] . '.*';
-      $glob = glob($original_wildcard);
+      $original_path = $path_parts['dirname'] . '/' . $path_parts['filename'] . '.*';
+      $glob = glob($original_path);
     }
     if (!empty($glob[0])) {
       $original_file = $glob[0];
@@ -123,11 +126,11 @@ class RepositoryImporter extends ImporterService {
       $file_content = file_get_contents($original_file);
       $directory = 'public://resources/';
       \Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
-      file_save_data($file_content, $directory . basename($original_file), FileSystemInterface::EXISTS_REPLACE);
+      \Drupal::service('file.repository')->writeData($file_content, $directory . basename($original_file), FileSystemInterface::EXISTS_REPLACE);
       return $file;
     }
     else {
-      print_r('File not found! ' . $original_wildcard);
+      print_r('File not found! ' .$original_path);
     }
     return FALSE;
   }

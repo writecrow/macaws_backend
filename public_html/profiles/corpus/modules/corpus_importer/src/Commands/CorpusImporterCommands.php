@@ -17,30 +17,19 @@ class CorpusImporterCommands extends DrushCommands {
    *
    * @param string $path
    *   Path to the folder that includes the files.
-   * @param array $options
-   *   An associative array of options.
-   * @option dryrun
-   *   Run the import logic without actually saving data.
    * @usage 0
    *   drush corpus-import corpus_data
-   * @usage 1
-   *   drush ci corpus_data --dryrun
    *
    * @command corpus:import
    * @aliases ci,corpus-import
    */
-  public function import($path, array $options = ['dryrun' => NULL]) {
-    $dryrun_value = $this->getOption($options, 'dryryn');
-    $dryrun = $dryrun_value ? TRUE : FALSE;
+  public function import($path) {
     if (!file_exists($path)) {
       $this->logger()->warning("Path $path doesn't exist");
       exit;
     }
-    if ($dryrun === TRUE) {
-      $this->output()->writeln('This is a dry run...');
-    }
     $start = time();
-    ImporterService::import($path, ['lorem' => FALSE, 'dryrun' => $dryrun]);
+    ImporterService::import($path);
     $finish = time();
     $this->output()->writeln('Completed in ' . ($finish - $start) . ' seconds.\n');
   }

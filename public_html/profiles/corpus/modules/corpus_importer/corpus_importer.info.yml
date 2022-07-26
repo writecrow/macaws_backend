@@ -3,5 +3,3 @@ type: module
 description: Importer tool for tagged text files to a Drupal entity
 core_version_requirement: ^8.8 || ^9
 package: Corpus
-dependencies:
-  - plupload
