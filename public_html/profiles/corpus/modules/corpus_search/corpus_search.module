@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Contains corpus_search.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+function corpus_search_theme($existing, $type, $theme, $path) {
+  return [
+    'corpus_concordance' => [
+      'variables' => [
+        'sorted_before' => NULL,
+        'sorted_after' => NULL,
+        'target_asc' => NULL,
+        'target_desc' => NULL,
+        'css' => NULL,
+        'script' => NULL,
+      ],
+    ],
+  ];
+}
+
+if (!function_exists('mb_ucfirst')) {
+
+  /**
+   * Helper function for UTF8-multibyte character manipulation.
+   */
+  function mb_ucfirst($str, $encoding = "UTF-8", $lower_str_end = TRUE) {
+    $first_letter = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding);
+    $str_end = "";
+    if ($lower_str_end) {
+      $str_end = mb_strtolower(mb_substr($str, 1, mb_strlen($str, $encoding), $encoding), $encoding);
+    }
+    else {
+      $str_end = mb_substr($str, 1, mb_strlen($str, $encoding), $encoding);
+    }
+    $str = $first_letter . $str_end;
+    return $str;
+  }
+
+}
