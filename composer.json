@@ -84,9 +84,6 @@
             "composer/installers": true
         }
     },
-    "conflict": {
-        "drupal/drupal": "*"
-    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
