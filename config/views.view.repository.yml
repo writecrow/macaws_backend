@@ -1092,7 +1092,7 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: true
+            alter_text: false
             text: ''
             make_link: false
             path: ''
@@ -1126,7 +1126,7 @@ display:
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
-          empty: '{{ text }}'
+          empty: '{{ raw_text }}'
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
@@ -1368,8 +1368,8 @@ display:
             target_language:
               alias: language
               raw_output: false
-            raw_text:
-              alias: text
+            search_api_excerpt:
+              alias: excerpt
               raw_output: false
       defaults:
         style: false
