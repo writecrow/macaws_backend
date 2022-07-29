@@ -18,6 +18,7 @@ dependencies:
     - field.storage.node.field_experience_abroad
     - field.storage.node.field_heritage_of_target_languag
     - field.storage.node.field_institution
+    - field.storage.node.field_instructor
     - field.storage.node.field_l1
     - field.storage.node.field_length_of_course
     - field.storage.node.field_macro_genre
@@ -30,8 +31,12 @@ dependencies:
     - field.storage.node.field_section
     - field.storage.node.field_target_language
     - field.storage.node.field_target_language_practice
+    - field.storage.node.field_text
     - field.storage.node.field_wordcount
     - field.storage.node.field_year_in_school
+    - node.type.text
+    - user.role.basic_search_access
+    - user.role.full_text_access
   module:
     - corpus_api_texts
     - node
@@ -118,56 +123,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        corpus_text:
-          id: corpus_text
-          table: node
-          field: corpus_text
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          plugin_id: corpus_text
-          label: ''
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: false
         field_draft:
           id: field_draft
           table: node__field_draft
@@ -1996,6 +1951,68 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        field_text:
+          id: field_text
+          table: node__field_text
+          field: field_text
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: basic_string
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         concordance_views_field:
           id: concordance_views_field
           table: node
@@ -2041,11 +2058,74 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: false
+          element_default_classes: true
           empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: false
+        field_instructor:
+          id: field_instructor
+          table: node__field_instructor
+          field: field_instructor
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: false
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       pager:
         type: mini
         options:
@@ -2075,9 +2155,11 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: perm
+        type: role
         options:
-          perm: 'access content'
+          role:
+            full_text_access: full_text_access
+            basic_search_access: basic_search_access
       cache:
         type: none
         options: {  }
@@ -2161,6 +2243,48 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: in
+          value:
+            text: text
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: serializer
       row:
@@ -2191,7 +2315,7 @@ display:
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -2208,6 +2332,7 @@ display:
         - 'config:field.storage.node.field_experience_abroad'
         - 'config:field.storage.node.field_heritage_of_target_languag'
         - 'config:field.storage.node.field_institution'
+        - 'config:field.storage.node.field_instructor'
         - 'config:field.storage.node.field_l1'
         - 'config:field.storage.node.field_length_of_course'
         - 'config:field.storage.node.field_macro_genre'
@@ -2220,6 +2345,7 @@ display:
         - 'config:field.storage.node.field_section'
         - 'config:field.storage.node.field_target_language'
         - 'config:field.storage.node.field_target_language_practice'
+        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_wordcount'
         - 'config:field.storage.node.field_year_in_school'
   rest_export_1:
@@ -2236,9 +2362,8 @@ display:
       style:
         type: serializer
         options:
-          grouping: {  }
-          uses_fields: false
-          formats: {  }
+          formats:
+            json: json
       row:
         type: data_field
         options:
@@ -2246,101 +2371,106 @@ display:
             title:
               alias: filename
               raw_output: false
-            corpus_text:
-              alias: ''
-              raw_output: false
             field_draft:
-              alias: ''
+              alias: draft
               raw_output: false
             field_assignment_code:
-              alias: ''
+              alias: assignment
               raw_output: false
             field_assignment_mode:
-              alias: ''
+              alias: assignment_mode
               raw_output: false
             field_assignment_name:
-              alias: ''
+              alias: assignment_name
               raw_output: false
             field_assignment_topic:
-              alias: ''
+              alias: topic
               raw_output: false
             field_began_formal_education:
-              alias: ''
+              alias: began_formal_education
               raw_output: false
             field_course:
-              alias: ''
+              alias: course
               raw_output: false
             field_course_semester:
-              alias: ''
+              alias: semester
               raw_output: false
             field_course_year:
-              alias: ''
+              alias: year
               raw_output: false
             field_courses_currently_enrolled:
-              alias: ''
+              alias: courses_currently_enrolled
               raw_output: false
             field_courses_previously_enrolle:
-              alias: ''
+              alias: courses_previously_enrolled
               raw_output: false
             field_credit_hours:
-              alias: ''
+              alias: credit_hours
               raw_output: false
             field_experience_abroad:
-              alias: ''
+              alias: experience_abroad
               raw_output: false
             field_heritage_of_target_languag:
-              alias: ''
+              alias: heritage_of_target_language
               raw_output: false
             field_institution:
-              alias: ''
+              alias: institution
               raw_output: false
             field_l1:
-              alias: ''
+              alias: l1
               raw_output: false
             field_length_of_course:
-              alias: ''
+              alias: length_of_course
               raw_output: false
             field_macro_genre:
-              alias: ''
+              alias: genre
               raw_output: false
             field_major:
-              alias: ''
+              alias: major
               raw_output: false
             field_minor:
-              alias: ''
+              alias: minor
               raw_output: false
             field_mode_of_course:
-              alias: ''
+              alias: course_mode
               raw_output: false
             field_other_languages:
-              alias: ''
+              alias: other_languages
               raw_output: false
             field_target_language_practice:
-              alias: ''
+              alias: target_language_practice
               raw_output: false
             field_proficiency_exam:
-              alias: ''
+              alias: proficiency_exam
               raw_output: false
             field_proficiency_exam_score:
-              alias: ''
+              alias: proficiency_exam_score
               raw_output: false
             field_section:
-              alias: ''
+              alias: section
               raw_output: false
             field_target_language:
-              alias: ''
+              alias: language
               raw_output: false
             field_wordcount:
-              alias: ''
+              alias: wordcount
               raw_output: false
             field_year_in_school:
-              alias: ''
+              alias: year_in_school
+              raw_output: false
+            field_text:
+              alias: text
               raw_output: false
             concordance_views_field:
               alias: concordance
               raw_output: false
+            field_instructor:
+              alias: instructor
+              raw_output: false
       display_extenders: {  }
       path: corpus/metadata
+      auth:
+        - oauth2
     cache_metadata:
       max-age: -1
       contexts:
@@ -2349,7 +2479,7 @@ display:
         - request_format
         - url
         - 'user.node_grants:view'
-        - user.permissions
+        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -2366,6 +2496,7 @@ display:
         - 'config:field.storage.node.field_experience_abroad'
         - 'config:field.storage.node.field_heritage_of_target_languag'
         - 'config:field.storage.node.field_institution'
+        - 'config:field.storage.node.field_instructor'
         - 'config:field.storage.node.field_l1'
         - 'config:field.storage.node.field_length_of_course'
         - 'config:field.storage.node.field_macro_genre'
@@ -2378,5 +2509,6 @@ display:
         - 'config:field.storage.node.field_section'
         - 'config:field.storage.node.field_target_language'
         - 'config:field.storage.node.field_target_language_practice'
+        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_wordcount'
         - 'config:field.storage.node.field_year_in_school'
