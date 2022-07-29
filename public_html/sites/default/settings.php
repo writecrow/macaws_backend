@@ -4,6 +4,13 @@
 
 $settings['hash_salt'] = 'U-BS0zPa-r9jdIDeoPGF02drLF3pRytlwa-xYdYuhxVzQnB96QOf0T2BsRhM3SUkngMBQTaBhA';
 
+$settings['trusted_host_patterns'] = [
+  '^.+\.corporaproject\.org$',
+  '^.+\.lndo\.site$',
+];
+
+
+
 
 /**
  * Deployment identifier.
