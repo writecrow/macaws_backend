@@ -1,0 +1,29 @@
+uuid: a41392a8-1823-4cd1-865b-4d53f2a0347d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_macro_genre
+    - node.type.resource
+    - taxonomy.vocabulary.macro_genre
+id: node.resource.field_macro_genre
+field_name: field_macro_genre
+entity_type: node
+bundle: resource
+label: 'Macro Genre'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      macro_genre: macro_genre
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

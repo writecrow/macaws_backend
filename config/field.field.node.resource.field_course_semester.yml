@@ -1,0 +1,29 @@
+uuid: 386364ea-1324-4ec4-8bd1-adf6230e0f47
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_course_semester
+    - node.type.resource
+    - taxonomy.vocabulary.course_semester
+id: node.resource.field_course_semester
+field_name: field_course_semester
+entity_type: node
+bundle: resource
+label: 'Course Semester'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      course_semester: course_semester
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -2,6 +2,7 @@
 
 namespace Drupal\search_api_lemma\Plugin\search_api\processor;
 
+use Drupal\search_api\Item\ItemInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
@@ -60,7 +61,7 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
   /**
    * The data type helper.
    *
-   * @var \Drupal\search_api\Utility\DataTypeHelperInterface|null
+   * @var DataTypeHelperInterface|null
    */
   protected $dataTypeHelper;
 
@@ -84,7 +85,7 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
   /**
    * Retrieves the data type helper.
    *
-   * @return \Drupal\search_api\Utility\DataTypeHelperInterface
+   * @return DataTypeHelperInterface
    *   The data type helper.
    */
   public function getDataTypeHelper() {
@@ -94,7 +95,7 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
   /**
    * Sets the data type helper.
    *
-   * @param \Drupal\search_api\Utility\DataTypeHelperInterface $data_type_helper
+   * @param DataTypeHelperInterface $data_type_helper
    *   The new data type helper.
    *
    * @return $this
@@ -277,7 +278,7 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
   /**
    * Adds excerpts to all results, if possible.
    *
-   * @param \Drupal\search_api\Item\ItemInterface[] $results
+   * @param ItemInterface[] $results
    *   The result items to which excerpts should be added.
    * @param string[] $fulltext_fields
    *   The fulltext fields from which the excerpt should be created.
@@ -302,7 +303,7 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
   /**
    * Retrieves highlighted field values for the given result items.
    *
-   * @param \Drupal\search_api\Item\ItemInterface[] $results
+   * @param ItemInterface[] $results
    *   The result items whose fields should be highlighted.
    * @param array $keys
    *   The search keys to use for highlighting.
@@ -334,7 +335,7 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
   /**
    * Retrieves the fulltext fields of the given result items.
    *
-   * @param \Drupal\search_api\Item\ItemInterface[] $result_items
+   * @param ItemInterface[] $result_items
    *   The results for which fulltext data should be extracted, keyed by item
    *   ID.
    * @param string[]|null $fulltext_fields
@@ -367,7 +368,7 @@ class LemmaHighlight extends ProcessorPluginBase implements PluginFormInterface 
   /**
    * Extracts the positive keywords used in a search query.
    *
-   * @param \Drupal\search_api\Query\QueryInterface $query
+   * @param QueryInterface $query
    *   The query from which to extract the keywords.
    *
    * @return string[]

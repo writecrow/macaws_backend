@@ -1,0 +1,16 @@
+name: 'Corpus Users'
+description: 'User management & registration functionality.'
+type: module
+core_version_requirement: '^9'
+dependencies:
+  - better_exposed_filters
+  - block
+  - captcha
+  - datetime
+  - facets
+  - field
+  - language
+  - options
+  - taxonomy
+  - user
+version: 8.x-1.0

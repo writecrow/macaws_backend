@@ -17,7 +17,8 @@ class CorpusImporter extends ImporterService {
   /**
    * Helper function to save corpus data.
    */
-  public static function saveCorpusNode($text, $options = []) {
+  public static function saveCorpusNode($text) {
+    $taxonomies = [];
     $vocabularies = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();
     foreach ($vocabularies as $key => $vocabulary) {
       $taxonomies[$vocabulary->label()] = $vocabulary->id();
@@ -143,23 +144,8 @@ class CorpusImporter extends ImporterService {
         }
       }
     }
-    if (isset($options['lorem']) && $options['lorem']) {
-      $text['text'] = LoremGutenberg::generate(['sentences' => 10]);
-    }
-    if (isset($options['merge']) && $options['merge']) {
-      $nodes = \Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->loadByProperties(['title' => $text['filename']]);
-      // Default to first instance found, in the unlikely event that there
-      // are more than one.
-      $node = reset($nodes);
-      $return = 'updated';
-    }
-    if (!$node) {
-      // Instantiate a new node object.
-      $node = Node::create(['type' => 'text']);
-      $return = 'created';
-    }
+    $node = Node::create(['type' => 'text']);
+    $return = 'created';
     $node->set('title', $text['filename']);
     foreach ($taxonomies as $name => $machine_name) {
       $field_name = substr('field_' . $machine_name, 0, 32);

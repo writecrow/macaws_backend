@@ -15,11 +15,7 @@ module:
   config_ignore: 0
   config_update: 0
   consumers: 0
-  content_type_page: 0
-  content_type_resource: 0
-  content_type_text: 0
   contextual: 0
-  corpus_api_resources: 0
   corpus_api_texts: 0
   corpus_importer: 0
   corpus_search: 0
@@ -30,6 +26,7 @@ module:
   dynamic_page_cache: 0
   editor: 0
   facets: 0
+  facets_rest: 0
   features: 0
   features_ui: 0
   field: 0
@@ -45,7 +42,6 @@ module:
   page_cache: 0
   path: 0
   path_alias: 0
-  plupload: 0
   rabbit_hole: 0
   recaptcha: 0
   reroute_email: 0
@@ -54,6 +50,8 @@ module:
   restui: 0
   rh_node: 0
   role_delegation: 0
+  search_api: 0
+  search_api_db: 0
   serialization: 0
   simple_oauth: 0
   simple_oauth_extras: 0

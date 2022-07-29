@@ -1,0 +1,29 @@
+uuid: 42233b71-2af4-4418-a064-40b42b6a35c0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_assignment_code
+    - node.type.resource
+    - taxonomy.vocabulary.assignment_code
+id: node.resource.field_assignment_code
+field_name: field_assignment_code
+entity_type: node
+bundle: resource
+label: 'Assignment Code'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      assignment_code: assignment_code
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

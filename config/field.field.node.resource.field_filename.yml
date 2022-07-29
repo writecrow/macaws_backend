@@ -1,0 +1,19 @@
+uuid: a470b41c-98c8-460b-80c3-5eda0259580a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_filename
+    - node.type.resource
+id: node.resource.field_filename
+field_name: field_filename
+entity_type: node
+bundle: resource
+label: Filename
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

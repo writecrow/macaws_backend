@@ -2,13 +2,10 @@
 
 namespace Drupal\corpus_importer;
 
-use Drupal\Component\Utility\Html;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\file\FileRepositoryInterface;
 use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
-use Drupal\taxonomy\Entity\Term;
-use writecrow\TagConverter\TagConverter;
-use writecrow\LoremGutenberg\LoremGutenberg;
-use writecrow\CountryCodeConverter\CountryCodeConverter;
 
 /**
  * Class RepositoryImporter.
@@ -20,7 +17,7 @@ class RepositoryImporter extends ImporterService {
   /**
    * Helper function to save repository data.
    */
-  public static function saveRepositoryNode($text, $repository_candidates, $options = []) {
+  public static function saveRepositoryNode($text, $repository_candidates) {
     // First check if we can find the file.
     $file = self::uploadRepositoryResource($text['full_path'], $repository_candidates);
     if (!$file) {
@@ -32,20 +29,21 @@ class RepositoryImporter extends ImporterService {
     }
     // The key *must* match what is provided in the original text file.
     $taxonomies = [
-      'Assignment' => 'assignment',
-      'Course' => 'course',
-      'Mode' => 'mode',
-      'Length' => 'course_length',
       'Institution' => 'institution',
-      'Instructor' => 'instructor',
+      'Course Year' => 'course_year',
+      'Course Semester' => 'course_semester',
+      'Course' => 'course',
+      'Macro Genre' => 'macro_genre',
+      'Assignment Mode' => 'assignment_mode',
+      'Assignment Topic' => 'assignment_topic',
+      'Assignment Code' => 'assignment_code',
       'Document Type' => 'document_type',
-      'Course Semester' => 'semester',
-      'Course Year' => 'year',
-      'File Type' => 'file_type',
-      'Topic' => 'topic',
+      'Instructor' => 'instructor',
+      'Target Language' => 'target_language',
     ];
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
+      $tid = 0;
       $save = TRUE;
       if (in_array($name, array_keys($text))) {
         // Skip N/A values.
@@ -55,13 +53,9 @@ class RepositoryImporter extends ImporterService {
         }
         if ($machine_name == 'document_type') {
           $doc_code = $text['Document Type'];
-          $text['Document Type'] = self::$docTypes[$doc_code];
+          $text['Document Type'] = ImporterService::$docTypes[$doc_code];
         }
-        if ($machine_name == 'assignment') {
-          $assignment_code = $text['Assignment'];
-          $text['Assignment'] = self::$assignments[$assignment_code];
-        }
-        if (in_array($machine_name, ['topic'])) {
+        if (in_array($machine_name, ['assignment_topic'])) {
           if (is_string($text[$name])) {
             $multiples = preg_split("/\s?;\s?/", $text[$name]);
             if (isset($multiples[1])) {
@@ -70,10 +64,10 @@ class RepositoryImporter extends ImporterService {
             $text[$name] = $multiples;
           }
         }
-        $tid = self::getTidByName($text[$name], $machine_name);
+        $tid = ImporterHelper::getTidByName($text[$name], $machine_name);
         if ($tid == 0) {
-          self::createTerm($text[$name], $machine_name);
-          $tid = self::getTidByName($text[$name], $machine_name);
+          ImporterHelper::createTerm($text[$name], $machine_name);
+          $tid = ImporterHelper::getTidByName($text[$name], $machine_name);
         }
       }
       else {
@@ -83,23 +77,10 @@ class RepositoryImporter extends ImporterService {
         $fields[$machine_name] = $tid;
       }
     }
-    if (isset($options['lorem']) && $options['lorem']) {
-      $text['text'] = LoremGutenberg::generate(['sentences' => 10]);
-    }
-    if (isset($options['merge']) && $options['merge']) {
-      $nodes = \Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->loadByProperties(['title' => $text['File ID']]);
-      // Default to first instance found, in the unlikely event that there
-      // are more than one.
-      $node = reset($nodes);
-      $return = 'updated';
-    }
-    if (!$node) {
-      // Instantiate a new node object.
-      $node = Node::create(['type' => 'resource']);
-      $return = 'created';
-    }
+
+    // Instantiate a new node object.
+    $node = Node::create(['type' => 'resource']);
+    $return = 'created';
     $node->set('title', $text['File ID']);
     $node->set('field_file', ['target_id' => $file->id()]);
     $node->set('field_filename', ['value' => $text['filename']]);
@@ -123,13 +104,14 @@ class RepositoryImporter extends ImporterService {
    */
   public static function uploadRepositoryResource($full_path, $repository_candidates) {
     $path_parts = pathinfo($full_path);
+    $original_path = '';
     if (in_array($path_parts['filename'], array_keys($repository_candidates))) {
       $glob = glob($repository_candidates[$path_parts['filename']]);
     }
     else {
       $path_parts['dirname'] = str_replace('/Text/', '/Original/', $path_parts['dirname']);
-      $original_wildcard = $path_parts['dirname'] . '/' . $path_parts['filename'] . '.*';
-      $glob = glob($original_wildcard);
+      $original_path = $path_parts['dirname'] . '/' . $path_parts['filename'] . '.*';
+      $glob = glob($original_path);
     }
     if (!empty($glob[0])) {
       $original_file = $glob[0];
@@ -144,12 +126,12 @@ class RepositoryImporter extends ImporterService {
       $file->save();
       $file_content = file_get_contents($original_file);
       $directory = 'public://resources/';
-      file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-      $file_saved = file_save_data($file_content, $directory . basename($original_file), FILE_EXISTS_REPLACE);
+      \Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
+      \Drupal::service('file.repository')->writeData($file_content, $directory . basename($original_file), FileSystemInterface::EXISTS_REPLACE);
       return $file;
     }
     else {
-      print_r('File not found! ' . $original_wildcard);
+      print_r('File not found! ' .$original_path);
     }
     return FALSE;
   }

@@ -1,0 +1,29 @@
+uuid: d8d7a2b8-19d5-40d2-9751-8c91941264a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_assignment_topic
+    - node.type.resource
+    - taxonomy.vocabulary.assignment_topic
+id: node.resource.field_assignment_topic
+field_name: field_assignment_topic
+entity_type: node
+bundle: resource
+label: 'Assignment Topic'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      assignment_topic: assignment_topic
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

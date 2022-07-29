@@ -125,69 +125,39 @@ class ImporterService {
    *
    * @param mixed $files
    *   Simple array of filepaths.
-   * @param string $options
-   *   User-supplied default flags.
    */
-  public static function import($files, $options = []) {
-
-    if (PHP_SAPI == 'cli' && function_exists('drush_main')) {
-      ini_set("memory_limit", "4096M");
-      $paths = array_slice(scandir($files), 2);
-      $absolute_paths = [];
-      $repository_candidates = [];
-      $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($files));
-      foreach ($objects as $filepath => $object) {
-        if (stripos($filepath, '.txt') !== FALSE) {
-          $absolute_paths[]['tmppath'] = $filepath;
-        }
-        if (stripos($filepath, '.txt') === FALSE) {
-          $path_parts = pathinfo($filepath);
-          // Get a filelist of repository materials eligible for upload.
-          $repository_candidates[$path_parts['filename']] = $filepath;
-        }
+  public static function import($files) {
+    ini_set("memory_limit", "4096M");
+    $paths = array_slice(scandir($files), 2);
+    $absolute_paths = [];
+    $repository_candidates = [];
+    $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($files));
+    foreach ($objects as $filepath => $object) {
+      if (stripos($filepath, '.txt') !== FALSE) {
+        $absolute_paths[]['tmppath'] = $filepath;
       }
-      $texts = self::convert($absolute_paths);
-
-      foreach ($texts as $text) {
-        // Fix failures in corpus headers:
-        if (empty($text['Institution'])) {
-          $text['Institution'] = 'Purdue University';
-        }
-        if ($text['type'] == 'corpus') {
-          $result = CorpusImporter::saveCorpusNode($text, $options);
-        }
-        if ($text['type'] == 'repository') {
-          $result = RepositoryImporter::saveRepositoryNode($text, $repository_candidates, $options);
-        }
-        if (isset($result['created'])) {
-          echo $result['created'] . PHP_EOL;
-        }
+      if (stripos($filepath, '.txt') === FALSE) {
+        $path_parts = pathinfo($filepath);
+        // Get a filelist of repository materials eligible for upload.
+        $repository_candidates[$path_parts['filename']] = $filepath;
       }
     }
-    else {
-      // Convert files into machine-readable array.
-      $texts = self::convert($files);
-      drupal_set_message(count($files) . ' files found.');
+    $texts = self::convert($absolute_paths);
 
-      // Perform validation logic on each row.
-      $texts = array_filter($texts, ['self', 'preSave']);
-
-      // Save valid texts.
-      foreach ($texts as $text) {
-        $operations[] = [
-          ['\Drupal\corpus_importer\ImporterService', 'save'],
-          [$text, $options],
-        ];
+    foreach ($texts as $text) {
+      // Fix failures in corpus headers:
+      if (empty($text['Institution'])) {
+        $text['Institution'] = 'Purdue University';
       }
-
-      $batch = [
-        'title' => t('Saving Texts'),
-        'operations' => $operations,
-        'finished' => ['\Drupal\corpus_importer\ImporterService', 'finish'],
-        'file' => drupal_get_path('module', 'corpus_importer') . '/corpus_importer.module',
-      ];
-
-      batch_set($batch);
+      if ($text['type'] == 'corpus') {
+        $result = CorpusImporter::saveCorpusNode($text);
+      }
+      if ($text['type'] == 'repository') {
+        $result = RepositoryImporter::saveRepositoryNode($text, $repository_candidates);
+      }
+      if (isset($result['created'])) {
+        echo $result['created'] . PHP_EOL;
+      }
     }
   }
 
@@ -227,41 +197,6 @@ class ImporterService {
   }
 
   /**
-   * Check for problematic data and remove or clean up.
-   *
-   * @param str[] $text
-   *   Keyed array of texts.
-   *
-   * @return bool
-   *   A TRUE/FALSE value to be used by array_filter.
-   */
-  public static function preSave(array $text) {
-    return TRUE;
-  }
-
-  /**
-   * Save an individual entity.
-   *
-   * @param str[] $text
-   *   Keyed array of redirects, in the format
-   *    [source, redirect, status_code, language].
-   * @param str[] $options
-   *   A 1 indicates that existing entities should be updated.
-   * @param str[] $context
-   *   Operational context for batch processes.
-   */
-  public static function save(array $text, array $options, array &$context) {
-    if (isset($text['Student ID'])) {
-      $result = CorpusImporter::saveCorpusNode($text, $options);
-    }
-    if (isset($text['File ID'])) {
-      $result = RepositoryImporter::saveRepositoryNode($text, $options);
-    }
-    $key = key($result);
-    $context['results'][$key][] = $result[$key];
-  }
-
-  /**
    * Utility: find term by name and vid.
    *
    * @param string $name
@@ -280,7 +215,7 @@ class ImporterService {
     if (!empty($vid)) {
       $properties['vid'] = $vid;
     }
-    $terms = \Drupal::entityManager()->getStorage('taxonomy_term')->loadByProperties($properties);
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties($properties);
     $term = reset($terms);
 
     return !empty($term) ? $term->id() : 0;
@@ -303,13 +238,13 @@ class ImporterService {
   public static function finish($success, $results, $operations) {
     if (!$success) {
       $message = t('Finished, with possible errors.');
-      drupal_set_message($message, 'warning');
+      \Drupal::messenger()->addWarning($message);
     }
     if (isset($results['updated'])) {
-      drupal_set_message(count($results['updated']) . ' texts updated.');
+      \Drupal::messenger()->addStatus(count($results['updated']) . ' texts updated.');
     }
     if (isset($results['created'])) {
-      drupal_set_message(count($results['created']) . ' texts created.');
+      \Drupal::messenger()->addStatus(count($results['created']) . ' texts created.');
     }
 
   }
