@@ -1,1 +1,0 @@
-<?php $root_map = ['2-hitter' => '2-hitters',];
