@@ -6,17 +6,17 @@ dependencies:
     - field.storage.node.field_assignment_code
     - field.storage.node.field_assignment_mode
     - field.storage.node.field_assignment_topic
-    - field.storage.node.field_course
     - field.storage.node.field_course_semester
     - field.storage.node.field_course_year
+    - field.storage.node.field_course
     - field.storage.node.field_document_type
     - field.storage.node.field_file
     - field.storage.node.field_filename
     - field.storage.node.field_institution
     - field.storage.node.field_instructor
     - field.storage.node.field_macro_genre
-    - field.storage.node.field_raw_text
     - field.storage.node.field_target_language
+    - field.storage.node.field_raw_text
     - search_api.server.corpus_database_server
   module:
     - taxonomy
@@ -47,16 +47,6 @@ field_settings:
         - field.storage.node.field_assignment_mode
       module:
         - taxonomy
-  assignment_topic:
-    label: 'Assignment Topic » Taxonomy term » Name'
-    datasource_id: 'entity:node'
-    property_path: 'field_assignment_topic:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_assignment_topic
-      module:
-        - taxonomy
   course:
     label: 'Course » Taxonomy term » Name'
     datasource_id: 'entity:node'
@@ -65,36 +55,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_course
-      module:
-        - taxonomy
-  course_semester:
-    label: 'Course Semester » Taxonomy term » Name'
-    datasource_id: 'entity:node'
-    property_path: 'field_course_semester:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_course_semester
-      module:
-        - taxonomy
-  course_year:
-    label: 'Course Year » Taxonomy term » Name'
-    datasource_id: 'entity:node'
-    property_path: 'field_course_year:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_course_year
-      module:
-        - taxonomy
-  document_type:
-    label: 'Document Type » Taxonomy term » Name'
-    datasource_id: 'entity:node'
-    property_path: 'field_document_type:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_document_type
       module:
         - taxonomy
   file:
@@ -113,6 +73,16 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_filename
+  genre:
+    label: 'Macro Genre » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_macro_genre:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_macro_genre
+      module:
+        - taxonomy
   institution:
     label: 'Institution » Taxonomy term » Name'
     datasource_id: 'entity:node'
@@ -133,14 +103,14 @@ field_settings:
         - field.storage.node.field_instructor
       module:
         - taxonomy
-  macro_genre:
-    label: 'Macro Genre » Taxonomy term » Name'
+  language:
+    label: 'Target Language » Taxonomy term » Name'
     datasource_id: 'entity:node'
-    property_path: 'field_macro_genre:entity:name'
+    property_path: 'field_target_language:entity:name'
     type: string
     dependencies:
       config:
-        - field.storage.node.field_macro_genre
+        - field.storage.node.field_target_language
       module:
         - taxonomy
   raw_text:
@@ -151,14 +121,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_raw_text
-  target_language:
-    label: 'Target Language » Taxonomy term » Name'
+  semester:
+    label: 'Course Semester » Taxonomy term » Name'
     datasource_id: 'entity:node'
-    property_path: 'field_target_language:entity:name'
+    property_path: 'field_course_semester:entity:name'
     type: string
     dependencies:
       config:
-        - field.storage.node.field_target_language
+        - field.storage.node.field_course_semester
       module:
         - taxonomy
   title:
@@ -169,6 +139,36 @@ field_settings:
     dependencies:
       module:
         - node
+  topic:
+    label: 'Assignment Topic » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_assignment_topic:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_assignment_topic
+      module:
+        - taxonomy
+  type:
+    label: 'Document Type » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_document_type:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_document_type
+      module:
+        - taxonomy
+  year:
+    label: 'Course Year » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_course_year:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_course_year
+      module:
+        - taxonomy
 datasource_settings:
   'entity:node':
     bundles:
@@ -202,18 +202,18 @@ processor_settings:
     fields:
       - assignment_code
       - assignment_mode
-      - assignment_topic
       - course
-      - course_semester
-      - course_year
-      - document_type
       - filename
+      - genre
       - institution
       - instructor
-      - macro_genre
+      - language
       - raw_text
-      - target_language
+      - semester
       - title
+      - topic
+      - type
+      - year
     title: true
     alt: true
     tags:
@@ -250,18 +250,18 @@ processor_settings:
     fields:
       - assignment_code
       - assignment_mode
-      - assignment_topic
       - course
-      - course_semester
-      - course_year
-      - document_type
       - filename
+      - genre
       - institution
       - instructor
-      - macro_genre
+      - language
       - raw_text
-      - target_language
+      - semester
       - title
+      - topic
+      - type
+      - year
 tracker_settings:
   default:
     indexing_order: fifo

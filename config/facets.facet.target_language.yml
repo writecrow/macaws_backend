@@ -8,14 +8,14 @@ dependencies:
   module:
     - search_api
 id: target_language
-name: 'Target Language'
+name: 'Target Language » Taxonomy term » Name'
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
-url_alias: target_language
+url_alias: language
 facet_source_id: 'search_api:views_rest__repository__rest_export_1'
-field_identifier: target_language
+field_identifier: language
 query_operator: or
 hard_limit: 0
 exclude: false

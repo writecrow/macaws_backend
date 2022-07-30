@@ -8,14 +8,14 @@ dependencies:
   module:
     - search_api
 id: topic
-name: Topic
+name: 'Assignment Topic » Taxonomy term » Name'
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
 url_alias: topic
 facet_source_id: 'search_api:views_rest__repository__rest_export_1'
-field_identifier: assignment_topic
+field_identifier: topic
 query_operator: or
 hard_limit: 0
 exclude: false
