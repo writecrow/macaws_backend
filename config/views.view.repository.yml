@@ -8,7 +8,7 @@ dependencies:
     - field.storage.node.field_raw_text
     - search_api.index.macaws_repository
     - user.role.basic_search_access
-    - user.role.full_text_access
+    - user.role.export_access
   module:
     - corpus_search
     - file
@@ -1166,8 +1166,8 @@ display:
         type: role
         options:
           role:
-            full_text_access: full_text_access
             basic_search_access: basic_search_access
+            export_access: export_access
       cache:
         type: search_api_tag
         options: {  }
@@ -1336,7 +1336,7 @@ display:
               alias: mode
               raw_output: false
             assignment_topic:
-              alias: topic
+              alias: ''
               raw_output: false
             course_semester:
               alias: semester
@@ -1348,7 +1348,7 @@ display:
               alias: course
               raw_output: false
             document_type:
-              alias: type
+              alias: ''
               raw_output: false
             file:
               alias: ''
@@ -1363,10 +1363,10 @@ display:
               alias: ''
               raw_output: false
             macro_genre:
-              alias: genre
+              alias: ''
               raw_output: false
             target_language:
-              alias: language
+              alias: ''
               raw_output: false
             search_api_excerpt:
               alias: excerpt

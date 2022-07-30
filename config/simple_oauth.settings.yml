@@ -4,8 +4,8 @@ access_token_expiration: 1800
 authorization_code_expiration: 300
 refresh_token_expiration: 1209600
 token_cron_batch_size: 0
-public_key: /home/markfull/public_html/consumers/macaws/public.key
-private_key: /home/markfull/public_html/consumers/macaws/private.key
+public_key: /home/u359-cpnfwwix7w8a/www/macaws-api.corporaproject.org/public.key
+private_key: /home/u359-cpnfwwix7w8a/www/macaws-api.corporaproject.org/private.key
 remember_clients: true
 use_implicit: true
 disable_openid_connect: false
