@@ -43,38 +43,32 @@ class RepositoryImporter extends ImporterService {
     ];
     $fields = [];
     foreach ($taxonomies as $name => $machine_name) {
-      $tid = 0;
-      $save = TRUE;
       if (in_array($name, array_keys($text))) {
         // Skip N/A values.
         if (in_array($text[$name], ['NA', 'N/A'])) {
-          $save = FALSE;
           continue;
         }
         if ($machine_name == 'document_type') {
           $doc_code = $text['Document Type'];
           $text['Document Type'] = ImporterService::$docTypes[$doc_code];
         }
-        if (in_array($machine_name, ['assignment_topic'])) {
-          if (is_string($text[$name])) {
-            $multiples = preg_split("/\s?;\s?/", $text[$name]);
-            if (isset($multiples[1])) {
-              array_push($multiples, $text[$name]);
-            }
-            $text[$name] = $multiples;
+        if (is_string($text[$name])) {
+          $text[$name] = ltrim($text[$name], '0');
+          $multiples = preg_split("/\s?;\s?/", $text[$name]);
+          if (isset($multiples[1])) {
+            array_push($multiples, $text[$name]);
           }
+          $text[$name] = $multiples;
         }
-        $tid = ImporterHelper::getTidByName($text[$name], $machine_name);
+      }
+      foreach ($text[$name] as $value) {
+        $tid = 0;
+        $tid = ImporterHelper::getTidByName($value, $machine_name);
         if ($tid == 0) {
-          ImporterHelper::createTerm($text[$name], $machine_name);
-          $tid = ImporterHelper::getTidByName($text[$name], $machine_name);
+          ImporterHelper::createTerm($value, $machine_name);
+          $tid = ImporterHelper::getTidByName($value, $machine_name);
         }
-      }
-      else {
-        $save = FALSE;
-      }
-      if ($save) {
-        $fields[$machine_name] = $tid;
+        $fields[$machine_name][] = $tid;
       }
     }
 
@@ -86,7 +80,7 @@ class RepositoryImporter extends ImporterService {
     $node->set('field_filename', ['value' => $text['filename']]);
     foreach ($taxonomies as $name => $machine_name) {
       if (!empty($fields[$machine_name])) {
-        $node->set('field_' . $machine_name, ['target_id' => $fields[$machine_name]]);
+        $node->set('field_' . $machine_name, $fields[$machine_name]);
       }
     }
 

@@ -1,1 +1,0 @@
-<?php $root_map = ['3-d' => '3-ds','3-hitter' => '3-hitters','3d' => '3ds','3tc' => '3tcs',];

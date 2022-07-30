@@ -1,1 +1,0 @@
-<?php $root_map = ['5-hitter' => '5-hitters','5-hydroxytryptamine' => '5-hydroxytryptamines',];
