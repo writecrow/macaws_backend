@@ -26,8 +26,6 @@ dependencies:
     - taxonomy.vocabulary.institution
     - taxonomy.vocabulary.instructor
     - taxonomy.vocabulary.macro_genre
-    - user.role.basic_search_access
-    - user.role.full_text_access
   module:
     - file
     - node
@@ -35,7 +33,6 @@ dependencies:
     - serialization
     - taxonomy
     - text
-    - user
 id: repository_metadata
 label: 'Repository by Metadata'
 module: views
@@ -1090,11 +1087,8 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: role
-        options:
-          role:
-            full_text_access: full_text_access
-            basic_search_access: basic_search_access
+        type: none
+        options: {  }
       cache:
         type: tag
         options: {  }
@@ -1645,6 +1639,57 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        field_instructor_target_id_1:
+          id: field_instructor_target_id_1
+          table: node__field_instructor
+          field: field_instructor_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: not
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_instructor_target_id_1_op
+            label: 'Excluded Instructor'
+            description: ''
+            use_operator: false
+            operator: field_instructor_target_id_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: exclude_instructor
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              full_text_access: '0'
+              basic_search_access: '0'
+              export_access: '0'
+              manager: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          vid: instructor
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: true
       style:
         type: table
       row:
@@ -1679,7 +1724,6 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -1712,7 +1756,6 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -1807,7 +1850,6 @@ display:
         - url
         - user
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
