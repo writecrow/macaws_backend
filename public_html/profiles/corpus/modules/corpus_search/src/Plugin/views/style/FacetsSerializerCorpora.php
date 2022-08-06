@@ -66,6 +66,9 @@ class FacetsSerializerCorpora extends FacetsSerializer {
     foreach ($rows['facets'] as &$facet) {
       $group = key($facet[0]);
       foreach ($facet[0][$group] as &$item) {
+        if (!isset($item['values'])) {
+          continue;
+        }
         $name = $item['values']['value'];
         if (isset($facet_map['by_name'][$group][$name])) {
           $id = $facet_map['by_name'][$group][$name];
