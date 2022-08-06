@@ -26,6 +26,10 @@ dependencies:
     - taxonomy.vocabulary.institution
     - taxonomy.vocabulary.instructor
     - taxonomy.vocabulary.macro_genre
+    - user.role.authenticated
+    - user.role.basic_search_access
+    - user.role.export_access
+    - user.role.full_text_access
   module:
     - file
     - node
@@ -33,6 +37,7 @@ dependencies:
     - serialization
     - taxonomy
     - text
+    - user
 id: repository_metadata
 label: 'Repository by Metadata'
 module: views
@@ -1087,8 +1092,13 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            authenticated: authenticated
+            full_text_access: full_text_access
+            basic_search_access: basic_search_access
+            export_access: export_access
       cache:
         type: tag
         options: {  }
@@ -1724,6 +1734,7 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -1756,6 +1767,7 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -1841,6 +1853,8 @@ display:
         row: false
       display_extenders: {  }
       path: repository/metadata
+      auth:
+        - oauth2
     cache_metadata:
       max-age: -1
       contexts:
@@ -1850,6 +1864,7 @@ display:
         - url
         - user
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
