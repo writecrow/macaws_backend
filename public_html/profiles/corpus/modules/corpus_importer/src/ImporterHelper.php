@@ -74,6 +74,44 @@ class ImporterHelper {
     return $output;
   }
 
+  public static function taxonomyConsolidate() {
+    $resources = \Drupal::entityQuery('node')
+      ->condition('type', 'resource')
+      ->execute();
+    $controller = \Drupal::service('entity_type.manager')
+    ->getStorage('node');
+    $term = \Drupal::service('entity_type.manager')
+    ->getStorage('taxonomy_term');
+    $entities = $controller->loadMultiple($resources);
+    foreach ($entities as $e) {
+      $codes = $e->get('field_assignment_code')->getValue();
+      foreach ($codes as $code) {
+        $new_codes = [];
+        if ($t = $term->load($code['target_id'])) {
+          $name = $t->getName();
+          $trimmed = ltrim($name, '0');
+          if ($name !== $trimmed) {
+            // print_r('changed');
+            $new_tid = self::getOrCreateTidFromName($trimmed, 'assignment_code');
+            // print_r($new_tid);
+            $new_codes[] = ['target_id' => $new_tid['tid']];
+          }
+          else {
+            $new_codes[] = ['target_id' => $code['target_id']];
+          }
+        }
+      }
+      if ($codes !== $new_codes) {
+        print_r('changed');
+        $e->set('field_assignment_code', $new_codes);
+        $e->save();
+      }
+      else {
+        print_r('same');
+      }
+    }
+  }
+
   /**
    * Given a taxonomy name and a vocabulary, retrieve the ID or create.
    *
@@ -85,7 +123,7 @@ class ImporterHelper {
    * @return int
    *   The term ID.
    */
-  public static function getOrCreateTidFromName($label, $vocabulary, $options) {
+  public static function getOrCreateTidFromName($label, $vocabulary, $options = ['dryrun' => FALSE]) {
     $output = [];
 
     // Skip N/A values.

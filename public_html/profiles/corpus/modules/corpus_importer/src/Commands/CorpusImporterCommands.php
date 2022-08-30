@@ -78,6 +78,20 @@ class CorpusImporterCommands extends DrushCommands {
   }
 
   /**
+   * Consolidate assignment code taxonomy terms.
+   *
+   * @usage 0
+   *   drush taxonomy-consolidate
+   *
+   * @command taxonomy:consolidate
+   * @aliases t-consolidate
+   */
+  public function taxonomyConsolidator() {
+    ImporterHelper::taxonomyConsolidate();
+    $this->output()->writeln("Consolidated");
+  }
+
+  /**
    * Delete all repository nodes.
    *
    * @param array $options
