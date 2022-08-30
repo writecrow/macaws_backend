@@ -76,7 +76,7 @@ class ImporterHelper {
 
   public static function taxonomyConsolidate() {
     $resources = \Drupal::entityQuery('node')
-      ->condition('type', 'resource')
+      ->condition('type', 'text')
       ->execute();
     $controller = \Drupal::service('entity_type.manager')
     ->getStorage('node');

@@ -13,7 +13,9 @@ dependencies:
     - field.storage.node.field_raw_text
     - field.storage.node.field_target_language
     - search_api.index.macaws_repository
+    - user.role.authenticated
     - user.role.basic_search_access
+    - user.role.export_access
     - user.role.full_text_access
   module:
     - corpus_search
@@ -1664,8 +1666,10 @@ display:
         type: role
         options:
           role:
+            authenticated: authenticated
             full_text_access: full_text_access
             basic_search_access: basic_search_access
+            export_access: export_access
       cache:
         type: search_api_tag
         options: {  }
