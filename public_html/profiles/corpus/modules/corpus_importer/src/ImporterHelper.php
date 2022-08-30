@@ -101,7 +101,7 @@ class ImporterHelper {
           }
         }
       }
-      if ($codes !== $new_codes) {
+      if (!empty($codes) && $codes !== $new_codes) {
         print_r('changed');
         $e->set('field_assignment_code', $new_codes);
         $e->save();
