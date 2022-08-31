@@ -29,6 +29,7 @@ dependencies:
     - field.storage.node.field_proficiency_exam
     - field.storage.node.field_proficiency_exam_score
     - field.storage.node.field_section
+    - field.storage.node.field_student_id
     - field.storage.node.field_target_language
     - field.storage.node.field_target_language_practice
     - field.storage.node.field_text
@@ -38,20 +39,18 @@ dependencies:
     - taxonomy.vocabulary.assignment_code
     - taxonomy.vocabulary.assignment_name
     - taxonomy.vocabulary.course
+    - taxonomy.vocabulary.course_semester
+    - taxonomy.vocabulary.course_year
     - taxonomy.vocabulary.institution
     - taxonomy.vocabulary.instructor
     - taxonomy.vocabulary.macro_genre
-    - user.role.authenticated
-    - user.role.basic_search_access
-    - user.role.export_access
-    - user.role.full_text_access
+    - taxonomy.vocabulary.student_id
   module:
     - corpus_api_texts
     - node
     - rest
     - serialization
     - taxonomy
-    - user
 id: corpus_by_metadata
 label: 'Corpus by Metadata'
 module: views
@@ -2135,6 +2134,69 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        field_student_id:
+          id: field_student_id
+          table: node__field_student_id
+          field: field_student_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: false
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       pager:
         type: mini
         options:
@@ -2164,13 +2226,8 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: role
-        options:
-          role:
-            authenticated: authenticated
-            full_text_access: full_text_access
-            basic_search_access: basic_search_access
-            export_access: export_access
+        type: none
+        options: {  }
       cache:
         type: none
         options: {  }
@@ -2616,7 +2673,7 @@ display:
           exposed: true
           expose:
             operator_id: field_instructor_target_id_1_op
-            label: 'Instructor (field_instructor)'
+            label: 'Excluded instructor'
             description: ''
             use_operator: false
             operator: field_instructor_target_id_1_op
@@ -2700,6 +2757,210 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        field_course_semester_target_id:
+          id: field_course_semester_target_id
+          table: node__field_course_semester
+          field: field_course_semester_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_course_semester_target_id_op
+            label: 'Course Semester (field_course_semester)'
+            description: ''
+            use_operator: false
+            operator: field_course_semester_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: semester
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              full_text_access: '0'
+              basic_search_access: '0'
+              export_access: '0'
+              manager: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: true
+          vid: course_semester
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: false
+        field_course_year_target_id:
+          id: field_course_year_target_id
+          table: node__field_course_year
+          field: field_course_year_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_course_year_target_id_op
+            label: 'Course Year (field_course_year)'
+            description: ''
+            use_operator: false
+            operator: field_course_year_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: year
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              full_text_access: '0'
+              basic_search_access: '0'
+              export_access: '0'
+              manager: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: true
+          vid: course_year
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: false
+        field_assignment_code_target_id:
+          id: field_assignment_code_target_id
+          table: node__field_assignment_code
+          field: field_assignment_code_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_assignment_code_target_id_op
+            label: 'Assignment Code (field_assignment_code)'
+            description: ''
+            use_operator: false
+            operator: field_assignment_code_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: code
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              full_text_access: '0'
+              basic_search_access: '0'
+              export_access: '0'
+              manager: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: true
+          vid: assignment_code
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: false
+        field_student_id_target_id:
+          id: field_student_id_target_id
+          table: node__field_student_id
+          field: field_student_id_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_student_id_target_id_op
+            label: 'Student ID (field_student_id)'
+            description: ''
+            use_operator: false
+            operator: field_student_id_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: student
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              full_text_access: '0'
+              basic_search_access: '0'
+              export_access: '0'
+              manager: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: true
+          vid: student_id
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: false
       style:
         type: serializer
       row:
@@ -2731,7 +2992,6 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -2759,6 +3019,7 @@ display:
         - 'config:field.storage.node.field_proficiency_exam'
         - 'config:field.storage.node.field_proficiency_exam_score'
         - 'config:field.storage.node.field_section'
+        - 'config:field.storage.node.field_student_id'
         - 'config:field.storage.node.field_target_language'
         - 'config:field.storage.node.field_target_language_practice'
         - 'config:field.storage.node.field_text'
@@ -2774,7 +3035,7 @@ display:
         type: some
         options:
           offset: 0
-          items_per_page: 10
+          items_per_page: 100
       style:
         type: serializer
         options:
@@ -2883,10 +3144,12 @@ display:
             field_instructor:
               alias: instructor
               raw_output: false
+            field_student_id:
+              alias: student
+              raw_output: false
       display_extenders: {  }
       path: corpus/metadata
-      auth:
-        - oauth2
+      auth: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -2896,7 +3159,6 @@ display:
         - url
         - user
         - 'user.node_grants:view'
-        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -2924,6 +3186,7 @@ display:
         - 'config:field.storage.node.field_proficiency_exam'
         - 'config:field.storage.node.field_proficiency_exam_score'
         - 'config:field.storage.node.field_section'
+        - 'config:field.storage.node.field_student_id'
         - 'config:field.storage.node.field_target_language'
         - 'config:field.storage.node.field_target_language_practice'
         - 'config:field.storage.node.field_text'
