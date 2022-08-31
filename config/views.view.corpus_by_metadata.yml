@@ -45,12 +45,14 @@ dependencies:
     - taxonomy.vocabulary.instructor
     - taxonomy.vocabulary.macro_genre
     - taxonomy.vocabulary.student_id
+    - user.role.authenticated
   module:
     - corpus_api_texts
     - node
     - rest
     - serialization
     - taxonomy
+    - user
 id: corpus_by_metadata
 label: 'Corpus by Metadata'
 module: views
@@ -2226,8 +2228,10 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            authenticated: authenticated
       cache:
         type: none
         options: {  }
@@ -2992,6 +2996,7 @@ display:
         - url.query_args
         - user
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
@@ -3149,7 +3154,8 @@ display:
               raw_output: false
       display_extenders: {  }
       path: corpus/metadata
-      auth: {  }
+      auth:
+        - oauth2
     cache_metadata:
       max-age: -1
       contexts:
@@ -3159,6 +3165,7 @@ display:
         - url
         - user
         - 'user.node_grants:view'
+        - user.roles
       tags:
         - 'config:field.storage.node.field_assignment_code'
         - 'config:field.storage.node.field_assignment_mode'
