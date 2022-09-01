@@ -123,6 +123,7 @@
                 "[web-root]/.csslintrc": false,
                 "[web-root]/.editorconfig": false,
                 "[web-root]/.eslintignore": false,
+                "[web-root]/.htaccess": false,
                 "[web-root]/example.gitignore": false,
                 "[web-root]/.eslintrc.json": false,
                 "[web-root]/.ht.router.php": false,
