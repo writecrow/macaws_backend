@@ -32,6 +32,7 @@
         "drupal/honeypot": "^1",
         "drupal/login_emailusername": "^1.1",
         "drupal/mailsystem": "^4.3",
+        "drupal/phpmailer_smtp": "^2.1",
         "drupal/rabbit_hole": "^1.0@beta",
         "drupal/recaptcha": "^3",
         "drupal/redirect_after_login": "^2.5",
@@ -39,7 +40,7 @@
         "drupal/restui": "^1",
         "drupal/role_delegation": "^1.0@alpha",
         "drupal/search_api": "^1.25",
-        "drupal/simple_oauth": "^5",
+        "drupal/simple_oauth": "5.0.2",
         "drupal/smtp": "^1.0@RC",
         "drupal/token": "^1.6",
         "drupal/userprotect": "^1.0",
@@ -78,6 +79,9 @@
             "cweagans/composer-patches": true,
             "drupal/core-composer-scaffold": true,
             "composer/installers": true
+        },
+        "platform": {
+            "php": "7.4.30"
         }
     },
     "minimum-stability": "dev",
