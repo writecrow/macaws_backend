@@ -134,8 +134,8 @@ class ImporterHelper {
     $output['tid'] = self::getTidByName($label, $vocabulary);
     if ($output['tid'] == 0) {
       $output['message'] = 'New ' . $vocabulary . ' created: ' . $label;
-      self::createTerm($label, $vocabulary, $options);
-      $output['tid'] = self::getTidByName($label, $vocabulary);
+      $new = self::createTerm($label, $vocabulary, $options);
+      $output['tid'] = $new;
     }
     return $output;
   }
@@ -308,11 +308,9 @@ class ImporterHelper {
     $term = Term::create([
       'name' => $name,
       'vid' => $taxonomy_type,
+      'description' => $options['description'] ?? '',
     ])->save();
-    if (isset($options['description'])) {
-
-    }
-    return TRUE;
+    return $term;
   }
 
   /**

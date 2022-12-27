@@ -1042,6 +1042,7 @@ $data = [
     ];
   }
   $processed = [];
+  ImporterHelper::taxonomyWipe('assignment_name');
 
   $query = \Drupal::entityQuery('node')
     ->condition('status', 1)
@@ -1058,8 +1059,9 @@ $data = [
     if (!isset($map[$code->getName()])) {
       \Drupal::logger('corpus_importer')->notice('Could not find assignment code of ' . $code->getName());
     }
-    $new_assignment_name = ImporterHelper::getOrCreateTidFromName($map[$code->getName()]['name'], 'assignment_name', [$map[$code->getName()]['description']]);
+    $new_assignment_name = ImporterHelper::getOrCreateTidFromName($map[$code->getName()]['name'], 'assignment_name', ['description' => $map[$code->getName()]['description']]);
     $node->set('field_assignment_name', ['target_id' => $new_assignment_name['tid']]);
     $node->save();
+    \Drupal::logger('corpus_importer')->notice('Updated node with assignment ' . $map[$code->getName()]['name']);
   }
 }
