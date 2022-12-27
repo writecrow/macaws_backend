@@ -1058,14 +1058,8 @@ $data = [
     if (!isset($map[$code->getName()])) {
       \Drupal::logger('corpus_importer')->notice('Could not find assignment code of ' . $code->getName());
     }
-    if (isset($name) && isset($code) && !in_array($name_tid, $processed)) {
-      if ($name->getName() !== $map[$code->getName()]['name']) {
-        \Drupal::logger('corpus_importer')->notice('Changing ' . $name->getName() . ' to ' . $map[$code->getName()]['name']);
-        $name->setName($map[$code->getName()]['name']);
-        $name->setDescription($map[$code->getName()]['name']);
-        $name->save();
-      }
-      $processed[] = $name_tid;
-    }
+    $new_assignment_name = ImporterHelper::getOrCreateTidFromName($map[$code->getName()]['name'], 'assignment_name', [$map[$code->getName()]['description']]);
+    $node->set('field_assignment_name', ['target_id' => $new_assignment_name['tid']]);
+    $node->save();
   }
 }

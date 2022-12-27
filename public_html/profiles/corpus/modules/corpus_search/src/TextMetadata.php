@@ -17,8 +17,8 @@ class TextMetadata {
     'course_semester' => 'cs',
     'assignment_topic' => 'ao',
     'assignment_name' => 'an',
-    'draft' => 'dr',
     'assignment_mode' => 'am',
+    'draft' => 'dr',
     'grouped_l1' => 'lo',
   ];
 

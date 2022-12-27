@@ -123,7 +123,7 @@ class ImporterHelper {
    * @return int
    *   The term ID.
    */
-  public static function getOrCreateTidFromName($label, $vocabulary, $options = ['dryrun' => FALSE]) {
+  public static function getOrCreateTidFromName($label, $vocabulary, $options = ['description' => FALSE]) {
     $output = [];
 
     // Skip N/A values.
@@ -134,9 +134,7 @@ class ImporterHelper {
     $output['tid'] = self::getTidByName($label, $vocabulary);
     if ($output['tid'] == 0) {
       $output['message'] = 'New ' . $vocabulary . ' created: ' . $label;
-      if (!$options['dryrun']) {
-        self::createTerm($label, $vocabulary);
-      }
+      self::createTerm($label, $vocabulary, $options);
       $output['tid'] = self::getTidByName($label, $vocabulary);
     }
     return $output;
@@ -306,11 +304,14 @@ class ImporterHelper {
   /**
    * Helper function.
    */
-  public static function createTerm($name, $taxonomy_type) {
-    Term::create([
+  public static function createTerm($name, $taxonomy_type, $options) {
+    $term = Term::create([
       'name' => $name,
       'vid' => $taxonomy_type,
     ])->save();
+    if (isset($options['description'])) {
+
+    }
     return TRUE;
   }
 
