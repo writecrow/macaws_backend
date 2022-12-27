@@ -278,6 +278,22 @@ class ImporterHelper {
   }
 
   /**
+   * Append institutional suffix to course ID.
+   *
+   * @param string $course
+   *   The course identifier, e.g., ENGL 106.
+   *
+   * @return string
+   *   The complete course ID.
+   */
+  public static function getLegacyInstitutionalCourse($course) {
+    if (in_array($course, array_keys(ImporterMap::$legacyCourseFixes))) {
+      return ImporterMap::$legacyCourseFixes[$course];
+    }
+    return $course;
+  }
+
+  /**
    * Utility: find term by name and vid.
    *
    * @param string $name

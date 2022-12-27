@@ -9068,12 +9068,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/highlighter.git",
-                "reference": "033f7ddb18209402359d23acc238c1a595c69758"
+                "reference": "82a71cec9bab3705f373b48b2e721f7065220835"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/033f7ddb18209402359d23acc238c1a595c69758",
-                "reference": "033f7ddb18209402359d23acc238c1a595c69758",
+                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/82a71cec9bab3705f373b48b2e721f7065220835",
+                "reference": "82a71cec9bab3705f373b48b2e721f7065220835",
                 "shasum": ""
             },
             "default-branch": true,
@@ -9102,7 +9102,7 @@
                 "issues": "https://github.com/writecrow/highlighter/issues",
                 "source": "https://github.com/writecrow/highlighter"
             },
-            "time": "2022-06-02T16:44:14+00:00"
+            "time": "2022-10-29T20:29:31+00:00"
         },
         {
             "name": "writecrow/lorem_gutenberg",
@@ -9261,5 +9261,5 @@
     "platform-overrides": {
         "php": "7.4.30"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }

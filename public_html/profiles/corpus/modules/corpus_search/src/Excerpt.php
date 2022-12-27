@@ -88,6 +88,7 @@ class Excerpt {
       }
       $excerpt .= $line . ' ';
     }
+    return $body;
   }
 
   /**
