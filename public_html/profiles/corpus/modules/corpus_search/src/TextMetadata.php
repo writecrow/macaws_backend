@@ -105,6 +105,7 @@ class TextMetadata {
       // Loop through facet names (e.g., ENGL 106, ENGL 107).
       foreach ($facet_map['by_name'][$group] as $name => $id) {
         if (!isset($facet_results[$group][$name])) {
+          // We display items with zero counts so they are still visible.
           $facet_results[$group][$name] = ['count' => 0];
         }
         if (isset($conditions[$group]) && in_array($id, $conditions[$group])) {
