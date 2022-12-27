@@ -1054,12 +1054,17 @@ $data = [
   foreach ($node_storage as $node) {
     $code_tid = $node->get('field_assignment_code')->getString();
     $code = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($code_tid);
-    if (!isset($map[$code->getName()])) {
-      \Drupal::logger('corpus_importer')->notice('Could not find assignment code of ' . $code->getName());
+    if (!isset($code)) {
+      continue;
     }
-    $new_assignment_name = ImporterHelper::getOrCreateTidFromName($map[$code->getName()]['name'], 'assignment_name', ['description' => $map[$code->getName()]['description']]);
-    $node->set('field_assignment_name', ['target_id' => $new_assignment_name['tid']]);
-    $node->save();
-    \Drupal::logger('corpus_importer')->notice('Updated node with assignment ' . $map[$code->getName()]['name']);
+    if (!isset($map[$code->getName()])) {
+      \Drupal::logger('corpus_importer')->warning('Could not find assignment code of ' . $code->getName());
+    }
+    else {
+      $new_assignment_name = ImporterHelper::getOrCreateTidFromName($map[$code->getName()]['name'], 'assignment_name', ['description' => $map[$code->getName()]['description']]);
+      $node->set('field_assignment_name', ['target_id' => $new_assignment_name['tid']]);
+      $node->save();
+      //\Drupal::logger('corpus_importer')->notice('Updated node with assignment ' . $map[$code->getName()]['name']);
+    }
   }
 }

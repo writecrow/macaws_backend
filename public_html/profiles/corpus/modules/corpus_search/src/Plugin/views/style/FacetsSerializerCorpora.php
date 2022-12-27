@@ -64,11 +64,11 @@ class FacetsSerializerCorpora extends FacetsSerializer {
     $rows['facets'] = array_values($processed_facets);
     $facet_map = TextMetadata::getFacetMap();
     foreach ($rows['facets'] as &$facet) {
+      if (!isset($facet[0])) {
+        continue;
+      }
       $group = key($facet[0]);
       foreach ($facet[0][$group] as &$item) {
-        if (!isset($item['values'])) {
-          continue;
-        }
         $name = $item['values']['value'];
         if (isset($facet_map['by_name'][$group][$name])) {
           $id = $facet_map['by_name'][$group][$name];
