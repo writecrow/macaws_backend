@@ -1,0 +1,1071 @@
+<?php
+
+use Drupal\corpus_importer\ImporterHelper;
+
+/**
+ * Move UA 108 courses to a different taxonomy.
+ */
+function corpus_importer_update_9111() {
+
+$data = [
+  0 => [
+    'Assignment Code' => '83',
+    'Assignment name' => 'About myself',
+    'Description' => 'Basic information about me (e.g., where I work and study, where I live)',
+  ],
+  1 => [
+    'Assignment Code' => '103',
+    'Assignment name' => 'About myself',
+    'Description' => 'Basic information about me (e.g., where I work and study, where I live)',
+  ],
+  2 => [
+    'Assignment Code' => '124',
+    'Assignment name' => 'About myself',
+    'Description' => 'Basic information about me (e.g., where I work and study, where I live)',
+  ],
+  3 => [
+    'Assignment Code' => '213',
+    'Assignment name' => 'About myself',
+    'Description' => 'Basic information about me (e.g., where I work and study, where I live)',
+  ],
+  4 => [
+    'Assignment Code' => '90',
+    'Assignment name' => 'Airport conversations',
+    'Description' => 'Rewrite of a text into two short dialogs (meeting up at the airport)',
+  ],
+  5 => [
+    'Assignment Code' => '91',
+    'Assignment name' => 'Apartment description',
+    'Description' => 'Move-in with your new roommate: apartment description',
+  ],
+  6 => [
+    'Assignment Code' => '93',
+    'Assignment name' => 'Apartment move-in conversation',
+    'Description' => 'Dialog: where are we going to put things in our new apartment',
+  ],
+  8 => [
+    'Assignment Code' => '210',
+    'Assignment name' => 'Appearance description',
+    'Description' => 'Appearance of a famous person',
+  ],
+  9 => [
+    'Assignment Code' => '37',
+    'Assignment name' => 'Art description',
+    'Description' => 'Description of some sort of art, preferably graffiti you like in Tucson',
+  ],
+  10 => [
+    'Assignment Code' => '38',
+    'Assignment name' => 'Art description',
+    'Description' => 'Description of some sort of art, preferably graffiti you like in Tucson',
+  ],
+  11 => [
+    'Assignment Code' => '32',
+    'Assignment name' => 'Artist description',
+    'Description' => 'Description of an artist and why the student admires them',
+  ],
+  12 => [
+    'Assignment Code' => '110',
+    'Assignment name' => 'Artist essay',
+    'Description' => 'Description of an artist\'s contribution to its artistic field',
+  ],
+  13 => [
+    'Assignment Code' => '92',
+    'Assignment name' => 'Autobiography',
+    'Description' => 'About myself (autobiography with years)',
+  ],
+  14 => [
+    'Assignment Code' => '58',
+    'Assignment name' => 'Bad day',
+    'Description' => 'An unpleasant thing that happened to me',
+  ],
+  15 => [
+    'Assignment Code' => '101',
+    'Assignment name' => 'Bad day',
+    'Description' => 'An unpleasant thing that happened to me',
+  ],
+  16 => [
+    'Assignment Code' => '159',
+    'Assignment name' => 'Breakfast',
+    'Description' => 'What I eat and drink for breakfast',
+  ],
+  17 => [
+    'Assignment Code' => '3',
+    'Assignment name' => 'Case study',
+    'Description' => 'Analysis of a business case study',
+  ],
+  18 => [
+    'Assignment Code' => '201',
+    'Assignment name' => 'Celebrity bio',
+    'Description' => 'Biography of a famous person',
+  ],
+  19 => [
+    'Assignment Code' => '69',
+    'Assignment name' => 'City description',
+    'Description' => 'Description of a city',
+  ],
+  20 => [
+    'Assignment Code' => '107',
+    'Assignment name' => 'Class recommendations',
+    'Description' => 'Making suggestions and giving advice to a friend',
+  ],
+  21 => [
+    'Assignment Code' => '196',
+    'Assignment name' => 'Class recommendations',
+    'Description' => 'Making suggestions and giving advice to a friend',
+  ],
+  22 => [
+    'Assignment Code' => '99',
+    'Assignment name' => 'Class schedule conversation',
+    'Description' => 'Dialog: what is your schedule like this semester?',
+  ],
+  23 => [
+    'Assignment Code' => '81',
+    'Assignment name' => 'Classmate bio',
+    'Description' => 'About my classmate (based on a video recording)',
+  ],
+  24 => [
+    'Assignment Code' => '66',
+    'Assignment name' => 'Classmate interview',
+    'Description' => 'About my classmate (based on an interview)',
+  ],
+  25 => [
+    'Assignment Code' => '82',
+    'Assignment name' => 'Classmate interview',
+    'Description' => 'About my classmate (based on an interview)',
+  ],
+  26 => [
+    'Assignment Code' => '73',
+    'Assignment name' => 'Climate change',
+    'Description' => 'Opinion piece on climate change',
+  ],
+  27 => [
+    'Assignment Code' => '203',
+    'Assignment name' => 'Country description',
+    'Description' => 'Description of a country, languages spoken there, and common stereotypes',
+  ],
+  28 => [
+    'Assignment Code' => '13',
+    'Assignment name' => 'Course review',
+    'Description' => 'Course review',
+  ],
+  29 => [
+    'Assignment Code' => '34',
+    'Assignment name' => 'Critical essay',
+    'Description' => 'Analysis of a piece of art: interpreting why and how that piece represents art',
+  ],
+  30 => [
+    'Assignment Code' => '45',
+    'Assignment name' => 'Culture essay',
+    'Description' => 'Essay on a cultural aspect of Portuguese-speaking cultures',
+  ],
+  31 => [
+    'Assignment Code' => '7',
+    'Assignment name' => 'CV',
+    'Description' => 'Resume or curriculum vitae',
+  ],
+  32 => [
+    'Assignment Code' => '9',
+    'Assignment name' => 'Dance description',
+    'Description' => 'Description of and reaction to a typical dance (lambada in most of the compositions); description of personal relationship with dance (or music), or reaction to information (documentary or article) about capoeira, a traditional Brazilian dance/fight',
+  ],
+  33 => [
+    'Assignment Code' => '198',
+    'Assignment name' => 'Dinner invitation',
+    'Description' => 'Invite your friends to dinner',
+  ],
+  34 => [
+    'Assignment Code' => '163',
+    'Assignment name' => 'Dinner party',
+    'Description' => 'Talk about a dinner party you attended: who invited you, what you ate, what you talked about',
+  ],
+  35 => [
+    'Assignment Code' => '205',
+    'Assignment name' => 'Directions',
+    'Description' => 'Directions to my house',
+  ],
+  36 => [
+    'Assignment Code' => '146',
+    'Assignment name' => 'Discourse organizers',
+    'Description' => 'Description of one\'s day using "first, then, finally"',
+  ],
+  37 => [
+    'Assignment Code' => '150',
+    'Assignment name' => 'Discourse organizers',
+    'Description' => 'Description of one\'s day using "first, then, finally"',
+  ],
+  38 => [
+    'Assignment Code' => '1',
+    'Assignment name' => 'Email to a company',
+    'Description' => 'Email consulting with a marketing company about the possibility to provide services to your company',
+  ],
+  39 => [
+    'Assignment Code' => '21',
+    'Assignment name' => 'Email to a friend',
+    'Description' => 'Email/message talking about yourself',
+  ],
+  40 => [
+    'Assignment Code' => '180',
+    'Assignment name' => 'Exam apartment description',
+    'Description' => 'Moving into a new apartment: describe where you will place certain furniture items; written during an exam',
+  ],
+  41 => [
+    'Assignment Code' => '134',
+    'Assignment name' => 'Exam city description',
+    'Description' => 'Description of a city with recommendations of places to visit; written during an exam',
+  ],
+  42 => [
+    'Assignment Code' => '179',
+    'Assignment name' => 'Exam email to professor',
+    'Description' => 'Email to a professor asking for an extension because of computer problems; written during an exam',
+  ],
+  43 => [
+    'Assignment Code' => '175',
+    'Assignment name' => 'Exam email to stranger',
+    'Description' => 'Email to a stranger from Russia; written during an exam',
+  ],
+  44 => [
+    'Assignment Code' => '176',
+    'Assignment name' => 'Exam Kirill\'s stolen car',
+    'Description' => 'Narration of how Kirill\'s car got stolen; written during an exam',
+  ],
+  45 => [
+    'Assignment Code' => '24',
+    'Assignment name' => 'Exam linguistic background',
+    'Description' => 'Write about your linguistic background',
+  ],
+  46 => [
+    'Assignment Code' => '177',
+    'Assignment name' => 'Exam my day',
+    'Description' => 'Describe your typical Friday; written during an exam',
+  ],
+  47 => [
+    'Assignment Code' => '178',
+    'Assignment name' => 'Exam Natasha\'s bad day',
+    'Description' => 'Narrate an unpleasant thing that happened to Natasha based on an outline; written during an exam',
+  ],
+  48 => [
+    'Assignment Code' => '144',
+    'Assignment name' => 'Exam travel experience',
+    'Description' => 'Where I\'ve been, where I want to go',
+  ],
+  49 => [
+    'Assignment Code' => '140',
+    'Assignment name' => 'Exam trip report',
+    'Description' => 'Narration of a trip (trip report): monologue followed by dialogue with instructor',
+  ],
+  50 => [
+    'Assignment Code' => '108',
+    'Assignment name' => 'Expectations narrative',
+    'Description' => 'Talk about what expectations your family and friends had in relation to you',
+  ],
+  51 => [
+    'Assignment Code' => '97',
+    'Assignment name' => 'Family and childhood',
+    'Description' => 'About my family history and my childhood',
+  ],
+  52 => [
+    'Assignment Code' => '102',
+    'Assignment name' => 'Family and childhood',
+    'Description' => 'About my family history and my childhood',
+  ],
+  53 => [
+    'Assignment Code' => '65',
+    'Assignment name' => 'Family member bio',
+    'Description' => 'Biography of a family member',
+  ],
+  54 => [
+    'Assignment Code' => '35',
+    'Assignment name' => 'Family structure',
+    'Description' => 'Comparison of family structure in Brazil and other countries',
+  ],
+  55 => [
+    'Assignment Code' => '168',
+    'Assignment name' => 'Famous person',
+    'Description' => 'About someone famous: name, profession, place of residence',
+  ],
+  56 => [
+    'Assignment Code' => '158',
+    'Assignment name' => 'Favorite store',
+    'Description' => 'My favorite store and why I like it',
+  ],
+  57 => [
+    'Assignment Code' => '160',
+    'Assignment name' => 'Favorite store',
+    'Description' => 'My favorite store and why I like it',
+  ],
+  58 => [
+    'Assignment Code' => '46',
+    'Assignment name' => 'Final group presentation',
+    'Description' => 'Group presentation on a cultural aspect',
+  ],
+  59 => [
+    'Assignment Code' => '111',
+    'Assignment name' => 'Final project outline',
+    'Description' => 'Outline of a final group presentation about Brazilian architecture',
+  ],
+  60 => [
+    'Assignment Code' => '64',
+    'Assignment name' => 'Food blog',
+    'Description' => 'Description of a favorite restaurant in a blog format',
+  ],
+  61 => [
+    'Assignment Code' => '138',
+    'Assignment name' => 'Food preferences',
+    'Description' => 'Description of food preferences',
+  ],
+  62 => [
+    'Assignment Code' => '190',
+    'Assignment name' => 'Food preferences',
+    'Description' => 'Description of food preferences',
+  ],
+  63 => [
+    'Assignment Code' => '206',
+    'Assignment name' => 'Food preferences',
+    'Description' => 'Description of food preferences',
+  ],
+  64 => [
+    'Assignment Code' => '139',
+    'Assignment name' => 'Food recipe',
+    'Description' => 'Instructions for how to make a dish',
+  ],
+  65 => [
+    'Assignment Code' => '161',
+    'Assignment name' => 'Food recipe',
+    'Description' => 'Instructions for how to make a dish',
+  ],
+  66 => [
+    'Assignment Code' => '193',
+    'Assignment name' => 'Food recipe',
+    'Description' => 'Instructions for how to make a dish',
+  ],
+  67 => [
+    'Assignment Code' => '87',
+    'Assignment name' => 'Email-formal',
+    'Description' => 'Email to an employer or a professor about an issue',
+  ],
+  68 => [
+    'Assignment Code' => '155',
+    'Assignment name' => 'Fridge',
+    'Description' => 'What I have in my fridge and what I need to buy',
+  ],
+  69 => [
+    'Assignment Code' => '22',
+    'Assignment name' => 'Friend description',
+    'Description' => 'About my friend',
+  ],
+  70 => [
+    'Assignment Code' => '131',
+    'Assignment name' => 'Friend description',
+    'Description' => 'About my friend',
+  ],
+  71 => [
+    'Assignment Code' => '126',
+    'Assignment name' => 'Friend\'s house',
+    'Description' => 'Describing a friend\'s house',
+  ],
+  72 => [
+    'Assignment Code' => '182',
+    'Assignment name' => 'Future expectations',
+    'Description' => 'Telling your plan for the future when something else happens',
+  ],
+  73 => [
+    'Assignment Code' => '8',
+    'Assignment name' => 'Future plans',
+    'Description' => 'Telling your plans for next week or later (e.g. routine, travelling, etc.)',
+  ],
+  74 => [
+    'Assignment Code' => '181',
+    'Assignment name' => 'Future plans',
+    'Description' => 'Telling your plans for next week or later (e.g. routine, travelling, etc.)',
+  ],
+  75 => [
+    'Assignment Code' => '53',
+    'Assignment name' => 'Gastronomic memory',
+    'Description' => 'Gastronomic memory: narrative describing a special situation/memory involving food',
+  ],
+  76 => [
+    'Assignment Code' => '164',
+    'Assignment name' => 'Group video project',
+    'Description' => 'Final project instructions: group video',
+  ],
+  77 => [
+    'Assignment Code' => '75',
+    'Assignment name' => 'Health',
+    'Description' => 'A story about getting sick while on study abroad',
+  ],
+  78 => [
+    'Assignment Code' => '151',
+    'Assignment name' => 'Hello',
+    'Description' => 'Introducing oneself and a friend',
+  ],
+  79 => [
+    'Assignment Code' => '105',
+    'Assignment name' => 'Higher education',
+    'Description' => 'An essay about the importance of higher education',
+  ],
+  80 => [
+    'Assignment Code' => '70',
+    'Assignment name' => 'Hometown',
+    'Description' => 'Description of a hometown',
+  ],
+  81 => [
+    'Assignment Code' => '212',
+    'Assignment name' => 'Hometown',
+    'Description' => 'Description of a hometown',
+  ],
+  82 => [
+    'Assignment Code' => '154',
+    'Assignment name' => 'House dialog recited',
+    'Description' => 'Recitation of a dialogue from the textbook',
+  ],
+  83 => [
+    'Assignment Code' => '59',
+    'Assignment name' => 'House essay',
+    'Description' => 'My childhood home and dream house',
+  ],
+  84 => [
+    'Assignment Code' => '127',
+    'Assignment name' => 'House picture description',
+    'Description' => 'Description of two houses based on a picture',
+  ],
+  85 => [
+    'Assignment Code' => '171',
+    'Assignment name' => 'Housing ad project',
+    'Description' => 'Final project: creating an ad to rent out one\'s home',
+  ],
+  86 => [
+    'Assignment Code' => '170',
+    'Assignment name' => 'How often',
+    'Description' => 'How frequently I do different activities',
+  ],
+  87 => [
+    'Assignment Code' => '23',
+    'Assignment name' => 'Hypothetical situations',
+    'Description' => 'Description of what students would do in hypothetical situations',
+  ],
+  88 => [
+    'Assignment Code' => '195',
+    'Assignment name' => 'Hypothetical situations',
+    'Description' => 'Description of what students would do in hypothetical situations',
+  ],
+  89 => [
+    'Assignment Code' => '167',
+    'Assignment name' => 'Ideal house',
+    'Description' => 'Describe your ideal house',
+  ],
+  90 => [
+    'Assignment Code' => '47',
+    'Assignment name' => 'Individual project final',
+    'Description' => 'Individual presentation on a cultural aspect',
+  ],
+  91 => [
+    'Assignment Code' => '86',
+    'Assignment name' => 'Informal email',
+    'Description' => 'Email to a friendabout something lost or stolen',
+  ],
+  92 => [
+    'Assignment Code' => '56',
+    'Assignment name' => 'Initial ideas for opinion piece',
+    'Description' => 'Preparation to write an opinion piece by describing possible themes',
+  ],
+  93 => [
+    'Assignment Code' => '19',
+    'Assignment name' => 'Instructions',
+    'Description' => 'Instructions on how to cook a dish or how to do something else (using imperative forms)',
+  ],
+  94 => [
+    'Assignment Code' => '33',
+    'Assignment name' => 'Instructions',
+    'Description' => 'Instructions on how to cook a dish or how to do something else (using imperative forms)',
+  ],
+  95 => [
+    'Assignment Code' => '112',
+    'Assignment name' => 'Interview questions',
+    'Description' => 'Questions to interview an invited guest speaker on issues of race and politics in Brazil and the US',
+  ],
+  96 => [
+    'Assignment Code' => '132',
+    'Assignment name' => 'Intro dialogue',
+    'Description' => 'Record an interview with an imaginary student (student writes a dialogue and reads for both speakers)',
+  ],
+  97 => [
+    'Assignment Code' => '51',
+    'Assignment name' => 'Job application letter',
+    'Description' => 'Job application letter: description of one\'s qualities in response to a real job ad selected by the student',
+  ],
+  98 => [
+    'Assignment Code' => '29',
+    'Assignment name' => 'Life timeline',
+    'Description' => 'Description of life timeline by important years',
+  ],
+  99 => [
+    'Assignment Code' => '2',
+    'Assignment name' => 'LinkedIn summary profile',
+    'Description' => 'Description of professional and personal qualities',
+  ],
+  100 => [
+    'Assignment Code' => '31',
+    'Assignment name' => 'Literary analysis',
+    'Description' => 'Interpretation questions about one literary piece',
+  ],
+  101 => [
+    'Assignment Code' => '109',
+    'Assignment name' => 'Literary analysis essay',
+    'Description' => 'Description and analysis of the novel A Hora da Estrela by Clarice Lispector',
+  ],
+  102 => [
+    'Assignment Code' => '94',
+    'Assignment name' => 'Lost and found',
+    'Description' => 'Rewrite a Lost and Found post about losing your bag into a message to your friends',
+  ],
+  103 => [
+    'Assignment Code' => '173',
+    'Assignment name' => 'Me and others',
+    'Description' => 'Description of self, family and friends: likes/dislikes, routines, school, work, free time',
+  ],
+  104 => [
+    'Assignment Code' => '5',
+    'Assignment name' => 'Memo',
+    'Description' => 'Message from company CEO to US employees about a new company plant in Brazil',
+  ],
+  105 => [
+    'Assignment Code' => '18',
+    'Assignment name' => 'Memory narration',
+    'Description' => 'Narration of an important memory or event that happened in your life',
+  ],
+  106 => [
+    'Assignment Code' => '25',
+    'Assignment name' => 'Midterm',
+    'Description' => 'Essays based on two writing prompts: 1) Write about yourself; 2) Write a story based on a picture of a couple and a dog',
+  ],
+  107 => [
+    'Assignment Code' => '39',
+    'Assignment name' => 'Movie description',
+    'Description' => 'Description and justification of favorite or least favorite movies',
+  ],
+  108 => [
+    'Assignment Code' => '44',
+    'Assignment name' => 'Movie reaction',
+    'Description' => 'Reaction to the documentary Wasteland',
+  ],
+  109 => [
+    'Assignment Code' => '113',
+    'Assignment name' => 'Music description',
+    'Description' => 'Description of a music genre, singer, or band typical of Portuguese-Speech cultures and a brief reaction to it',
+  ],
+  110 => [
+    'Assignment Code' => '152',
+    'Assignment name' => 'My family',
+    'Description' => 'Description of my family members',
+  ],
+  111 => [
+    'Assignment Code' => '157',
+    'Assignment name' => 'My family',
+    'Description' => 'Description of my family members',
+  ],
+  112 => [
+    'Assignment Code' => '165',
+    'Assignment name' => 'My family',
+    'Description' => 'Description of my family members',
+  ],
+  113 => [
+    'Assignment Code' => '194',
+    'Assignment name' => 'My family',
+    'Description' => 'Description of my family members',
+  ],
+  114 => [
+    'Assignment Code' => '104',
+    'Assignment name' => 'My house',
+    'Description' => 'About where I live',
+  ],
+  115 => [
+    'Assignment Code' => '123',
+    'Assignment name' => 'My house',
+    'Description' => 'About where I live',
+  ],
+  116 => [
+    'Assignment Code' => '156',
+    'Assignment name' => 'My house',
+    'Description' => 'About where I live',
+  ],
+  117 => [
+    'Assignment Code' => '166',
+    'Assignment name' => 'My house',
+    'Description' => 'About where I live',
+  ],
+  118 => [
+    'Assignment Code' => '174',
+    'Assignment name' => 'My house',
+    'Description' => 'About where I live',
+  ],
+  119 => [
+    'Assignment Code' => '192',
+    'Assignment name' => 'My house',
+    'Description' => 'About where I live',
+  ],
+  120 => [
+    'Assignment Code' => '85',
+    'Assignment name' => 'My languages',
+    'Description' => 'My languages',
+  ],
+  121 => [
+    'Assignment Code' => '128',
+    'Assignment name' => 'My life story',
+    'Description' => 'Family history, childhood home, self, and dream house',
+  ],
+  122 => [
+    'Assignment Code' => '142',
+    'Assignment name' => 'My room',
+    'Description' => 'Description of a room',
+  ],
+  123 => [
+    'Assignment Code' => '84',
+    'Assignment name' => 'My studies',
+    'Description' => 'My academic life, e.g., major, year of study, courses, schedule',
+  ],
+  124 => [
+    'Assignment Code' => '129',
+    'Assignment name' => 'My studies',
+    'Description' => 'My academic life, e.g., major, year of study, courses, schedule',
+  ],
+  125 => [
+    'Assignment Code' => '130',
+    'Assignment name' => 'My studies',
+    'Description' => 'My academic life, e.g., major, year of study, courses, schedule',
+  ],
+  126 => [
+    'Assignment Code' => '145',
+    'Assignment name' => 'My studies',
+    'Description' => 'My academic life, e.g., major, year of study, courses, schedule',
+  ],
+  127 => [
+    'Assignment Code' => '149',
+    'Assignment name' => 'My studies',
+    'Description' => 'My academic life, e.g., major, year of study, courses, schedule',
+  ],
+  128 => [
+    'Assignment Code' => '172',
+    'Assignment name' => 'My studies',
+    'Description' => 'My academic life, e.g., major, year of study, courses, schedule',
+  ],
+  129 => [
+    'Assignment Code' => '136',
+    'Assignment name' => 'My typical week',
+    'Description' => 'What I do on every day of the week',
+  ],
+  130 => [
+    'Assignment Code' => '54',
+    'Assignment name' => 'News article',
+    'Description' => 'News article on a contemporary topic',
+  ],
+  131 => [
+    'Assignment Code' => '209',
+    'Assignment name' => 'One day',
+    'Description' => 'Description of one day in the past based on images, using motion verbs',
+  ],
+  132 => [
+    'Assignment Code' => '55',
+    'Assignment name' => 'Opinion piece',
+    'Description' => 'Opinion piece: argumentative piece on a polemic topic chosen by the student',
+  ],
+  133 => [
+    'Assignment Code' => '133',
+    'Assignment name' => 'Painting description',
+    'Description' => 'Description of a famous painting with a fictional narrative of events before and after the depicted scene',
+  ],
+  134 => [
+    'Assignment Code' => '100',
+    'Assignment name' => 'Past day',
+    'Description' => 'Talk about one day in the past',
+  ],
+  135 => [
+    'Assignment Code' => '17',
+    'Assignment name' => 'Past experience',
+    'Description' => 'Description of what you did last week',
+  ],
+  136 => [
+    'Assignment Code' => '184',
+    'Assignment name' => 'Past experience',
+    'Description' => 'Description of what you did last week',
+  ],
+  137 => [
+    'Assignment Code' => '98',
+    'Assignment name' => 'Person description',
+    'Description' => 'Friend or family member\'s personality and appearance',
+  ],
+  138 => [
+    'Assignment Code' => '202',
+    'Assignment name' => 'Person description',
+    'Description' => 'Friend or family member\'s personality and appearance',
+  ],
+  139 => [
+    'Assignment Code' => '211',
+    'Assignment name' => 'Person description',
+    'Description' => 'Friend or family member\'s personality and appearance',
+  ],
+  140 => [
+    'Assignment Code' => '15',
+    'Assignment name' => 'Personal narrative',
+    'Description' => 'Talk about yourself, your family, your personality, your Zodiac sign, etc.',
+  ],
+  141 => [
+    'Assignment Code' => '183',
+    'Assignment name' => 'Personal narrative',
+    'Description' => 'Talk about yourself, your family, your personality, your Zodiac sign, etc.',
+  ],
+  142 => [
+    'Assignment Code' => '95',
+    'Assignment name' => 'Personality survey',
+    'Description' => 'Writing up survey results: what kind of people are we, and what kind of people do we like?',
+  ],
+  143 => [
+    'Assignment Code' => '214',
+    'Assignment name' => 'Personality traits',
+    'Description' => 'My personality traits and the types of people I like',
+  ],
+  144 => [
+    'Assignment Code' => '89',
+    'Assignment name' => 'Peter\'s cabin',
+    'Description' => 'Narration of a fictional visit to the Peter the Great\'s cabin museum',
+  ],
+  145 => [
+    'Assignment Code' => '27',
+    'Assignment name' => 'Physical description',
+    'Description' => 'Description of height, eye/hair color, etc.',
+  ],
+  146 => [
+    'Assignment Code' => '191',
+    'Assignment name' => 'Physical description',
+    'Description' => 'Description of height, eye/hair color, etc.',
+  ],
+  147 => [
+    'Assignment Code' => '48',
+    'Assignment name' => 'Picture comparison',
+    'Description' => 'Comparison of features of two pictures',
+  ],
+  148 => [
+    'Assignment Code' => '36',
+    'Assignment name' => 'Picture description',
+    'Description' => 'Description of a picture of their choice – narration of the story behind it and why they chose it',
+  ],
+  149 => [
+    'Assignment Code' => '115',
+    'Assignment name' => 'Plans description',
+    'Description' => 'Description of future plans in a variety of circumstances (e.g., plans for the holidays, plans to save the environment, etc.)',
+  ],
+  150 => [
+    'Assignment Code' => '41',
+    'Assignment name' => 'Poem analysis',
+    'Description' => 'Description and analysis of a poem in Portuguese',
+  ],
+  151 => [
+    'Assignment Code' => '4',
+    'Assignment name' => 'Portfolio reflection',
+    'Description' => 'Portfolio reflection: student reflects on their progress throughout the course at the end of the semester',
+  ],
+  152 => [
+    'Assignment Code' => '57',
+    'Assignment name' => 'Portfolio reflection',
+    'Description' => 'Portfolio reflection: student reflects on their progress throughout the course at the end of the semester',
+  ],
+  153 => [
+    'Assignment Code' => '125',
+    'Assignment name' => 'Possessions',
+    'Description' => 'Inventory of items I own',
+  ],
+  154 => [
+    'Assignment Code' => '143',
+    'Assignment name' => 'Possessions',
+    'Description' => 'Inventory of items I own',
+  ],
+  155 => [
+    'Assignment Code' => '153',
+    'Assignment name' => 'Possessions',
+    'Description' => 'Inventory of items I own',
+  ],
+  156 => [
+    'Assignment Code' => '116',
+    'Assignment name' => 'PowerPoint Presentation',
+    'Description' => 'Presentation on a cultural aspect (e.g. food, cities, music)',
+  ],
+  157 => [
+    'Assignment Code' => '189',
+    'Assignment name' => 'PowerPoint Presentation',
+    'Description' => 'Presentation on a cultural aspect (e.g. food, cities, music)',
+  ],
+  158 => [
+    'Assignment Code' => '26',
+    'Assignment name' => 'Preferences',
+    'Description' => 'What one likes and does not like',
+  ],
+  159 => [
+    'Assignment Code' => '122',
+    'Assignment name' => 'Preferences',
+    'Description' => 'What one likes and does not like',
+  ],
+  160 => [
+    'Assignment Code' => '137',
+    'Assignment name' => 'Preferences',
+    'Description' => 'What one likes and does not like',
+  ],
+  161 => [
+    'Assignment Code' => '12',
+    'Assignment name' => 'Previous recommendations',
+    'Description' => 'Description of the expectations and recommendations parents gave to the student before starting the university',
+  ],
+  162 => [
+    'Assignment Code' => '10',
+    'Assignment name' => 'Project proposal',
+    'Description' => 'Short final project proposal',
+  ],
+  163 => [
+    'Assignment Code' => '30',
+    'Assignment name' => 'Reactions',
+    'Description' => 'Description of a reaction in the face of a given situation',
+  ],
+  164 => [
+    'Assignment Code' => '197',
+    'Assignment name' => 'Reactions',
+    'Description' => 'Description of a reaction in the face of a given situation',
+  ],
+  165 => [
+    'Assignment Code' => '77',
+    'Assignment name' => 'Reading survey',
+    'Description' => 'Survey about reading preferences: What do you like to read? What do Russians/Americans like to read?',
+  ],
+  166 => [
+    'Assignment Code' => '11',
+    'Assignment name' => 'Recommendation email',
+    'Description' => 'Email/message giving recommendations about the class to a new student of Portuguese',
+  ],
+  167 => [
+    'Assignment Code' => '71',
+    'Assignment name' => 'Role of arts',
+    'Description' => 'Personal reflection about the role of art in one\'s life',
+  ],
+  168 => [
+    'Assignment Code' => '121',
+    'Assignment name' => 'Role of arts',
+    'Description' => 'Personal reflection about the role of art in one\'s life',
+  ],
+  169 => [
+    'Assignment Code' => '16',
+    'Assignment name' => 'Routine',
+    'Description' => 'Description of what you do in your regular routine',
+  ],
+  170 => [
+    'Assignment Code' => '76',
+    'Assignment name' => 'Routine',
+    'Description' => 'My daily routine, e.g., wake up, eat breakfast',
+  ],
+  171 => [
+    'Assignment Code' => '148',
+    'Assignment name' => 'Routine',
+    'Description' => 'My daily routine, e.g., wake up, eat breakfast',
+  ],
+  172 => [
+    'Assignment Code' => '188',
+    'Assignment name' => 'Routine',
+    'Description' => 'Description of what you do in your regular routine',
+  ],
+  173 => [
+    'Assignment Code' => '204',
+    'Assignment name' => 'Routine',
+    'Description' => 'My daily routine, e.g., wake up, eat breakfast',
+  ],
+  174 => [
+    'Assignment Code' => '187',
+    'Assignment name' => 'Routine lately',
+    'Description' => 'Description of what you have been doing lateley',
+  ],
+  175 => [
+    'Assignment Code' => '200',
+    'Assignment name' => 'Rules',
+    'Description' => 'What you can, need to, or cannot do at the university',
+  ],
+  176 => [
+    'Assignment Code' => '208',
+    'Assignment name' => 'Rules',
+    'Description' => 'What you can, need to, or cannot do at the university',
+  ],
+  177 => [
+    'Assignment Code' => '67',
+    'Assignment name' => 'Russian and American families',
+    'Description' => 'Description of typical Russian and American families based on online research',
+  ],
+  178 => [
+    'Assignment Code' => '68',
+    'Assignment name' => 'Russian and American housing',
+    'Description' => 'Description of typical Russian and American housing based on online research',
+  ],
+  179 => [
+    'Assignment Code' => '96',
+    'Assignment name' => 'Scientist bio',
+    'Description' => 'Biography of a scientist',
+  ],
+  180 => [
+    'Assignment Code' => '117',
+    'Assignment name' => 'Sculpture description',
+    'Description' => 'Description of a sculpture found in Tucson',
+  ],
+  181 => [
+    'Assignment Code' => '28',
+    'Assignment name' => 'Short fable',
+    'Description' => 'Adaptation of a known fable',
+  ],
+  182 => [
+    'Assignment Code' => '119',
+    'Assignment name' => 'Short response',
+    'Description' => 'Short reaction to video and reading on race in Brazil',
+  ],
+  183 => [
+    'Assignment Code' => '78',
+    'Assignment name' => 'Should be doing',
+    'Description' => 'What my friends and I are doing vs. what we should be doing',
+  ],
+  184 => [
+    'Assignment Code' => '43',
+    'Assignment name' => 'Skit',
+    'Description' => 'Skit portraying an everyday situation',
+  ],
+  185 => [
+    'Assignment Code' => '88',
+    'Assignment name' => 'Social media',
+    'Description' => 'Technology and social media in your life',
+  ],
+  186 => [
+    'Assignment Code' => '141',
+    'Assignment name' => 'Song description',
+    'Description' => 'Fictional story based on a song',
+  ],
+  187 => [
+    'Assignment Code' => '199',
+    'Assignment name' => 'Summer vacation',
+    'Description' => 'Description of a summer vacation',
+  ],
+  188 => [
+    'Assignment Code' => '207',
+    'Assignment name' => 'Summer vacation',
+    'Description' => 'Description of a summer vacation',
+  ],
+  189 => [
+    'Assignment Code' => '215',
+    'Assignment name' => 'Travel experience',
+    'Description' => 'Where I\'ve been, where I want to go',
+  ],
+  190 => [
+    'Assignment Code' => '186',
+    'Assignment name' => 'Trip recommendations',
+    'Description' => 'Recommendations of restaurants and activities in Tucson',
+  ],
+  191 => [
+    'Assignment Code' => '72',
+    'Assignment name' => 'Trip report',
+    'Description' => 'Narration of a trip',
+  ],
+  192 => [
+    'Assignment Code' => '185',
+    'Assignment name' => 'Trip report',
+    'Description' => 'Narration of a trip',
+  ],
+  193 => [
+    'Assignment Code' => '50',
+    'Assignment name' => 'Trip report blog',
+    'Description' => 'Trip report: description of travel experiences with focus on giving recommendations on lodging, food and activies',
+  ],
+  194 => [
+    'Assignment Code' => '147',
+    'Assignment name' => 'Typical American students',
+    'Description' => 'What typical Americans do during the weekend',
+  ],
+  195 => [
+    'Assignment Code' => '60',
+    'Assignment name' => 'Typical Russian families',
+    'Description' => 'Description of typical Russian families based on online research',
+  ],
+  196 => [
+    'Assignment Code' => '61',
+    'Assignment name' => 'Typical Russian food',
+    'Description' => 'Description of typical Russian food based online research',
+  ],
+  197 => [
+    'Assignment Code' => '62',
+    'Assignment name' => 'Typical Russian housing',
+    'Description' => 'Description of typical Russian housing based on online research',
+  ],
+  198 => [
+    'Assignment Code' => '63',
+    'Assignment name' => 'Typical Russian shops',
+    'Description' => 'Description of typical Russian stores based on online research',
+  ],
+  199 => [
+    'Assignment Code' => '79',
+    'Assignment name' => 'Typical teenager day',
+    'Description' => 'Typical routine of a teenager',
+  ],
+  200 => [
+    'Assignment Code' => '169',
+    'Assignment name' => 'University',
+    'Description' => 'VoiceThread instructions: talk about your university and what you study there',
+  ],
+  201 => [
+    'Assignment Code' => '74',
+    'Assignment name' => 'Weather and sickness',
+    'Description' => 'Weather and diseases: superstitions and facts',
+  ],
+  202 => [
+    'Assignment Code' => '135',
+    'Assignment name' => 'Weather report',
+    'Description' => 'Description of weather based on images',
+  ],
+  203 => [
+    'Assignment Code' => '162',
+    'Assignment name' => 'Where I go',
+    'Description' => 'Where I go every day of the week (focus on the Accusative case)',
+  ],
+  204 => [
+    'Assignment Code' => '80',
+    'Assignment name' => 'Why study Russian?',
+    'Description' => 'Why should Amercans study Russian?',
+  ],
+  205 => [
+    'Assignment Code' => '106',
+    'Assignment name' => 'Work issues',
+    'Description' => 'Essay on one of two assigned topics: 1) Work-life balance; 2) How to achieve success in one\'s career',
+  ],
+];
+
+  foreach ($data as $row) {
+    $map[$row['Assignment Code']] = [
+      'name' => $row['Assignment name'],
+      'description' => $row['Description']
+    ];
+  }
+  $processed = [];
+
+  $query = \Drupal::entityQuery('node')
+    ->condition('status', 1)
+    ->condition('type', 'text', '=');
+  $nids = $query->execute();
+
+  \Drupal::logger('corpus_importer')->notice('Converting ' . (count($nids)) . ' nodes');
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
+  foreach ($node_storage as $node) {
+    $code_tid = $node->get('field_assignment_code')->getString();
+    $code = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($code_tid);
+    $name_tid = $node->get('field_assignment_name')->getString();
+    $name = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($name_tid);
+    if (!isset($map[$code->getName()])) {
+      \Drupal::logger('corpus_importer')->notice('Could not find assignment code of ' . $code->getName());
+    }
+    if (isset($name) && isset($code) && !in_array($name_tid, $processed)) {
+      if ($name->getName() !== $map[$code->getName()]['name']) {
+        \Drupal::logger('corpus_importer')->notice('Changing ' . $name->getName() . ' to ' . $map[$code->getName()]['name']);
+        $name->setName($map[$code->getName()]['name']);
+        $name->setDescription($map[$code->getName()]['name']);
+        $name->save();
+      }
+      $processed[] = $name_tid;
+    }
+  }
+}
