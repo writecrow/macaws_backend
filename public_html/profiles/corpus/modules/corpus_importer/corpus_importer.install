@@ -175,7 +175,7 @@ $data = [
   ],
   34 => [
     'Assignment Code' => '163',
-    'Assignment name' => 'Dinner party',
+    'Assignment name' => 'backend/tree/main/public_html/profiles/corpus/modules/corpus_search/src',
     'Description' => 'Talk about a dinner party you attended: who invited you, what you ate, what you talked about',
   ],
   35 => [
@@ -1046,7 +1046,7 @@ $data = [
 
   $query = \Drupal::entityQuery('node')
     ->condition('status', 1)
-    ->condition('type', 'text', '=');
+    ->condition('type', 'page', '<>');
   $nids = $query->execute();
 
   \Drupal::logger('corpus_importer')->notice('Converting ' . (count($nids)) . ' nodes');
@@ -1054,8 +1054,6 @@ $data = [
   foreach ($node_storage as $node) {
     $code_tid = $node->get('field_assignment_code')->getString();
     $code = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($code_tid);
-    $name_tid = $node->get('field_assignment_name')->getString();
-    $name = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($name_tid);
     if (!isset($map[$code->getName()])) {
       \Drupal::logger('corpus_importer')->notice('Could not find assignment code of ' . $code->getName());
     }
