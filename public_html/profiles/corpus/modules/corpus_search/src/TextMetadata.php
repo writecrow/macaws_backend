@@ -16,6 +16,7 @@ class TextMetadata {
     'course_year' => 'cy',
     'course_semester' => 'cs',
     'assignment_topic' => 'ao',
+    'assignment_name' => 'an',
     'draft' => 'dr',
     'assignment_mode' => 'am',
     'grouped_l1' => 'lo',
@@ -138,6 +139,7 @@ class TextMetadata {
     $texts[$result->nid]['grouped_l1'][$result->field_grouped_l1_target_id] = 1;
     $texts[$result->nid]['assignment_topic'][$result->field_assignment_topic_target_id] = 1;
     $texts[$result->nid]['assignment_mode'][$result->field_assignment_mode_target_id] = 1;
+    $texts[$result->nid]['assignment_name'][$result->field_assignment_name_target_id] = 1;
     return $texts;
   }
 
