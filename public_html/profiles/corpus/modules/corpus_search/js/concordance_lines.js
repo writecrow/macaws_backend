@@ -14,6 +14,7 @@ function sort_before() {
 }
 // function to sort lines by the word before the kwic
 function sort_target_asc() {
+  console.log('here');
   const table = document.getElementById("table");
   const label = document.getElementById("label");
   label.innerHTML = "Lines are sorted by the <strong>keyword</strong> in context.<br/>Sort by: <a href=\"#\" onclick=\"sort_before();return false;\">word before keyword</a> | target word | <a href=\"#\" onclick=\"sort_after();return false;\">word after keyword</a>";

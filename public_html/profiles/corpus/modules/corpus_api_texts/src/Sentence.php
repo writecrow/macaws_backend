@@ -23,21 +23,21 @@ class Sentence {
 
 	/**
 	 * List of characters used to terminate sentences.
-	 * 
+	 *
 	 * @var string[]
 	 */
 	private $terminals = array('.', '!', '?');
 
 	/**
 	 * List of characters used for abbreviations.
-	 * 
+	 *
 	 * @var string[]
 	 */
 	private $abbreviators = array('.');
 
 	/**
 	 * Multibyte safe version of standard trim() function.
-	 * 
+	 *
 	 * @param string $string
 	 * @return string
 	 */
@@ -49,7 +49,7 @@ class Sentence {
 	/**
 	 * A cross between mb_split and preg_split, adding the preg_split flags
 	 * to mb_split.
-	 * 
+	 *
 	 * @param string $pattern
 	 * @param string $string
 	 * @param int $limit
@@ -134,7 +134,7 @@ class Sentence {
 
 	/**
 	 * Replace
-	 * 
+	 *
 	 * @staticvar array $chr_map
 	 * @param string $string
 	 * @return string
@@ -287,7 +287,7 @@ class Sentence {
 			$last_is_capital = preg_match('#^\p{Lu}#u', $last_word);
 			$last_is_abbreviation = substr(trim($fragment), -1) == '.';
 			$is_abbreviation = $last_is_capital > 0 && $last_is_abbreviation > 0 && mb_strlen($last_word) <= 3;
-			
+
 			// merge previous fragment with this
 			if ($previous_is_abbreviation === true) {
 				$current_string = $previous_string . $current_string;
@@ -307,7 +307,7 @@ class Sentence {
 	/**
 	 * Merges any part starting with a closing parenthesis ')' to the previous
 	 * part.
-	 * 
+	 *
 	 * @param string[] $parts
 	 * @return string[]
 	 */
@@ -330,7 +330,7 @@ class Sentence {
 	 * Looks for closing quotes to include them with the previous statement.
 	 * "That was very interesting," he said.
 	 * "That was very interesting."
-	 * 
+	 *
 	 * @param string[] $statements
 	 * @return string[]
 	 */
@@ -356,7 +356,7 @@ class Sentence {
 			$return[$i] = $statement;
 			$previous_statement = $statement;
 		}
-		
+
 		return $return;
 	}
 

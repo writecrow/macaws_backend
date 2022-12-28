@@ -54,8 +54,11 @@ class ConcordanceViewsField extends FieldPluginBase {
   public function render(ResultRow $values) {
     $param = \Drupal::request()->query->all();
     $entity = $values->_entity;
-    $text_object = $entity->get('field_text')->getValue();
-    $text = $text_object[0]['value'];
+    $text_object = $entity->get('field_body')->getValue();
+    $text = '';
+    if (isset($text_object[0])) {
+      $text = $text_object[0]['value'];
+    }
     $output = '';
     if (isset($param['search'])) {
       if (isset($param['method']) && $param['method'] == 'lemma') {
