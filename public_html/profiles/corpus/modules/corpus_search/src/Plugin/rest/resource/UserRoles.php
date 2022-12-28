@@ -2,9 +2,9 @@
 
 namespace Drupal\corpus_search\Plugin\rest\resource;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\rest\ModifiedResourceResponse;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -28,7 +28,7 @@ class UserRoles extends ResourceBase {
   /**
    * A curent user instance.
    *
-   * @var AccountProxyInterface
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
 
@@ -43,9 +43,9 @@ class UserRoles extends ResourceBase {
    *   The plugin implementation definition.
    * @param array $serializer_formats
    *   The available serialization formats.
-   * @param LoggerInterface $logger
+   * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param AccountProxyInterface $current_user
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user instance.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user) {
@@ -70,17 +70,17 @@ class UserRoles extends ResourceBase {
   /**
    * Responds to GET requests.
    *
-   * @return ResourceResponse
+   * @return \Drupal\rest\ResourceResponse
    *   The HTTP response object.
    *
-   * @throws HttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
   public function get($type = NULL) {
     $user = User::load($this->currentUser->id());
     $data = $user->getRoles();
-    $response = new ResourceResponse($data);
-    $response->getCacheableMetadata()->addCacheContexts(['user']);
+    // Using ModifiedResourceResponse will enforce no caching in browser.
+    $response = new ModifiedResourceResponse($data, 200);
     return $response;
   }
 

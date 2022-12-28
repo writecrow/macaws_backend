@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.resource.field_assignment_code
     - field.field.node.resource.field_assignment_mode
+    - field.field.node.resource.field_assignment_name
     - field.field.node.resource.field_assignment_topic
     - field.field.node.resource.field_course
     - field.field.node.resource.field_course_semester
@@ -46,6 +47,16 @@ content:
   field_assignment_mode:
     type: entity_reference_autocomplete
     weight: 130
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_assignment_name:
+    type: entity_reference_autocomplete
+    weight: 135
     region: content
     settings:
       match_operator: CONTAINS

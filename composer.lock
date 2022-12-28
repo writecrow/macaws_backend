@@ -2164,17 +2164,17 @@
         },
         {
             "name": "drupal/facets",
-            "version": "2.0.5",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facets.git",
-                "reference": "2.0.5"
+                "reference": "2.0.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets-2.0.5.zip",
-                "reference": "2.0.5",
-                "shasum": "8be11b5bca088212270603cd3f3e69185022e379"
+                "url": "https://ftp.drupal.org/files/projects/facets-2.0.6.zip",
+                "reference": "2.0.6",
+                "shasum": "e984e6ce69026c20d2049d4ec53748e67c5e70de"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10.0"
@@ -2183,9 +2183,9 @@
                 "drupal/search_api": "<1.14"
             },
             "require-dev": {
-                "drupal/jquery_ui_slider": "~1.1",
-                "drupal/jquery_ui_touch_punch": "~1.0",
-                "drupal/search_api": "^1.25||1.x-dev"
+                "drupal/jquery_ui_slider": "~2.0",
+                "drupal/jquery_ui_touch_punch": "~1.1",
+                "drupal/search_api": "^1.28||1.x-dev"
             },
             "suggest": {
                 "drupal/jquery_ui_slider": "Required for the 'Facets Range Widget' module to work",
@@ -2194,8 +2194,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.5",
-                    "datestamp": "1658315614",
+                    "version": "2.0.6",
+                    "datestamp": "1671207897",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3133,20 +3133,20 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "1.25.0",
+            "version": "1.28.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api.git",
-                "reference": "8.x-1.25"
+                "reference": "8.x-1.28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.25.zip",
-                "reference": "8.x-1.25",
-                "shasum": "823bf5a6010cd08c7d1b287fcd855fbf81140e39"
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.28.zip",
+                "reference": "8.x-1.28",
+                "shasum": "d3ae0bb3cf17c986d5e0c6edb87aee6580b6fc1e"
             },
             "require": {
-                "drupal/core": "^9.2 || ^10.0"
+                "drupal/core": "^9.3 || ^10.0"
             },
             "conflict": {
                 "drupal/search_api_solr": "2.* || 3.0 || 3.1"
@@ -3164,8 +3164,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.25",
-                    "datestamp": "1658149514",
+                    "version": "8.x-1.28",
+                    "datestamp": "1667814116",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9068,12 +9068,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/writecrow/highlighter.git",
-                "reference": "033f7ddb18209402359d23acc238c1a595c69758"
+                "reference": "82a71cec9bab3705f373b48b2e721f7065220835"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/033f7ddb18209402359d23acc238c1a595c69758",
-                "reference": "033f7ddb18209402359d23acc238c1a595c69758",
+                "url": "https://api.github.com/repos/writecrow/highlighter/zipball/82a71cec9bab3705f373b48b2e721f7065220835",
+                "reference": "82a71cec9bab3705f373b48b2e721f7065220835",
                 "shasum": ""
             },
             "default-branch": true,
@@ -9102,7 +9102,7 @@
                 "issues": "https://github.com/writecrow/highlighter/issues",
                 "source": "https://github.com/writecrow/highlighter"
             },
-            "time": "2022-06-02T16:44:14+00:00"
+            "time": "2022-10-29T20:29:31+00:00"
         },
         {
             "name": "writecrow/lorem_gutenberg",
@@ -9261,5 +9261,5 @@
     "platform-overrides": {
         "php": "7.4.30"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }

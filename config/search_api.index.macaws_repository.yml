@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.field_assignment_code
     - field.storage.node.field_assignment_mode
+    - field.storage.node.field_assignment_name
     - field.storage.node.field_assignment_topic
     - field.storage.node.field_course_semester
     - field.storage.node.field_course_year
@@ -45,6 +46,26 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_assignment_mode
+      module:
+        - taxonomy
+  assignment_name:
+    label: 'Assignment Name » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_assignment_name:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_assignment_name
+      module:
+        - taxonomy
+  assignment_name_description:
+    label: 'Assignment Name » Taxonomy term » Description'
+    datasource_id: 'entity:node'
+    property_path: 'field_assignment_name:entity:description'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_assignment_name
       module:
         - taxonomy
   course:

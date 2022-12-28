@@ -2,7 +2,7 @@
 
 namespace Drupal\corpus_search;
 
-use writecrow\Highlighter\HighlightExcerpt;
+use writecrow\Highlighter\Highlighter;
 
 /**
  * Class Excerpt.
@@ -18,8 +18,16 @@ class Excerpt {
    *   An array of entity data, including metadata.
    * @param string[] $tokens
    *   The words/phrases to be highlighted.
+   * @param string[] $facet_map
+   *   The canonical facet map -- includes all data.
+   * @param int $limit
+   *   The number of results to return.
+   * @param int $offset
+   *   Pagination functionality (translates to SQL offset).
+   * @param string $excerpt_display
+   *   Provide concatenated results or keyed (for iDDL)?
    */
-  public static function getExcerptOrFullText(array $matching_texts, array $tokens, $facet_map, $limit = 20, $offset = 0, $do_excerpt = TRUE, $excerpt_type = "concat") {
+  public static function getExcerpt(array $matching_texts, array $tokens, array $facet_map, $limit = 20, $offset = 0, $excerpt_display = "concat") {
     if (empty($matching_texts)) {
       return [];
     }
@@ -30,41 +38,67 @@ class Excerpt {
     $query->range($offset, $limit);
     $results = $query->execute()->fetchAllKeyed();
     $sliced_matches = array_intersect_key($matching_texts, $results);
-    $metadata_names = [
-      'assignment_topic',
-      'assignment_mode',
+    // @see TextMetadata::populateTextMetadata().
+    $metadata_groups = [
+      'target_language',
       'course',
-      'draft',
-      'course_semester',
+      'macro_genre',
       'course_year',
+      'course_semester',
+      'assignment_topic',
+      'assignment_name',
+      'assignment_mode',
+      'draft',
+      'grouped_l1',
     ];
     foreach ($sliced_matches as $id => $metadata) {
       $excerpts[$id]['filename'] = $metadata['filename'];
       $excerpts[$id]['wordcount'] = $metadata['wordcount'];
-      foreach ($metadata_names as $name) {
-        $excerpts[$id][$name] = self::getFacetName($metadata[$name], $name, $facet_map);
+      // Check if the metadata includes a description & append that.
+      foreach ($metadata_groups as $field) {
+        if (isset($metadata[$field])) {
+          $facet_data = self::getFacetData($metadata[$field], $field, $facet_map);
+          $excerpts[$id][$field] = $facet_data['name'];
+          if (isset($facet_data['description'])) {
+            $excerpts[$id][$field . '_description'] = $facet_data['description'];
+          }
+        }
       }
-      if ($do_excerpt) {
-        $excerpts[$id]['text'] = HighlightExcerpt::highlight($results[$id], $tokens, $length = "300", $excerpt_type);
+      if ($excerpt_display === 'plain') {
+        $excerpts[$id]['text'] = self::generatePlainExcerpt($results[$id]);
       }
       else {
-        $excerpts[$id]['text'] = $results[$id];
+        $excerpts[$id]['text'] = Highlighter::process($results[$id], $tokens, FALSE, $excerpt_display);
       }
     }
     return array_values($excerpts);
   }
 
+  public static function generatePlainExcerpt($body) {
+    $excerpt = '';
+    $separator = "\r\n";
+    $line = strtok($body, $separator);
+    while ($line !== FALSE) {
+      $line = strtok($separator);
+      if (mb_strlen($excerpt) > 300) {
+        return mb_substr($excerpt, 0, 300) . '...';
+      }
+      if (mb_strlen($line) < 50) {
+        continue;
+      }
+      $excerpt .= $line . ' ';
+    }
+    return $body;
+  }
+
   /**
    * Simple facet name array lookup.
    */
-  public static function getFacetName($ids, $facet_group, $facet_map) {
-    $labels = [];
-    foreach (array_keys($ids) as $id) {
-      if (!empty($facet_map['by_id'][$facet_group][$id])) {
-        $labels[] = $facet_map['by_id'][$facet_group][$id];
-      }
+  public static function getFacetData($id, $vocabulary, $facet_map) {
+    if (!empty($facet_map['by_id'][$vocabulary][$id])) {
+      return $facet_map['by_id'][$vocabulary][$id];
     }
-    return implode(', ', $labels);
+    return ['name' => $id];
   }
 
 }

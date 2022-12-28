@@ -1,6 +1,0 @@
-global-styling:
-  version: VERSION
-  css:
-    base:
-      css/base.css: {}
-      css/overrides.css: {}

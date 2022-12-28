@@ -16,10 +16,13 @@ class TextMetadata {
     'course_year' => 'cy',
     'course_semester' => 'cs',
     'assignment_topic' => 'ao',
-    'draft' => 'dr',
+    'assignment_name' => 'an',
     'assignment_mode' => 'am',
+    'draft' => 'dr',
     'grouped_l1' => 'lo',
   ];
+
+  public static $corpusSourceBundle = 'text';
 
   /**
    * Retrieve metadata for all texts in one go!
@@ -31,25 +34,21 @@ class TextMetadata {
     }
     $connection = \Drupal::database();
     $query = $connection->select('node_field_data', 'n');
-    foreach (self::$facetIDs as $field => $alias) {
-      $field_name = substr('field_' . $field, 0, 32);
-      $query->leftJoin('node__' . $field_name, $alias, 'n.nid = ' . $alias . '.entity_id');
-    }
-    $query->leftJoin('node__field_wordcount', 'wc', 'n.nid = wc.entity_id');
-
+    $query->condition('n.type', self::$corpusSourceBundle, '=');
     $query->fields('n', ['title', 'type', 'nid']);
-    foreach (self::$facetIDs as $field => $alias) {
-      $field_name = substr('field_' . $field, 0, 32);
-      $query->fields($alias, [$field_name . '_target_id']);
-    }
+    // Add non-facet fields.
+    $query->leftJoin('node__field_wordcount', 'wc', 'n.nid = wc.entity_id');
     $query->fields('wc', ['field_wordcount_value']);
-    $query->condition('n.type', 'text', '=');
+    foreach (self::$facetIDs as $field => $alias) {
+      $query->leftJoin('node__field_' . $field, $alias, 'n.nid = ' . $alias . '.entity_id');
+      $query->fields($alias, ['field_' . $field . '_target_id']);
+    }
     $result = $query->execute();
     $matching_texts = $result->fetchAll();
     $texts = [];
     if (!empty($matching_texts)) {
       foreach ($matching_texts as $result) {
-        $texts = self::populateTextMetadata($result, $texts);;
+        $texts[$result->nid] = self::populateTextMetadata($result);
       }
     }
     \Drupal::cache()->set($cache_id, $texts, \Drupal::time()->getRequestTime() + (2500000));
@@ -63,11 +62,17 @@ class TextMetadata {
     $map = [];
     $connection = \Drupal::database();
     $query = $connection->select('taxonomy_term_field_data', 't');
-    $query->fields('t', ['tid', 'vid', 'name']);
+    $query->fields('t', ['tid', 'vid', 'name', 'description__value']);
     $result = $query->execute()->fetchAll();
     foreach ($result as $i) {
+      $data = [
+        'name' => $i->name,
+      ];
+      if (isset($i->description__value)) {
+        $data['description'] = strip_tags($i->description__value);
+      }
       $map['by_name'][$i->vid][$i->name] = $i->tid;
-      $map['by_id'][$i->vid][$i->tid] = $i->name;
+      $map['by_id'][$i->vid][$i->tid] = $data;
     }
     return $map;
   }
@@ -76,46 +81,46 @@ class TextMetadata {
    * Loop through the facets & increment each item's count.
    */
   public static function countFacets($matching_texts, $facet_map, $conditions) {
+    $facet_results = [];
     foreach ($matching_texts as $id => $elements) {
-      foreach (array_keys(self::$facetIDs) as $f) {
-        $ids = array_keys($elements[$f]);
-        foreach ($ids as $id) {
-          if (isset($facet_map['by_id'][$f][$id])) {
-            $name = $facet_map['by_id'][$f][$id];
-            if (!isset($facet_results[$f][$name]['count'])) {
-              $facet_results[$f][$name]['count'] = 1;
-            }
-            else {
-              $facet_results[$f][$name]['count']++;
-            }
-          }
+      foreach (array_keys(self::$facetIDs) as $group) {
+        if (!isset($elements[$group])) {
+          continue;
+        }
+        if (!isset($facet_map['by_id'][$group][$elements[$group]])) {
+          continue;
+        }
+        $name = $facet_map['by_id'][$group][$elements[$group]]['name'];
+        if (!isset($facet_results[$group][$name]['count'])) {
+          $facet_results[$group][$name]['count'] = 1;
+        }
+        else {
+          $facet_results[$group][$name]['count']++;
         }
       }
     }
     // Add facets that have no matches to the result set.
     // Loop through facet groups (e.g., course, assignment).
-    foreach (array_keys(self::$facetIDs) as $f) {
+    foreach (array_keys(self::$facetIDs) as $group) {
       // Loop through facet names (e.g., ENGL 106, ENGL 107).
-      if (isset($facet_map['by_id'][$f])) {
-        foreach ($facet_map['by_id'][$f] as $n) {
-          if (!isset($facet_results[$f][$n])) {
-            $facet_results[$f][$n]['count'] = 0;
-          }
-          $facet_id = $facet_map['by_name'][$f][$n];
-          if (isset($conditions[$f])) {
-            if (in_array($facet_id, $conditions[$f])) {
-              $facet_results[$f][$n]['active'] = TRUE;
-            }
+      foreach ($facet_map['by_name'][$group] as $name => $id) {
+        if (!isset($facet_results[$group][$name])) {
+          // We display items with zero counts so they are still visible.
+          $facet_results[$group][$name] = ['count' => 0];
+        }
+        if (isset($conditions[$group]) && in_array($id, $conditions[$group])) {
+          $facet_results[$group][$name]['active'] = TRUE;
+        }
+        if (isset($facet_results[$group][$name])) {
+          // Add description, if it exists..
+          if (isset($facet_map['by_id'][$group][$id]['description'])) {
+            $facet_results[$group][$name]['description'] = $facet_map['by_id'][$group][$id]['description'];
           }
         }
-        // Ensure facets are listed alphanumerically.
-        ksort($facet_results[$f]);
-        // Move "Other" to end of results.
-        if (isset($facet_results[$f]['Other'])) {
-          $temp = $facet_results[$f]['Other'];
-          unset($facet_results[$f]['Other']);
-          $facet_results[$f]['Other'] = $temp;
-        }
+      }
+      // Ensure facets are listed alphanumerically.
+      if (isset($facet_results[$group])) {
+        ksort($facet_results[$group]);
       }
     }
     return $facet_results;
@@ -124,21 +129,18 @@ class TextMetadata {
   /**
    * Helper function to put a single text's result data into a structured array.
    */
-  private static function populateTextMetadata($result, $texts) {
-    if (!isset($texts[$result->nid])) {
-      $texts[$result->nid] = ['filename' => $result->title];
-      $texts[$result->nid]['wordcount'] = $result->field_wordcount_value;
+  private static function populateTextMetadata($result) {
+    $metadata = [
+      'filename' => $result->title,
+      'wordcount' => $result->field_wordcount_value,
+    ];
+    foreach (array_keys(self::$facetIDs) as $field) {
+      $target = 'field_' . $field . '_target_id';
+      if (isset($result->$target)) {
+        $metadata[$field] = $result->$target;
+      }
     }
-    $texts[$result->nid]['macro_genre'][$result->field_macro_genre_target_id] = 1;
-    $texts[$result->nid]['draft'][$result->field_draft_target_id] = 1;
-    $texts[$result->nid]['target_language'][$result->field_target_language_target_id] = 1;
-    $texts[$result->nid]['course_year'][$result->field_course_year_target_id] = 1;
-    $texts[$result->nid]['course_semester'][$result->field_course_semester_target_id] = 1;
-    $texts[$result->nid]['course'][$result->field_course_target_id] = 1;
-    $texts[$result->nid]['grouped_l1'][$result->field_grouped_l1_target_id] = 1;
-    $texts[$result->nid]['assignment_topic'][$result->field_assignment_topic_target_id] = 1;
-    $texts[$result->nid]['assignment_mode'][$result->field_assignment_mode_target_id] = 1;
-    return $texts;
+    return $metadata;
   }
 
 }
