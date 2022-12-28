@@ -20,7 +20,7 @@ settings:
       - numberedList
       - '|'
       - blockQuote
-      - uploadImage
+      - drupalInsertImage
       - '|'
       - sourceEditing
   plugins:
