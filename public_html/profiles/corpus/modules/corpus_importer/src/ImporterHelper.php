@@ -135,7 +135,7 @@ class ImporterHelper {
     if ($output['tid'] == 0) {
       $output['message'] = 'New ' . $vocabulary . ' created: ' . $label;
       $new = self::createTerm($label, $vocabulary, $options);
-      $output['tid'] = $new;
+      $output['tid'] = self::getTidByName($label, $vocabulary);
     }
     return $output;
   }
