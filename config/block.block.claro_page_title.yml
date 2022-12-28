@@ -1,13 +1,13 @@
-uuid: 7e435202-0c8f-4d36-8ada-d6e531b14850
+uuid: 4ad5823d-cd2f-49ca-82c2-d64538110f2b
 langcode: en
 status: true
 dependencies:
   theme:
-    - corpus_theme
+    - claro
 _core:
-  default_config_hash: Z3nlZUh2mSJP3apMrJWt-duS-aLyP79rcfu_0wpPmDs
-id: corpus_theme_page_title
-theme: corpus_theme
+  default_config_hash: fNwDdW063tk_ktzSWzZVeQS9wzvLooVO280BQ9WrsIs
+id: claro_page_title
+theme: claro
 region: header
 weight: -30
 provider: null

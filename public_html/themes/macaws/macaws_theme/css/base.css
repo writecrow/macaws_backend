@@ -8,6 +8,7 @@ header h1.title {
 }
 header h1.title a {
   color: #fff;
+  text-decoration: none;
 }
 header .content-header {
   padding-top: 0;
@@ -33,4 +34,10 @@ header {
     width: 140px;
     border-radius: 50%;
     background-color: #fff;
+}
+a.tabs__link {
+  color: #fff;
+}
+a.tabs__link.is-active {
+  color: rgb(163, 163, 163);
 }
