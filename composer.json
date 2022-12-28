@@ -20,11 +20,11 @@
     "require": {
         "composer/installers": "^1 || ^2",
         "cweagans/composer-patches": "^1.7",
-        "drupal/adminimal_theme": "^1.4",
         "drupal/allow_iframed_site": "^3",
         "drupal/better_exposed_filters": "^6",
         "drupal/captcha": "^1",
         "drupal/config_ignore": "^2.2",
+        "drupal/config_update": "^1.7",
         "drupal/core-composer-scaffold": "^9",
         "drupal/core-recommended": "^9",
         "drupal/facets": "^2.0",
