@@ -3,4 +3,3 @@ global-styling:
   css:
     base:
       css/base.css: {}
-      css/overrides.css: {}

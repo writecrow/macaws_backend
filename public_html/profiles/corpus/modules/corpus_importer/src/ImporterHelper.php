@@ -123,7 +123,7 @@ class ImporterHelper {
    * @return int
    *   The term ID.
    */
-  public static function getOrCreateTidFromName($label, $vocabulary, $options = ['dryrun' => FALSE]) {
+  public static function getOrCreateTidFromName($label, $vocabulary, $options = ['description' => FALSE]) {
     $output = [];
 
     // Skip N/A values.
@@ -134,9 +134,7 @@ class ImporterHelper {
     $output['tid'] = self::getTidByName($label, $vocabulary);
     if ($output['tid'] == 0) {
       $output['message'] = 'New ' . $vocabulary . ' created: ' . $label;
-      if (!$options['dryrun']) {
-        self::createTerm($label, $vocabulary);
-      }
+      $new = self::createTerm($label, $vocabulary, $options);
       $output['tid'] = self::getTidByName($label, $vocabulary);
     }
     return $output;
@@ -280,6 +278,22 @@ class ImporterHelper {
   }
 
   /**
+   * Append institutional suffix to course ID.
+   *
+   * @param string $course
+   *   The course identifier, e.g., ENGL 106.
+   *
+   * @return string
+   *   The complete course ID.
+   */
+  public static function getLegacyInstitutionalCourse($course) {
+    if (in_array($course, array_keys(ImporterMap::$legacyCourseFixes))) {
+      return ImporterMap::$legacyCourseFixes[$course];
+    }
+    return $course;
+  }
+
+  /**
    * Utility: find term by name and vid.
    *
    * @param string $name
@@ -306,12 +320,13 @@ class ImporterHelper {
   /**
    * Helper function.
    */
-  public static function createTerm($name, $taxonomy_type) {
-    Term::create([
+  public static function createTerm($name, $taxonomy_type, $options) {
+    $term = Term::create([
       'name' => $name,
       'vid' => $taxonomy_type,
+      'description' => $options['description'] ?? '',
     ])->save();
-    return TRUE;
+    return $term;
   }
 
   /**

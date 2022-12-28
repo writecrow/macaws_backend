@@ -3,7 +3,7 @@ type: theme
 description: Administrative theme for Corpus
 core_version_requirement: ^8.8 || ^9
 # Defines the base theme
-base theme: corpus_theme
+base theme: claro
 
 libraries:
   - macaws_theme/global-styling
