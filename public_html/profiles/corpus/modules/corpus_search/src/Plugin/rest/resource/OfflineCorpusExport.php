@@ -75,7 +75,7 @@ class OfflineCorpusExport extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('corpus_search'),
+      $container->get('logger.factory')->get('example_rest'),
       $container->get('current_user'),
       $container->get('request_stack')->getCurrentRequest()
     );
@@ -91,7 +91,6 @@ class OfflineCorpusExport extends ResourceBase {
    *   Throws exception expected.
    */
   public function get() {
-    die();
     $user = User::load($this->currentUser->id());
     $roles = $user->getRoles();
     if (!in_array('offline', $roles)) {
@@ -102,9 +101,6 @@ class OfflineCorpusExport extends ResourceBase {
     $file = File::load($fid);
     if ($file) {
       $data = file_get_contents($file->getFileUri());
-    }
-    else {
-      return new ModifiedResourceResponse([], 404);
     }
     // Using ModifiedResourceResponse will enforce no caching in browser.
     $response = new ModifiedResourceResponse();

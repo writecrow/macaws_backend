@@ -10,7 +10,7 @@ dependencies:
     - rest
 id: export_access
 label: 'Export Access'
-weight: 5
+weight: -8
 is_admin: null
 permissions:
   - 'restful get corpus_export'

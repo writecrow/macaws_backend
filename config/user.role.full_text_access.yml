@@ -9,7 +9,7 @@ dependencies:
     - rest
 id: full_text_access
 label: 'Full Text Access'
-weight: 3
+weight: -9
 is_admin: null
 permissions:
   - 'restful get corpus_search'
