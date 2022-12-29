@@ -2,15 +2,18 @@
 
 namespace Drupal\corpus_search\Plugin\rest\resource;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\rest\ModifiedResourceResponse;
 use Drupal\corpus_search\Controller\CorpusSearch as Corpus;
 use Drupal\corpus_search\Excerpt;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
+
 
 /**
  * Provides a resource to get corpus search results.
@@ -30,14 +33,14 @@ class CorpusExport extends ResourceBase {
   /**
    * A curent user instance.
    *
-   * @var AccountProxyInterface
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
 
   /**
    * The request.
    *
-   * @var Request
+   * @var \Symfony\Component\HttpFoundation\Request
    */
   protected $currentRequest;
 
@@ -52,11 +55,11 @@ class CorpusExport extends ResourceBase {
    *   The plugin implementation definition.
    * @param array $serializer_formats
    *   The available serialization formats.
-   * @param LoggerInterface $logger
+   * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param AccountProxyInterface $current_user
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user instance.
-   * @param Request $current_request
+   * @param Symfony\Component\HttpFoundation\Request $current_request
    *   The current request.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user, Request $current_request) {
@@ -74,7 +77,7 @@ class CorpusExport extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('example_rest'),
+      $container->get('logger.factory')->get('corpus_search'),
       $container->get('current_user'),
       $container->get('request_stack')->getCurrentRequest()
     );
@@ -83,18 +86,22 @@ class CorpusExport extends ResourceBase {
   /**
    * Responds to GET requests.
    *
-   * @return ResourceResponse
+   * @return \Drupal\rest\ResourceResponse
    *   The HTTP response object.
    *
-   * @throws HttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
   public function get($type = NULL) {
+    $user = User::load($this->currentUser->id());
+    $roles = $user->getRoles();
+    if (!in_array('offline', $roles)) {
+      return new ModifiedResourceResponse([], 403);
+    }
     $data = Corpus::search($this->currentRequest);
-    $is_excerpt = TRUE;
-    $output = Excerpt::getExcerptOrFullText($data['matching_texts'], $data['tokens'], $data['facet_map'], 50, $is_excerpt);
-    $response = new ResourceResponse($output);
-    $response->getCacheableMetadata()->addCacheContexts(['url.query_args']);
+    $output = Excerpt::getExcerpt($data['matching_texts'], $data['tokens'], $data['facet_map'], 500, 0);
+    // Using ModifiedResourceResponse will enforce no caching in browser.
+    $response = new ModifiedResourceResponse($output, 200);
     return $response;
   }
 
