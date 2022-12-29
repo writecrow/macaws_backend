@@ -102,10 +102,14 @@ class OfflineCorpusExport extends ResourceBase {
     if ($file) {
       $data = file_get_contents($file->getFileUri());
     }
+    else {
+      return new ModifiedResourceResponse([], 404);
+    }
     // Using ModifiedResourceResponse will enforce no caching in browser.
     $response = new ModifiedResourceResponse();
     $response->headers->set('Content-Type', 'application/zip');
-    $response->headers->set('Content-Disposition', 'attachment; filename="crow_corpus.zip');
+    // The filename is be written by the frontend; corpus.zip is a placeholder.
+    $response->headers->set('Content-Disposition', 'attachment; filename="corpus.zip');
     $response->setContent($data);
     return $response;
   }
