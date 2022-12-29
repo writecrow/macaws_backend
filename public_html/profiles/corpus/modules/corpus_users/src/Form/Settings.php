@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class Settings extends ConfigFormBase {
 
-  /** 
+  /**
    * Config settings.
    *
    * @var string
@@ -43,6 +43,11 @@ class Settings extends ConfigFormBase {
       '#title' => $this->t('Enable notifications'),
       '#default_value' => $config->get('on'),
     ];
+    $form['offline_survey'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('URL to survey for offline request.'),
+      '#default_value' => $config->get('offline_survey'),
+    ];
     $form['project'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Basecamp Project ID for todo list'),
@@ -71,6 +76,7 @@ class Settings extends ConfigFormBase {
       ->set('on', $form_state->getValue('on'))
       ->set('assignee_ids', $form_state->getValue('assignee_ids'))
       ->set('list', $form_state->getValue('list'))
+      ->set('offline_survey', $form_state->getValue('offline_survey'))
       ->set('project', $form_state->getValue('project'))
       ->save();
     parent::submitForm($form, $form_state);

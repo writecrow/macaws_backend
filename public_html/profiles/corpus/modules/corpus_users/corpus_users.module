@@ -5,9 +5,118 @@
  * Defines user registration modifications.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Render\Markup;
 use Drupal\basecamp_api\Basecamp;
+use GuzzleHttp\Exception\RequestException;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Display modifications to the user registration form.
+ */
+function corpus_users_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['account']['name']['#title'] = "Account login name";
+  $form['account']['name']['#description'] = t('This field will be used for signing in.');
+  $form['field_requested_access_level']['#access'] = FALSE;
+  $form['web_access'] = [
+    '#prefix' => '<div class="web-access-wrapper">',
+    '#suffix' => '</div>',
+    '#weight' => 4,
+  ];
+  $form['web_access']['base'] = [
+    '#type' => 'fieldset',
+    '#title' => 'Web interface access',
+  ];
+  $form['web_access']['base']['base_options'] = [
+    '#type' => 'radios',
+    '#options' => [
+      'standard' => t('Standard'),
+      'full_text' => t('Full'),
+    ],
+    '#default_value' => 'standard',
+    '#description' => t('By default, only 500 characters are shown. "Full" access displays the entire text of student writing in the online interface.'),
+  ];
+  $form['web_access']['additional'] = [
+    '#type' => 'fieldset',
+    '#title' => 'Additional web access request',
+  ];
+  $form['web_access']['additional']['excerpt'] = [
+    '#type' => 'checkbox',
+    '#title' => 'Export search excerpt results',
+    '#default_value' => FALSE,
+    '#description' => t('Export excerpted search results from the interface to a spreadsheet (similar to concordance line output).'),
+  ];
+  $form['web_access']['additional']['excerpt_note'] = [
+    '#type' => 'item',
+    '#markup' => '<strong>Note: Please ensure that you provide justification for export access in your project description, below.</strong>',
+    '#states'   => [
+      'visible' => [
+        ':input[name="excerpt"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+  $form['download_wrapper'] = [
+    '#type' => 'fieldset',
+    '#title' => 'Corpus download access',
+    '#weight' => 4,
+  ];
+  $form['download_wrapper']['offline'] = [
+    '#type' => 'checkbox',
+    '#title' => 'Download a representative corpus for offline research',
+    '#default_value' => FALSE,
+    '#description' => t('Download a subset of the texts available in the online corpus. This option is intended for users who would like to use the corpus for their own research, particularly if they would like to annotate the corpus, use concordancing software (e.g., Antconc or LancsBox), or create their own programs to analyze the data. The offline corpus has been curated by the MACAWS team to ensure a representative sample from the first year writing context. Note: additional training and verification is required.'),
+  ];
+  $form['download_wrapper']['excerpt_note'] = [
+    '#type' => 'item',
+    '#markup' => '<strong>Note: Please ensure that you provide justification for download access in your project description, below. Additional training and verification will be required.</strong>',
+    '#states'   => [
+      'visible' => [
+        ':input[name="offline"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+  $form['#attached']['library'][] = 'corpus_users/registration';
+  $form['#validate'][] = '_corpus_users_registration_validate';
+  foreach (array_keys($form['actions']) as $action) {
+    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+      $form['actions'][$action]['#submit'][] = '_corpus_users_basecamp_todo';
+    }
+  }
+}
+
+/**
+ * Form validation handler for \Drupal\user\RegisterForm.
+ *
+ * The validation_counter variable stores how many registrations have been
+ * blocked by this module. This is added to the status report page.
+ *
+ * @see \Drupal\user\RegisterForm
+ */
+function _corpus_users_registration_validate($form, &$form_state) {
+  $error = 'Please enter a project description of at least 100 characters.';
+  $description = $form_state->getValue('field_project_description');
+  if (strlen($description[0]['value']) < 100) {
+    // Files an error on the mail element and provides an error message.
+    $form_state->setErrorByName('field_project_description', $error);
+    // Log the error message.
+    \Drupal::logger('corpus_users')->notice($error);
+  }
+  // Take values from "fake" fields and put them into the "real" field.
+  $base = $form_state->getValue('base_options');
+  $requests = [$base];
+  $excerpt = $form_state->getValue('excerpt');
+  if ($excerpt) {
+    $requests[] = 'export';
+  }
+  $offline = $form_state->getValue('offline');
+  if ($offline) {
+    $requests[] = 'offline';
+  }
+  $form_state->setValue('field_requested_access_level', $requests);
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -15,14 +124,25 @@ use Drupal\basecamp_api\Basecamp;
  * Display modifications to the user profile form.
  */
 function corpus_users_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $account = \Drupal::service('current_route_match')->getParameter('user');
+  // If this is not the Superadmin's edit page.
+  if (!empty($account) && ($account->id() != 1)) {
+    // Turn off Current password field's validation.
+    $form_state->set('user_pass_reset', 1);
+    // Hide the Current password fields.
+    $form['account']['current_pass']['#access'] = FALSE;
+  }
+
   if ($form_id != 'user_register_form') {
     $request_fields = [
       'field_account_type',
+      'field_requested_access_level',
       'field_affiliation',
       'field_institution',
-      'field_requested_access_level',
       'field_project_complete_date',
       'field_project_description',
+    ];
+    $suppress_fields = [
       'field_read_terms',
       'field_no_download',
     ];
@@ -77,7 +197,82 @@ function corpus_users_form_user_form_alter(&$form, FormStateInterface $form_stat
       $form['notification_preferences'][$field] = $form[$field];
       unset($form[$field]);
     }
+    foreach ($suppress_fields as $field) {
+      $form[$field]['#access'] = FALSE;
+    }
     $form['#attributes']['novalidate'] = 'novalidate';
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function corpus_users_entity_presave(EntityInterface $entity) {
+  // If an *active* user's roles are changed, send an email clarifying this.
+  if ($entity->bundle() !== 'user') {
+    return;
+  }
+  if (!$entity->original) {
+    // Don't act on new user accounts.
+    return;
+  }
+  if (!$entity->original->isActive() || !$entity->isActive()) {
+    // Don't send an email if the user was previously inactive or will be.
+    // i.e., only proceed if the user was already active and still is.
+    \Drupal::logger('corpus_users')->notice('The user with id ' . $entity->id() . ' was previously inactive');
+    return;
+  }
+  $old_roles = $entity->original->getRoles();
+  $new_roles = $entity->getRoles();
+  if ($old_roles != $new_roles) {
+    $config = \Drupal::config('corpus_users.settings');
+    $name = $entity->get('field_full_name')->getString();
+    $text = [$name . ','];
+    $text[] = '';
+    $text[] = 'Your access level for MACAWS (https://macaws.corporaproject.org) has changed. Below is a summary of your account capabilities.';
+    $text[] = '';
+    foreach ($new_roles as $role) {
+      if ($role === 'basic_search_access') {
+        $text[] = 'STANDARD ACCESS';
+        $text[] = $config->get('description_standard');
+        $text[] = '';
+      }
+      elseif ($role === 'full_text_access') {
+        $text[] = 'FULL TEXT VIEWING';
+        $text[] = $config->get('description_full_text_access');
+        $text[] = '';
+      }
+      elseif ($role === 'export_access') {
+        $text[] = 'EXPORT SEARCH EXCERPTS';
+        $text[] = $config->get('description_export');
+        $text[] = '';
+      }
+      elseif ($role === 'offline') {
+        $text[] = 'OFFLINE DOWNLOAD';
+        $text[] = $config->get('description_offline');
+        $text[] = '';
+      }
+    }
+    $text[] = 'Best regards,';
+    $text[] = 'MACAWS team';
+    $text[] = 'collaborate@writecrow.org';
+    $params = [];
+    $params['message'] = implode(PHP_EOL, $text);
+    $params['account'] = $entity;
+    try {
+      $mailManager = \Drupal::service('plugin.manager.mail');
+      $module = 'corpus_users';
+      $key = 'role_change';
+      $to = $entity->getEmail();
+      $params['title'] = 'Your MACAWS access level has changed';
+      $langcode = $entity->getPreferredLangcode();
+      $send = TRUE;
+      $response_status['status'] = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+      \Drupal::logger('corpus_users')->notice('User ' . $name . ' has been emailed updated roles.');
+    }
+    catch (RequestException $e) {
+      \Drupal::logger('corpus_users')->error($e);
+    }
   }
 }
 
@@ -96,13 +291,15 @@ function corpus_users_mail_alter(&$message) {
   if ($sender) {
     $message['headers']['Sender'] = $sender;
   }
-  $reply_to = Settings::get('corpus_users_reply_to');
-  if ($reply_to) {
-    $message['headers']['Reply-To'] = $reply_to;
-  }
-  $from = Settings::get('corpus_users_from');
-  if ($from) {
-    $message['headers']['From'] = $from;
+  if (!isset($message['headers']['Reply-To'])) {
+    $reply_to = Settings::get('corpus_users_reply_to');
+    if ($reply_to) {
+      $message['headers']['Reply-To'] = $reply_to;
+    }
+    $from = Settings::get('corpus_users_from');
+    if ($from) {
+      $message['headers']['From'] = $from;
+    }
   }
 
   $bcc_mail = Settings::get('corpus_users_bcc_email');
@@ -110,52 +307,63 @@ function corpus_users_mail_alter(&$message) {
     'user_register_admin_created',
     'user_status_activated',
     'user_register_pending_approval',
+    'role_change',
   ])) {
     if ($bcc_mail) {
       $existing_bcc = isset($message['headers']['Bcc']) ? $message['headers']['Bcc'] : '';
       $message['headers']['Bcc'] = implode(' ', array_merge(explode(' ', $existing_bcc), [$bcc_mail]));
     }
   }
-}
-
-/**
- * Implements hook_form_alter().
- */
-function corpus_users_form_alter(&$form, &$form_state, $form_id) {
-  // For now we just want the user registration form. Will continue to develop
-  // additional functionality, possibly including the user_account_form().
-  $user_forms = ['user_register_form'];
-
-  if (in_array($form_id, $user_forms)) {
-    // Add a new validation handler to the form.
-    $form['#validate'][] = '_corpus_users_registration_validate';
-    foreach (array_keys($form['actions']) as $action) {
-      if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
-        $form['actions'][$action]['#submit'][] = '_corpus_users_basecamp_todo';
+  switch ($message['id']) {
+    case 'user_register_pending_approval':
+      $account = $message['params']['account'];
+      $levels = $account->get('field_requested_access_level')->getValue();
+      foreach ($levels as $level) {
+        if ($level['value'] === 'offline') {
+          $url = \Drupal::config('corpus_users.settings')->get('offline_url') ?? 'https://purdue.ca1.qualtrics.com/jfe/form/SV_7WMVgBVdNjEFhWu';
+          $survey = $url . '?' . http_build_query([
+            'CrowEmail' => $account->getEmail(),
+            'CrowUsername' => $account->getAccountName(),
+            'CrowName' => $account->get('field_full_name')->getString(),
+          ]);
+          $message['body'] = str_replace('Your application is currently being reviewed. Once it has been approved,', 'Since you have requested offline access, you will now need to complete a training, at  ' . $survey . ' . Once that has been completed and reviewed,', $message['body']);
+        }
       }
-    }
+      break;
+
+    case 'user_status_activated':
+      $account = $message['params']['account'];
+      if ($account->hasRole('offline')) {
+        $message['body'] = str_replace('Best regards', PHP_EOL . 'After you have signed in to the interface at https://macaws.corporaproject.org, you can download the corpus for offline use at https://macaws.corporaproject.org/download .' . PHP_EOL . PHP_EOL . 'Best regards', $message['body']);
+      }
+      break;
   }
 }
 
 /**
- * Form validation handler for \Drupal\user\RegisterForm.
- *
- * The validation_counter variable stores how many registrations have been
- * blocked by this module. This is added to the status report page.
- *
- * @see \Drupal\user\RegisterForm
+ * Implements hook_mail().
  */
-function _corpus_users_registration_validate($form, &$form_state) {
-  $error = 'Please enter a project description of at least 100 characters.';
-  $description = $form_state->getValue('field_project_description');
-  if (strlen($description[0]['value']) < 100) {
-    // Files an error on the mail element and provides an error message.
-    $form_state->setErrorByName('field_project_description', $error);
-    // Log the error message.
-    \Drupal::logger('corpus_users')->notice($error);
+function corpus_users_mail($key, &$message, $params) {
+  $options = [
+    'langcode' => $message['langcode'],
+  ];
+
+  switch ($key) {
+    case 'user_report':
+      $message['subject'] = t('@title', ['@title' => $params['title']], $options);
+      $message['body'][] = $params['message'];
+      break;
+
+    case 'role_change':
+      $message['subject'] = t('@title', ['@title' => $params['title']], $options);
+      $message['body'][] = $params['message'];
+      break;
   }
 }
 
+/**
+ * Helper function to create basecamp todos from user access requests.
+ */
 function _corpus_users_basecamp_todo(&$form, &$form_state) {
   $config = \Drupal::config('corpus_users.settings');
   if (!$config->get('on')) {
@@ -165,17 +373,23 @@ function _corpus_users_basecamp_todo(&$form, &$form_state) {
   \Drupal::logger('corpus_users')->notice(serialize($form_state->getValues()));
   $values = $form_state->getValues();
   $message = '<p><strong>Request time: </strong>' . date('F j, Y g:i a', time()) . '</p>';
+  $message = '<p><strong>Access level(s) requested: ' . implode(',', $values['field_requested_access_level']);
+  $message .= '<p><hr /></p>';
   $message = '<p><strong>Name: </strong>' . $values['field_full_name'][0]['value'] . '</p>';
   $message .= '<p><strong>Email: </strong>' . $values['mail'] . '</p>';
   $message .= '<p><strong>Project description: </strong>' . $values['field_project_description'][0]['value'] . '</p>';
   $message .= '<p><hr /></p>';
-  $message .= '<p>To review the application details, sign in with your managerial account at ' . $base_url . '/user and then go to the following URL:</p><p>' . $base_url . '/user/' . $values['uid'] .'/edit</p><p>To make the account active, you will need to do two things:</p><p>&nbsp;</p>1. Change the "Status" field from "Blocked" to "Active"<br />2. Select one or more "Roles" (at a minimum, you must tick "Basic Search Access")</p><p>You do *not* need to set a password for the account.</p><p>&nbsp;</p><p>After pressing "Save," your work is done. An email will be automatically sent to the requestor, with instructions for creating a password.</p>';
+  $message .= '<p>To review the application details, sign in with your managerial account at ' . $base_url . '/user and then go to the following URL:</p><p>' . $base_url . '/user/' . $values['uid'] . '/edit</p><p>To make the account active, you will need to do two things:</p><p>&nbsp;</p>1. Change the "Status" field from "Blocked" to "Active"<br />2. Select one or more "Roles" (at a minimum, you must tick "Standard")</p><p>You do *not* need to set a password for the account.</p><p>&nbsp;</p><p>After pressing "Save," your work is done. An email will be automatically sent to the requestor, with instructions for creating a password.</p>';
   $data = [
     'content' => 'User access request: ' . $values['field_full_name'][0]['value'],
     'description' => $message,
     'due_on' => date('Y-m-d', strtotime('+7 days')),
     'notify' => TRUE,
   ];
+  if (in_array('offline', $values['field_requested_access_level'])) {
+    $data['description'] .= '<p><strong>Note: this user has requested offline corpus access. They have been emailed a link to the Qualtrics form. This account should not be activated until the Qualtrics form has been successfully submitted.</strong></p>';
+    $data['content'] .= ' (Offline Access)';
+  }
   $assignee_ids = $config->get('assignee_ids');
   if (!empty($assignee_ids)) {
     $data['assignee_ids'] = explode(',', $assignee_ids);
