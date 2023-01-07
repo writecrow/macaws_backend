@@ -64,7 +64,17 @@ class TextMetadata {
     $query = $connection->select('taxonomy_term_field_data', 't');
     $query->fields('t', ['tid', 'vid', 'name', 'description__value']);
     $result = $query->execute()->fetchAll();
+
+    // @macaws-specific: Omit empty assignment names.
+    $query = $connection->select('node__field_assignment_name', 'n');
+    $query->condition('n.bundle', 'text');
+    $query->fields('n', ['field_assignment_name_target_id']);
+    $assignment_names = $query->execute()->fetchCol(0);
+
     foreach ($result as $i) {
+      if ($i->vid == 'assignment_name' && !in_array($i->tid, array_values($assignment_names))) {
+        continue;
+      }
       $data = [
         'name' => $i->name,
       ];
