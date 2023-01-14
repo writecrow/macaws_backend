@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\corpus_api_texts\Plugin\views\field;
+namespace Drupal\corpus_search\Plugin\views\field;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;

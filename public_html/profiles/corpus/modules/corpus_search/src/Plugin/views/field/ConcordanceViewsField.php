@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\corpus_api_texts\Plugin\views\field;
+namespace Drupal\corpus_search\Plugin\views\field;
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
-use Drupal\corpus_api_texts\Kwic;
+use Drupal\corpus_search\Kwic;
 
 /**
  * A handler to provide a field that is completely custom by the administrator.

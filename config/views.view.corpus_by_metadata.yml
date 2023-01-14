@@ -32,7 +32,6 @@ dependencies:
     - field.storage.node.field_student_id
     - field.storage.node.field_target_language
     - field.storage.node.field_target_language_practice
-    - field.storage.node.field_text
     - field.storage.node.field_wordcount
     - field.storage.node.field_year_in_school
     - node.type.text
@@ -47,7 +46,7 @@ dependencies:
     - taxonomy.vocabulary.student_id
     - user.role.authenticated
   module:
-    - corpus_api_texts
+    - corpus_search
     - node
     - rest
     - serialization
@@ -1962,68 +1961,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        field_text:
-          id: field_text
-          table: node__field_text
-          field: field_text
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: ''
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: basic_string
-          settings: {  }
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         concordance_views_field:
           id: concordance_views_field
           table: node
@@ -2264,6 +2201,56 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        corpus_text:
+          id: corpus_text
+          table: node
+          field: corpus_text
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: corpus_text
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
       pager:
         type: mini
         options:
@@ -3111,7 +3098,6 @@ display:
         - 'config:field.storage.node.field_student_id'
         - 'config:field.storage.node.field_target_language'
         - 'config:field.storage.node.field_target_language_practice'
-        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_wordcount'
         - 'config:field.storage.node.field_year_in_school'
   rest_export_1:
@@ -3225,7 +3211,7 @@ display:
               alias: year_in_school
               raw_output: false
             field_text:
-              alias: text
+              alias: ''
               raw_output: false
             concordance_views_field:
               alias: concordance
@@ -3238,6 +3224,9 @@ display:
               raw_output: false
             description__value:
               alias: assignment_name_description
+              raw_output: false
+            corpus_text:
+              alias: text
               raw_output: false
       display_extenders: {  }
       path: corpus/metadata
@@ -3283,6 +3272,5 @@ display:
         - 'config:field.storage.node.field_student_id'
         - 'config:field.storage.node.field_target_language'
         - 'config:field.storage.node.field_target_language_practice'
-        - 'config:field.storage.node.field_text'
         - 'config:field.storage.node.field_wordcount'
         - 'config:field.storage.node.field_year_in_school'

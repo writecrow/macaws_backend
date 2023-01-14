@@ -8,7 +8,7 @@
 /**
  * Implements hook_views_data_alter().
  */
-function corpus_api_texts_views_data_alter(array &$data) {
+function corpus_search_views_data_alter(array &$data) {
   $data['node']['concordance_views_field'] = array(
     'title' => t('Concordance excerpt'),
     'field' => array(

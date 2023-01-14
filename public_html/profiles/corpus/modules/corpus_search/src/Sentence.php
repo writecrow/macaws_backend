@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\corpus_api_texts;
+namespace Drupal\corpus_search;
 
 /**
  * Segments sentences.

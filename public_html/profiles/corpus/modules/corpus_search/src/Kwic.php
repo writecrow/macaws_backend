@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\corpus_api_texts;
+namespace Drupal\corpus_search;
 
 use writecrow\Highlighter\Highlighter;
 use Drupal\corpus_search\Controller\CorpusSearch;
-use Drupal\corpus_api_texts\Sentence;
+use Drupal\corpus_search\Sentence;
 
 /**
  * PHP Implementation of a Keyword-in-Context search.

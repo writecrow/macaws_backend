@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\corpus_api_texts\Plugin\views\style;
+namespace Drupal\corpus_search\Plugin\views\style;
 
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\rest\Plugin\views\style\Serializer;
