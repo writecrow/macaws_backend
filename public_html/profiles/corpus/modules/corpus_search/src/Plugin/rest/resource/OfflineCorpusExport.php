@@ -4,16 +4,14 @@ namespace Drupal\corpus_search\Plugin\rest\resource;
 
 
 use Drupal\rest\Plugin\ResourceBase;
-use Drupal\rest\ResourceResponse;
 use Drupal\rest\ModifiedResourceResponse;
-use Drupal\corpus_search\Controller\CorpusSearch as Corpus;
-use Drupal\corpus_search\Excerpt;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\user\Entity\User;
+use Drupal\file\Entity\File;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
-
+use Drupal\user\Entity\User;
 
 /**
  * Provides a resource to get corpus search results.
@@ -21,14 +19,14 @@ use Psr\Log\LoggerInterface;
  * This is modeled on https://www.drupal.org/project/drupal/issues/2884721.
  *
  * @RestResource(
- *   id = "corpus_export",
- *   label = @Translation("Corpus export"),
+ *   id = "offline_corpus_export",
+ *   label = @Translation("Offline corpus export"),
  *   uri_paths = {
- *     "canonical" = "/corpus/export"
+ *     "canonical" = "/corpus/offline"
  *   }
  * )
  */
-class CorpusExport extends ResourceBase {
+class OfflineCorpusExport extends ResourceBase {
 
   /**
    * A curent user instance.
@@ -77,7 +75,7 @@ class CorpusExport extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('corpus_search'),
+      $container->get('logger.factory')->get('example_rest'),
       $container->get('current_user'),
       $container->get('request_stack')->getCurrentRequest()
     );
@@ -92,16 +90,27 @@ class CorpusExport extends ResourceBase {
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
-  public function get($type = NULL) {
+  public function get() {
     $user = User::load($this->currentUser->id());
     $roles = $user->getRoles();
     if (!in_array('offline', $roles)) {
       return new ModifiedResourceResponse([], 403);
     }
-    $data = Corpus::search($this->currentRequest);
-    $output = Excerpt::getExcerpt($data['matching_texts'], $data['tokens'], $data['facet_map'], 500, 0);
+    $data = '';
+    $fid = \Drupal::state()->get('offline_file_id');
+    $file = File::load($fid);
+    if ($file) {
+      $data = file_get_contents($file->getFileUri());
+    }
+    else {
+      return new ModifiedResourceResponse([], 404);
+    }
     // Using ModifiedResourceResponse will enforce no caching in browser.
-    $response = new ModifiedResourceResponse($output, 200);
+    $response = new ModifiedResourceResponse();
+    $response->headers->set('Content-Type', 'application/zip');
+    // The filename is be written by the frontend; corpus.zip is a placeholder.
+    $response->headers->set('Content-Disposition', 'attachment; filename="corpus.zip');
+    $response->setContent($data);
     return $response;
   }
 
