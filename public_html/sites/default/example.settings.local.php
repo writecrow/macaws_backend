@@ -173,3 +173,5 @@ $settings['trusted_host_patterns'] = [
 
 $config['simple_oauth.settings']['public_key'] = "/app/public.key";
 $config['simple_oauth.settings']['private_key'] = "/app/private.key";
+
+$config['system.mail']['interface']['default'] = 'test_mail_collector';
