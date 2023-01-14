@@ -8,7 +8,7 @@ dependencies:
   module:
     - rest
 id: full_text_access
-label: 'Full Text Access'
+label: Full
 weight: -9
 is_admin: null
 permissions:
