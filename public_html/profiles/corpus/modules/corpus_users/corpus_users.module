@@ -58,26 +58,26 @@ function corpus_users_form_user_register_form_alter(&$form, FormStateInterface $
       ],
     ],
   ];
-  $form['download_wrapper'] = [
-    '#type' => 'fieldset',
-    '#title' => 'Corpus download access',
-    '#weight' => 4,
-  ];
-  $form['download_wrapper']['offline'] = [
-    '#type' => 'checkbox',
-    '#title' => 'Download a representative corpus for offline research',
-    '#default_value' => FALSE,
-    '#description' => t('Download a subset of the texts available in the online corpus. This option is intended for users who would like to use the corpus for their own research, particularly if they would like to annotate the corpus, use concordancing software (e.g., Antconc or LancsBox), or create their own programs to analyze the data. The offline corpus has been curated by the MACAWS team to ensure a representative sample from the first year writing context. Note: additional training and verification is required.'),
-  ];
-  $form['download_wrapper']['excerpt_note'] = [
-    '#type' => 'item',
-    '#markup' => '<strong>Note: Please ensure that you provide justification for download access in your project description, below. Additional training and verification will be required.</strong>',
-    '#states'   => [
-      'visible' => [
-        ':input[name="offline"]' => ['checked' => TRUE],
-      ],
-    ],
-  ];
+  // $form['download_wrapper'] = [
+  //   '#type' => 'fieldset',
+  //   '#title' => 'Corpus download access',
+  //   '#weight' => 4,
+  // ];
+  // $form['download_wrapper']['offline'] = [
+  //   '#type' => 'checkbox',
+  //   '#title' => 'Download a representative corpus for offline research',
+  //   '#default_value' => FALSE,
+  //   '#description' => t('Download a subset of the texts available in the online corpus. This option is intended for users who would like to use the corpus for their own research, particularly if they would like to annotate the corpus, use concordancing software (e.g., Antconc or LancsBox), or create their own programs to analyze the data. The offline corpus has been curated by the MACAWS team to ensure a representative sample from the first year writing context. Note: additional training and verification is required.'),
+  // ];
+  // $form['download_wrapper']['excerpt_note'] = [
+  //   '#type' => 'item',
+  //   '#markup' => '<strong>Note: Please ensure that you provide justification for download access in your project description, below. Additional training and verification will be required.</strong>',
+  //   '#states'   => [
+  //     'visible' => [
+  //       ':input[name="offline"]' => ['checked' => TRUE],
+  //     ],
+  //   ],
+  // ];
   $form['#attached']['library'][] = 'corpus_users/registration';
   $form['#validate'][] = '_corpus_users_registration_validate';
   foreach (array_keys($form['actions']) as $action) {
