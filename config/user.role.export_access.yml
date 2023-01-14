@@ -9,7 +9,7 @@ dependencies:
   module:
     - rest
 id: export_access
-label: 'Export Access'
+label: Export
 weight: -8
 is_admin: null
 permissions:

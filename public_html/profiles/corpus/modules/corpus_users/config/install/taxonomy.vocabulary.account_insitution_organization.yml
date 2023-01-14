@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: 'Account Insitution/Organization'
-vid: account_insitution_organization
-description: ''
-weight: 0

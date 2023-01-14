@@ -62,17 +62,20 @@ class TextMetadata {
     $map = [];
     $connection = \Drupal::database();
     $query = $connection->select('taxonomy_term_field_data', 't');
+    $query->condition('t.vid', array_keys(self::$facetIDs), 'IN');
     $query->fields('t', ['tid', 'vid', 'name', 'description__value']);
     $result = $query->execute()->fetchAll();
 
-    // @macaws-specific: Omit empty assignment names.
-    $query = $connection->select('node__field_assignment_name', 'n');
-    $query->condition('n.bundle', 'text');
-    $query->fields('n', ['field_assignment_name_target_id']);
-    $assignment_names = $query->execute()->fetchCol(0);
-
+    $corpus_tids = [];
+    foreach (self::$facetIDs as $field => $alias) {
+      $query = $connection->select('node__field_' . $field, $alias);
+      $query->condition($alias .'.bundle', self::$corpusSourceBundle);
+      $query->fields($alias, ['field_' . $field . '_target_id']);
+      $corpus_tids[$field] = array_values($query->execute()->fetchCol(0));
+    }
     foreach ($result as $i) {
-      if ($i->vid == 'assignment_name' && !in_array($i->tid, array_values($assignment_names))) {
+      // Omit any TIDs that are not actively referenced in corpus data.
+      if (!in_array($i->tid, $corpus_tids[$i->vid])) {
         continue;
       }
       $data = [

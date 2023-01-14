@@ -8,7 +8,7 @@ dependencies:
   module:
     - rest
 id: basic_search_access
-label: 'Basic Search Access'
+label: Standard
 weight: -10
 is_admin: null
 permissions:
