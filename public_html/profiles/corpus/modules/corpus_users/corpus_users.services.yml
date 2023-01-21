@@ -1,0 +1,5 @@
+services:
+  corpus_users.route_subscriber:
+    class: Drupal\corpus_users\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
