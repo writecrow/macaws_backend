@@ -37,7 +37,6 @@
         "drupal/search_api": "^1.25",
         "drupal/simple_oauth": "^5",
         "drupal/token": "^1.6",
-        "drupal/upgrade_status": "^3.18",
         "drupal/userprotect": "^1.0",
         "drupal/views_data_export": "^1",
         "drush/drush": "^10",
