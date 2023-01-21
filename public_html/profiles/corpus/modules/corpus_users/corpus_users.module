@@ -14,6 +14,39 @@ use GuzzleHttp\Exception\RequestException;
 
 /**
  * Implements hook_form_FORM_ID_alter().
+ */
+function corpus_users_form_user_login_form_alter(&$form, FormStateInterface $form_state) {
+  $form['name']['#title'] = t('Username or email address.');
+  $form['name']['#description'] = t('Enter your username or email address');
+  $form['name']['#element_validate'][] = '_user_login_validate';
+}
+
+/**
+ * Form element validation handler for the user login form.
+ *
+ * Allows users to authenticate by username OR email.
+ */
+function _user_login_validate($form, FormStateInterface $form_state) {
+  $name_input = $form_state->getValue('name');
+
+  // Try loading by username.
+  if ($user = user_load_by_name($name_input)) {
+    return TRUE;
+  }
+
+  // Try loading by email.
+  if ($user = user_load_by_mail($name_input)) {
+    // Set the username for further validation.
+    $form_state->setValue('name', $user->getAccountName());
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
  *
  * Display modifications to the user registration form.
  */
