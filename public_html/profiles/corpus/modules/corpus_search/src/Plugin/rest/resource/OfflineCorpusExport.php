@@ -96,8 +96,12 @@ class OfflineCorpusExport extends ResourceBase {
     if (!in_array('offline', $roles)) {
       return new ModifiedResourceResponse([], 403);
     }
+    $language = $this->currentRequest->query->get('language');
+    if (!in_array($language, ['russian', 'portuguese'])) {
+      return new ModifiedResourceResponse([], 403);
+    }
     $data = '';
-    $fid = \Drupal::state()->get('offline_file_id');
+    $fid = \Drupal::state()->get('offline_fid_' . $language);
     $file = File::load($fid);
     if ($file) {
       $data = file_get_contents($file->getFileUri());

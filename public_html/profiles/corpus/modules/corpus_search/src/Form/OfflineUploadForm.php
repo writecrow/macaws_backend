@@ -33,11 +33,15 @@ class OfflineUploadForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $fid = \Drupal::state()->get('offline_file_id');
-    if (!$fid) {
-      $fid = 0;
+    $portuguese = \Drupal::state()->get('offline_fid_portuguese');
+    if (!$portuguese) {
+      $portuguese = 0;
     }
-    $form['file'] = [
+    $russian = \Drupal::state()->get('offline_fid_russian');
+    if (!$russian) {
+      $russian = 0;
+    }
+    $form['portuguese'] = [
       '#type' => 'managed_file',
       '#upload_location' => 'private://',
       '#multiple' => FALSE,
@@ -45,8 +49,19 @@ class OfflineUploadForm extends ConfigFormBase {
       '#upload_validators' => [
         'file_validate_extensions' => ['zip'],
       ],
-      '#default_value' => [$fid],
-      '#title' => $this->t('Upload a zip file'),
+      '#default_value' => [$portuguese],
+      '#title' => $this->t('Portuguese offline corpus'),
+    ];
+    $form['russian'] = [
+      '#type' => 'managed_file',
+      '#upload_location' => 'private://',
+      '#multiple' => FALSE,
+      '#description' => $this->t('Allowed extensions: zip'),
+      '#upload_validators' => [
+        'file_validate_extensions' => ['zip'],
+      ],
+      '#default_value' => [$russian],
+      '#title' => $this->t('Russian offline corpus'),
     ];
     $form['submit'] = [
       '#type' => 'submit',
@@ -61,9 +76,13 @@ class OfflineUploadForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
-    $field = $form_state->getValue('file');
+    $field = $form_state->getValue('portuguese');
     if (!$field[0]) {
-      $form_state->setErrorByName('file', $this->t("Upload failed. Please try again."));
+      $form_state->setErrorByName('portuguese', $this->t("Upload failed. Please try again."));
+    }
+    $field = $form_state->getValue('russian');
+    if (!$field[0]) {
+      $form_state->setErrorByName('russian', $this->t("Upload failed. Please try again."));
     }
   }
 
@@ -71,12 +90,19 @@ class OfflineUploadForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $field = $form_state->getValue('file');
-    $file = File::load($field[0]);
+    $field = $form_state->getValue('portuguese');
+    $portuguese = File::load($field[0]);
     // This will set the file status to 'permanent' automatically.
-    \Drupal::service('file.usage')->add($file, 'corpus_search', 'file', $file->id());
+    \Drupal::service('file.usage')->add($portuguese, 'corpus_search', 'file', $portuguese->id());
 
-    \Drupal::state()->set('offline_file_id', $file->id());
+    \Drupal::state()->set('offline_fid_portuguese', $portuguese->id());
+
+    $field = $form_state->getValue('russian');
+    $russian = File::load($field[0]);
+    // This will set the file status to 'permanent' automatically.
+    \Drupal::service('file.usage')->add($russian, 'corpus_search', 'file', $russian->id());
+
+    \Drupal::state()->set('offline_fid_russian', $russian->id());
   }
 
 }
