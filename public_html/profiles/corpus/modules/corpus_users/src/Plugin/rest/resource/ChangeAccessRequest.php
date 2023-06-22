@@ -110,7 +110,7 @@ class ChangeAccessRequest extends ResourceBase {
     // Email requestor.
     $key = 'change_access_requestor';
     $params['message'] = $this->getRequestorEmailText($name, $data['role'], $user);
-    $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+    $mailManager->mail($module, $key, $user->getEmail(), $langcode, $params, NULL, $send);
 
     // Basecamp integration.
     $assignee_ids = $config->get('assignee_ids');
