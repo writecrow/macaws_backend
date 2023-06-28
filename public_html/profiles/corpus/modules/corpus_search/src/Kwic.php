@@ -35,7 +35,7 @@ class Kwic {
       if (count($instances) >= $inc) {
         break;
       }
-      $sentence = Highlighter::process($sentence, array_keys($keywords), FALSE, "kwic");
+      $sentence = Highlighter::process($sentence, array_keys($keywords), FALSE, "sentence");
       if (mb_strpos($sentence, '<mark>') !== FALSE) {
         $instances[] = $sentence;
       }
