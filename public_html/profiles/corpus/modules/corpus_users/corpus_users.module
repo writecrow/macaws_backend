@@ -142,11 +142,14 @@ function _corpus_users_registration_validate($form, &$form_state) {
   $requests = [$base];
   $excerpt = $form_state->getValue('excerpt');
   if ($excerpt) {
-    $requests[] = 'export_access';
+    $requests[] = 'export';
   }
   $offline = $form_state->getValue('offline');
   if ($offline) {
     $requests[] = 'offline';
+  }
+  if (empty($requests)) {
+    $requests[] = 'standard';
   }
   $form_state->setValue('field_requested_access_level', $requests);
 }
