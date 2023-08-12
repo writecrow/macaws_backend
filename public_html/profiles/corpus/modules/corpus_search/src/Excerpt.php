@@ -64,6 +64,9 @@ class Excerpt {
           }
         }
       }
+      // @macaws
+      $results[$id] = preg_replace('/<[\w\s]*>/u', '', $results[$id]);
+      // @endmacaws
       if ($excerpt_display === 'plain') {
         $excerpts[$id]['text'] = self::generatePlainExcerpt($results[$id]);
       }

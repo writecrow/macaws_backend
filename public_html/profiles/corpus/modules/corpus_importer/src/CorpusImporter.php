@@ -28,7 +28,7 @@ class CorpusImporter extends ImporterService {
       $save = TRUE;
       if (in_array($name, array_keys($text)) || $name == "Grouped L1") {
         // Skip N/A values.
-        if (in_array($text[$name], ['NA', 'N/A', 'No', 'Na', 'Nan', 'NaN'])) {
+        if (isset($text[$name]) && in_array($text[$name], ['NA', 'N/A', 'No', 'Na', 'Nan', 'NaN'])) {
           $save = FALSE;
         }
         if ($name == 'Grouped L1') {
@@ -72,7 +72,14 @@ class CorpusImporter extends ImporterService {
         }
         if (in_array($machine_name, ['assignment_name', 'experience_abroad'])) {
           $r = preg_replace("/\([^)]+\)/", "", $text[$name]);
-          $text[$name] = trim($r);
+          if (is_array($r)) {
+            foreach ($r as $item) {
+              $text[$name][] = trim($item);
+            }
+          }
+          else {
+            $text[$name] = trim($r);
+          }
         }
         // Standardize draft names.
         if ($machine_name == 'draft') {
