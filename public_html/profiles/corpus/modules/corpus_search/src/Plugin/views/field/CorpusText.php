@@ -56,11 +56,16 @@ class CorpusText extends FieldPluginBase {
     $entity = $values->_entity;
     $text_object = $entity->get('field_text')->getValue();
     $user = User::load(\Drupal::currentUser()->id());
-    $text = htmlentities(strip_tags($text_object[0]['value'], "<name><date><place>"));
+    $text = $text_object[0]['value'];
+    $text = htmlentities(strip_tags($text, "<name><date><place>"));
+    // @macaws
+    $text = preg_replace('/<[\w\s]*>/u', '', $text);
+    // @endmacaws
+
     $param = \Drupal::request()->query->all();
     if (isset($param['search'])) {
       $tokens = CorpusSearch::getTokens($param['search']);
-      $text = Highlighter::process($text, array_keys($tokens), FALSE,  'all');
+      $text = Highlighter::process($text, array_keys($tokens), FALSE, 'all');
     }
     if ($user->hasRole('full_text_access')) {
       return '<div class="panel">' . nl2br($text) . '</div>';
