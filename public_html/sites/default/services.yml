@@ -165,7 +165,7 @@ parameters:
     # Specify allowed request methods, specify ['*'] to allow all possible ones.
     allowedMethods: ['GET', 'POST']
     # Configure requests allowed from specific origins.
-    allowedOrigins: ['https://macaws.corporaproject.org','https://www.macaws.corporaproject.org']
+    allowedOrigins: ['https://test.macaws.corporaproject.org', 'https://macaws.corporaproject.org', 'https://www.macaws.corporaproject.org']
     # Sets the Access-Control-Expose-Headers header.
     exposedHeaders: false
     # Sets the Access-Control-Max-Age header.
