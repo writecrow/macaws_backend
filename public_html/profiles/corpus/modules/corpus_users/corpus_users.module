@@ -66,17 +66,17 @@ function corpus_users_form_user_register_form_alter(&$form, FormStateInterface $
   $form['web_access']['base']['base_options'] = [
     '#type' => 'radios',
     '#options' => [
-      'basic_search_access' => t('Standard'),
-      'full_text_access' => t('Full'),
+      'standard' => t('Standard'),
+      'full_text' => t('Full'),
     ],
-    '#default_value' => 'basic_search_access',
+    '#default_value' => 'standard',
     '#description' => t('By default, only 500 characters are shown. "Full" access displays the entire text of student writing in the online interface.'),
   ];
   $form['web_access']['additional'] = [
     '#type' => 'fieldset',
     '#title' => 'Additional web access request',
   ];
-  $form['web_access']['additional']['excerpt'] = [
+  $form['web_access']['additional']['export'] = [
     '#type' => 'checkbox',
     '#title' => 'Export search excerpt results',
     '#default_value' => FALSE,
