@@ -112,11 +112,6 @@ class ChangeAccessRequest extends ResourceBase {
     $params['message'] = $this->getRequestorEmailText($name, $data['role'], $user);
     $mailManager->mail($module, $key, $user->getEmail(), $langcode, $params, NULL, $send);
 
-    // Basecamp integration.
-    $assignee_ids = $config->get('assignee_ids');
-    if (!empty($assignee_ids)) {
-      $data['assignee_ids'] = explode(',', $assignee_ids);
-    }
     $project = $config->get('project');
     $todolist = $config->get('list');
     if ($project && $todolist) {
@@ -126,6 +121,11 @@ class ChangeAccessRequest extends ResourceBase {
         'due_on' => date('Y-m-d', strtotime('+7 days')),
         'notify' => TRUE,
       ];
+      // Basecamp integration.
+      $assignee_ids = $config->get('assignee_ids');
+      if (!empty($assignee_ids)) {
+        $data['assignee_ids'] = explode(',', $assignee_ids);
+      }
       $transaction = Basecamp::createTodo($project, $todolist, $data);
     }
     if (!$transaction) {
