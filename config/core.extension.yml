@@ -28,7 +28,6 @@ module:
   facets: 0
   facets_rest: 0
   field: 0
-  field_ui: 0
   file: 0
   filter: 0
   image: 0
@@ -65,7 +64,6 @@ module:
   user: 0
   userprotect: 0
   views_data_export: 0
-  views_ui: 0
   views: 10
   corpus: 1000
 theme:
