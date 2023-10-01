@@ -26,6 +26,7 @@ permissions:
   - 'assign export_access role'
   - 'assign full_text_access role'
   - 'assign manager role'
+  - 'assign offline role'
   - 'edit any page content'
   - 'edit own page content'
   - 'revert page revisions'
