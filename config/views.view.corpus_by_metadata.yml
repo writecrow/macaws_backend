@@ -2251,6 +2251,70 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: false
+        description__value_1:
+          id: description__value_1
+          table: taxonomy_term_field_data
+          field: description__value
+          relationship: field_course
+          group_type: group
+          admin_label: ''
+          entity_type: taxonomy_term
+          entity_field: description
+          plugin_id: field
+          label: 'Course description'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: true
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: true
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: text_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       pager:
         type: mini
         options:
@@ -3054,6 +3118,15 @@ display:
           entity_type: taxonomy_term
           plugin_id: entity_reverse
           required: false
+        field_course:
+          id: field_course
+          table: node__field_course
+          field: field_course
+          relationship: none
+          group_type: group
+          admin_label: 'field_course: Taxonomy term'
+          plugin_id: standard
+          required: false
       header: {  }
       footer: {  }
       display_extenders: {  }
@@ -3210,9 +3283,6 @@ display:
             field_year_in_school:
               alias: year_in_school
               raw_output: false
-            field_text:
-              alias: ''
-              raw_output: false
             concordance_views_field:
               alias: concordance
               raw_output: false
@@ -3227,6 +3297,9 @@ display:
               raw_output: false
             corpus_text:
               alias: text
+              raw_output: false
+            description__value_1:
+              alias: course_description
               raw_output: false
       display_extenders: {  }
       path: corpus/metadata
