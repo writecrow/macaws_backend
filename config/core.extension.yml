@@ -1,7 +1,6 @@
 _core:
   default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
 module:
-  allow_iframed_site: 0
   automated_cron: 0
   basecamp_api: 0
   better_exposed_filters: 0
