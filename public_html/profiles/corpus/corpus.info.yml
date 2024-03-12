@@ -1,5 +1,5 @@
 name: corpus
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^10
 type: profile
 description: 'A minimal configuration for a corpus web application.'
 distribution:

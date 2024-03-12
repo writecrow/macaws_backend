@@ -112,6 +112,7 @@ class CorpusImporterCommands extends DrushCommands {
     $this->output()->writeln("Finding existing repository nodes...");
     ini_set("memory_limit", "4096M");
     $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+    $query->accessCheck(FALSE);
     $query->condition('type', 'resource');
     if ($institution_id !== NULL) {
       $query->condition('field_institution.target_id', (int) $institution_id, '=');
@@ -157,6 +158,7 @@ class CorpusImporterCommands extends DrushCommands {
     $language = $this->getOption($options, 'language');
     ini_set("memory_limit", "4096M");
     $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery();
+    $query->accessCheck(FALSE);
     $query->condition('type', 'text');
     if ($institution_id !== NULL) {
       $query->condition('field_institution.target_id', (int) $institution_id, '=');
