@@ -1,7 +1,7 @@
 name: Macaws Theme
 type: theme
 description: Administrative theme for Corpus
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^10
 # Defines the base theme
 base theme: claro
 

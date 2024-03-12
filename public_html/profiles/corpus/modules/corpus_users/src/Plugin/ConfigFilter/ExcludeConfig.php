@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ExcludeConfig extends ConfigFilterBase implements ContainerFactoryPluginInterface {
 
- /**
+  /**
    * A somewhat arbitrary string that works better than an empty string when
    * used as array key. Yes, StorageInterface::DEFAULT_COLLECTION, we're looking
    * at you.
@@ -115,7 +115,7 @@ class ExcludeConfig extends ConfigFilterBase implements ContainerFactoryPluginIn
         // method to discover dependent config is inspired by what
         // ConfigManager::uninstall() does to find dependent config.
         $config_object_names = $this->configManager->getConfigFactory()->listAll($module_name . '.');
-        $config_entity_names = array_keys($this->configManager->findConfigEntityDependents('module', [$module_name]));
+        $config_entity_names = array_keys($this->configManager->findConfigEntityDependencies('module', [$module_name]));
         $config_item_names = array_merge($config_object_names, $config_entity_names);
 
         // Load all dependent config items.
@@ -140,8 +140,7 @@ class ExcludeConfig extends ConfigFilterBase implements ContainerFactoryPluginIn
       foreach ($this->excludedModules as $module_name => $info) {
         $data['module'][$module_name] = 0;
       }
-    }
-    else {
+    } else {
       $collection_key = $this->getCollectionKey($this->source->getCollectionName());
       if (isset($this->excludedConfig[$collection_key][$name])) {
         $data = $this->excludedConfig[$collection_key][$name];
@@ -190,8 +189,7 @@ class ExcludeConfig extends ConfigFilterBase implements ContainerFactoryPluginIn
     if ($name === 'core.extension') {
       $exclude = $this->excludedModules;
       $data['module'] = array_diff_key($data['module'], $exclude);
-    }
-    else {
+    } else {
       $collection_key = $this->getCollectionKey($this->source->getCollectionName());
       if (isset($this->excludedConfig[$collection_key][$name])) {
         return NULL;
@@ -212,5 +210,4 @@ class ExcludeConfig extends ConfigFilterBase implements ContainerFactoryPluginIn
   protected function getCollectionKey($collection_name) {
     return $collection_name === StorageInterface::DEFAULT_COLLECTION ? self::DEFAULT_COLLECTION_KEY : $collection_name;
   }
-
 }

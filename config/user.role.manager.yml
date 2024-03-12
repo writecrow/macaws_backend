@@ -6,6 +6,7 @@ dependencies:
     - filter.format.standard_html
     - node.type.page
   module:
+    - file
     - filter
     - node
     - role_delegation
@@ -26,6 +27,8 @@ permissions:
   - 'assign export_access role'
   - 'assign full_text_access role'
   - 'assign manager role'
+  - 'assign offline role'
+  - 'delete own files'
   - 'edit any page content'
   - 'edit own page content'
   - 'revert page revisions'

@@ -1045,6 +1045,7 @@ $data = [
   ImporterHelper::taxonomyWipe('assignment_name');
 
   $query = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
     ->condition('status', 1)
     ->condition('type', 'page', '<>');
   $nids = $query->execute();
