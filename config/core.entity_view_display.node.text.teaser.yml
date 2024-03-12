@@ -4,11 +4,39 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.text.field_age
     - field.field.node.text.field_assignment
+    - field.field.node.text.field_assignment_code
+    - field.field.node.text.field_assignment_mode
+    - field.field.node.text.field_assignment_name
+    - field.field.node.text.field_assignment_topic
+    - field.field.node.text.field_began_formal_education
     - field.field.node.text.field_course
+    - field.field.node.text.field_course_semester
+    - field.field.node.text.field_course_year
+    - field.field.node.text.field_courses_currently_enrolled
+    - field.field.node.text.field_courses_previously_enrolle
+    - field.field.node.text.field_credit_hours
     - field.field.node.text.field_draft
+    - field.field.node.text.field_experience_abroad
+    - field.field.node.text.field_grouped_l1
+    - field.field.node.text.field_heritage_of_target_languag
     - field.field.node.text.field_institution
     - field.field.node.text.field_instructor
+    - field.field.node.text.field_l1
+    - field.field.node.text.field_length_of_course
+    - field.field.node.text.field_macro_genre
+    - field.field.node.text.field_major
+    - field.field.node.text.field_minor
+    - field.field.node.text.field_mode_of_course
+    - field.field.node.text.field_other_languages
+    - field.field.node.text.field_proficiency_exam
+    - field.field.node.text.field_proficiency_exam_score
+    - field.field.node.text.field_section
+    - field.field.node.text.field_student_id
+    - field.field.node.text.field_target_language
+    - field.field.node.text.field_target_language_practice
+    - field.field.node.text.field_text
     - field.field.node.text.field_wordcount
     - field.field.node.text.field_year_in_school
     - node.type.text
@@ -27,11 +55,40 @@ content:
     weight: 100
     region: content
 hidden:
+  field_age: true
   field_assignment: true
+  field_assignment_code: true
+  field_assignment_mode: true
+  field_assignment_name: true
+  field_assignment_topic: true
+  field_began_formal_education: true
   field_course: true
+  field_course_semester: true
+  field_course_year: true
+  field_courses_currently_enrolled: true
+  field_courses_previously_enrolle: true
+  field_credit_hours: true
   field_draft: true
+  field_experience_abroad: true
+  field_grouped_l1: true
+  field_heritage_of_target_languag: true
   field_institution: true
   field_instructor: true
+  field_l1: true
+  field_length_of_course: true
+  field_macro_genre: true
+  field_major: true
+  field_minor: true
+  field_mode_of_course: true
+  field_other_languages: true
+  field_proficiency_exam: true
+  field_proficiency_exam_score: true
+  field_section: true
+  field_student_id: true
+  field_target_language: true
+  field_target_language_practice: true
+  field_text: true
   field_wordcount: true
   field_year_in_school: true
   langcode: true
+  search_api_excerpt: true

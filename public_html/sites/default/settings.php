@@ -4,13 +4,14 @@
 
 $settings['hash_salt'] = 'U-BS0zPa-r9jdIDeoPGF02drLF3pRytlwa-xYdYuhxVzQnB96QOf0T2BsRhM3SUkngMBQTaBhA';
 
-$settings['trusted_host_patterns'] = [
-  '^.+\.corporaproject\.org$',
-  '^.+\.lndo\.site$',
-];
+// @codingStandardsIgnoreFile
 
+/**
+ * @file
+ * Drupal site-specific configuration file.
+ */
 
-
+$settings['hash_salt'] = 'U-BS0zPa-r9jdIDeoPGF02drLF3pRytlwa-xYdYuhxVzQnB96QOf0T2BsRhM3SUkngMBQTaBhA';
 
 /**
  * Deployment identifier.
@@ -60,7 +61,7 @@ $settings['config_sync_directory'] = $app_root . '/../config';
  * useful in a configuration file for a vhost or directory, rather than
  * the default settings.php.
  */
-$settings['config_exclude_modules'] = ['smtp, phpmailer_smtp'];
+$settings['config_exclude_modules'] = ['smtp', 'phpmailer_smtp'];
 
 /**
  * Fast 404 pages:
@@ -77,6 +78,7 @@ $config['system.performance']['fast_404']['html'] = '<!DOCTYPE html><html><head>
  * Load services definition file.
  */
 $settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.yml';
+// $settings['container_yamls'][] = 'sites/default/monolog.services.yml';
 
 /**
  * Trusted host configuration.
