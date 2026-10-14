@@ -187,6 +187,41 @@ class CorpusImporterCommands extends DrushCommands {
   }
 
   /**
+   * Find duplicate corpus texts.
+   *
+   * @param array $options
+   *   An associative array of options.
+   * @option delete
+   *   Delete duplicates
+   * @usage 0
+   *   drush corpus-dedupe-provided
+   *
+   * @command corpus:dedupe-provided
+   * @aliases c-dedupe-provided,corpus-dedupe-provided
+   */
+  public function dedupeprovided(array $options = ['delete' => NULL]) {
+    $this->output()->writeln('Starting...');
+    $database = \Drupal::database();
+    $query = $database->query("SELECT title
+      FROM {node_field_data}");
+    $result = $query->fetchAll();
+    $filenames = [];
+    foreach ($result as $i) {
+      $filenames[] = $i->title . '.txt';
+    }
+    if (!file_exists('../provided_files.txt')) {
+      $this->output()->writeln('You must provide a file at ../provided_files');
+    }
+    $file = file_get_contents('../provided_files.txt');
+    $provided_files = explode("\n", str_replace(["\r\n", "\r"], ["\n", "\n"], $file));
+    foreach ($provided_files as $provided_file) {
+      if (!in_array($provided_file, $filenames) && $provided_file !== 'provided_files.txt') {
+        $this->output()->writeln("$provided_file should have been imported but was not.");
+      }
+    }
+  }
+
+  /**
    * Get the value of an option.
    *
    * @param array $options
